@@ -67,10 +67,16 @@ def main():
     ap = argparse.ArgumentParser(description="Scribe - accounting for agentic commerce")
     sub = ap.add_subparsers(dest="mode", required=True)
     sub.add_parser("demo", help="run on simulated x402 traffic")
+    sub.add_parser("refresh", help="update facilitator wallets from the x402scan registry")
     lv = sub.add_parser("live", help="run on real Base-chain x402 data")
     lv.add_argument("--limit", type=int, default=150, help="settlements to sweep")
     lv.add_argument("--wallet", type=str, default=None, help="track one payer wallet")
     args = ap.parse_args()
+
+    if args.mode == "refresh":
+        from scribelib.live import refresh_facilitators
+        refresh_facilitators(os.path.join(HERE, "config.yaml"))
+        return
 
     cfg = load_config()
     if args.mode == "demo":
@@ -82,10 +88,10 @@ def main():
         run(SampleDataAdapter(days=30).fetch(), cfg, "Demo Co (simulated data)")
     else:
         load_env()
-        if not os.environ.get("ETHERSCAN_API_KEY"):
-            print("Missing ETHERSCAN_API_KEY. Create a free key at "
-                  "https://etherscan.io/apis and put it in a .env file:\n"
-                  "  ETHERSCAN_API_KEY=your_key_here")
+        if "etherscan" in (cfg.get("chain", {}).get("api_base") or "") and \
+                not os.environ.get("ETHERSCAN_API_KEY"):
+            print("Etherscan mode needs ETHERSCAN_API_KEY in .env "
+                  "(or switch api_base to Blockscout, which needs no key).")
             sys.exit(1)
         from scribelib.live import BaseChainAdapter
         adapter = BaseChainAdapter(cfg)

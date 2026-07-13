@@ -1,11 +1,9 @@
 # Scribe configuration
 # ---------------------------------------------------------------
-# LIVE DATA SETUP (one-time, ~10 minutes):
-#   1. Create a free API key at https://etherscan.io/apis
-#      (Etherscan V2 keys work for Base via chainid=8453)
-#   2. Put it in a file named `.env` next to scribe.py:
-#        ETHERSCAN_API_KEY=your_key_here
-#   3. Run:  python3 scribe.py live --limit 150
+# LIVE DATA: uses Blockscout's free public API for Base (no key
+# needed). An Etherscan key in .env is optional (paid tiers/other
+# chains). To refresh facilitator wallets when they rotate:
+#   python3 scribe.py refresh
 # ---------------------------------------------------------------
 
 chain:
@@ -15,27 +13,27 @@ chain:
   usdc_contract: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"   # USDC on Base mainnet
   usdc_decimals: 6
 
-# Known x402 facilitator settlement wallets (tx senders for
-# transferWithAuthorization). Labeled on Basescan as
-# "Coinbase: x402 Facilitator N". Add more as discovered.
+# Facilitator registry source (community-maintained, x402scan):
+facilitator_registry: "https://raw.githubusercontent.com/Merit-Systems/x402scan/main/packages/external/facilitators/src/facilitators/coinbase.ts"
+
+# Coinbase x402 facilitator settlement wallets, newest first.
+# Coinbase runs ~40 and rotates them; run `scribe.py refresh` when stale.
 facilitators:
-  # Coinbase x402 facilitator wallets, newest first (source:
-  # x402scan's registry, github.com/Merit-Systems/x402scan).
-  # Coinbase runs ~40 and rotates them; refresh from that repo when stale.
+  # Newest Coinbase x402 facilitator wallets (auto-refreshed from x402scan registry)
   - "0x2a89407a98a0732b7fd578c4e156b7166540eb5a"   # first tx 2026-06-15
   - "0xe72f0af4cf41356d433723547f1412ca27fbb1b8"   # first tx 2026-06-12
   - "0xca5e87f82b3fa093800e6ad67d621a427d79c70d"   # first tx 2026-06-12
   - "0x4c934c63c786157fefd990945b25ea60a0fb0205"   # first tx 2026-06-12
+  - "0x64cc42b1ce598e3abcfbb64df4688521ddbf1f0a"   # first tx 2026-06-12
+  - "0xe74817f4cdc15844314812b2271276e64e890fae"   # first tx 2026-06-12
 
-# Map payer wallets to agent names (fill in when tracking a
-# specific company's agents; unknown payers get short labels)
+
+# Map payer wallets to agent names (unknown payers get short labels)
 agents: {}
-#  "0x1234...": "research-agent"
 
-# Map seller wallets to (label, category); unknown sellers are
-# auto-labeled and land in the exception queue for classification
+# Map seller wallets to label + category (unknown sellers land in
+# the exception queue for classification)
 providers: {}
-#  "0xabcd...": { label: "MarketFeed API", category: "Market data" }
 
 accounting:
   asset_account: "1085 - Digital Assets (USDC)"

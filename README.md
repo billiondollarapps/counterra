@@ -1,70 +1,103 @@
-# Scribe (working title)
+# Scribe
 
 **The open accounting & audit layer for agentic commerce.**
-AI agents pay for data, tools, and compute over machine payment rails
-(x402/AP2) — thousands of micropayments with no invoices, no receipts,
-no books. Scribe ingests those payments and produces what a finance
-team needs: per-agent spend attribution, aggregated journal entries,
+
+AI agents now pay for data, tools, and compute over machine payment
+rails like [x402](https://x402.org) — millions of micropayments with
+**no invoices, no receipts, no books**. Scribe reads those payments
+straight off the chain and produces what a finance team actually
+needs: per-agent spend attribution, aggregated journal entries,
 tax-relevant disposal counts, and an exception queue.
 
 *Agents move the money. Scribe makes it count.*
+
+![Scribe monthly close on live Base data](docs/screenshot.png)
+
+*Above: a real monthly close generated from live Base mainnet data —
+71 x402 settlements made by an autonomous agent on the morning of
+13 July 2026, decoded, attributed, and rolled into books.*
+
+## What it does
+
+- **Ingest** — sweeps settlements submitted by x402 facilitator
+  wallets on Base (Coinbase runs ~40 and rotates them; Scribe
+  auto-refreshes the list from the community registry), decodes the
+  USDC transfers inside: payer (agent) → payee (seller) → amount.
+- **Ledger** — attributes spend per agent, aggregates thousands of
+  sub-cent events into ERP-ready journal entries
+  (Dr expense / Cr Digital Assets), flags unmapped counterparties
+  and anomalies into an exception queue.
+- **Comply** — retains per-entry settlement counts (each is a
+  potential digital-asset disposal for tax purposes). VAT/GST module
+  and confidential-rail audit ingestion are on the roadmap.
+
+Scribe is **non-custodial by design**: it reads public ledgers,
+never holds or moves funds, and has no token.
 
 ## Quick start
 
 ```bash
 pip install pyyaml requests
-python3 scribe.py demo        # simulated x402 traffic -> out/spend_report.html
+
+python3 scribe.py demo                    # simulated x402 traffic
+python3 scribe.py refresh                 # pull newest facilitator wallets
+python3 scribe.py live --limit 80         # real Base data (no API key needed)
+python3 scribe.py live --wallet 0xABC...  # track one payer wallet
 ```
 
-## Live data (10-minute setup)
+Outputs land in `out/`: `spend_report.html` (monthly close) and
+`journal_entries.csv` (ERP-import ready). Unknown sellers appear in
+the exception queue; map them under `providers:` in `config.yaml`
+and re-run to see them classified into proper expense accounts.
 
-1. Create a **free API key** at https://etherscan.io/apis
-   (Etherscan V2 keys cover Base via chainid 8453).
-2. Create a file named `.env` next to `scribe.py`:
-   ```
-   ETHERSCAN_API_KEY=your_key_here
-   ```
-3. Run a real sweep of x402 settlements on Base:
-   ```bash
-   python3 scribe.py live --limit 150
-   ```
-   This pulls recent settlements submitted by Coinbase's x402
-   facilitator wallets (see `config.yaml`), decodes the USDC
-   transfers (agent -> seller), and closes the books on them.
+Live data uses Blockscout's free public API for Base — no key
+required. An Etherscan key in `.env` enables Etherscan mode for
+other chains/paid tiers.
 
-4. Or track a specific payer wallet's spend:
-   ```bash
-   python3 scribe.py live --wallet 0xYourAgentWallet
-   ```
+## Tests (offline, no key)
 
-Unknown sellers land in the exception queue; map them in
-`config.yaml` under `providers:` and re-run to see them
-categorized into proper expense accounts.
-
-## How live ingestion works
-x402 settlements are submitted on-chain BY facilitator wallets
-(Basescan labels them "Coinbase: x402 Facilitator N"; Facilitator 8
-alone has ~2.5M transactions). Scribe lists their recent transactions,
-keeps the ones calling the USDC contract, and decodes the ERC-20
-Transfer inside: payer (agent) -> payee (seller) -> amount.
-Public data, no permissions needed.
-
-## Tests (no API key required)
 ```bash
 python3 tests/test_live.py
 ```
-Feeds the live adapter canned Etherscan-shaped responses and verifies
-the full decode path.
+
+Canned API-shaped fixtures verify the full decode path, wallet
+filtering, and the facilitator-refresh rewrite.
+
+## Why this exists
+
+The x402 protocol deliberately removed accounts, invoices, and
+billing relationships from payments — that is its genius for
+machines, and its unsolved liability for the businesses deploying
+them. Industry reviewers note that tax and invoicing remain
+unaddressed at the protocol level, and enterprises name the
+audit/accountability gap as the blocker for autonomous transactions.
+Every rail is bundling reporting for its own rail; nobody owns the
+neutral layer across rails. Scribe is that layer, built in the open.
+
+## Roadmap
+
+- [x] Base collector (facilitator sweep + wallet tracking), live-verified
+- [x] Agentic subledger: attribution, aggregation, exceptions
+- [x] Facilitator auto-refresh from the x402scan community registry
+- [ ] Receipt/evidence alignment (TrustBench-compatible) via x402 Foundation process
+- [ ] Solana collector
+- [ ] QuickBooks/Xero journal sync
+- [ ] Public "agent spend explorer" (paste a wallet, get books)
+- [ ] VAT/GST & disposal tax module
+- [ ] Confidential-rail audit ingestion (viewing keys)
 
 ## Repo map
-- `scribe.py` — CLI (demo / live sweep / wallet tracking)
-- `scribelib/ingest.py` — canonical PaymentEvent + sample generator
-- `scribelib/live.py` — Base-chain adapter (Etherscan V2)
-- `scribelib/ledger.py` — attribution, aggregation, journal entries, exceptions
-- `report.py` — HTML monthly-close report
-- `config.yaml` — chain, facilitators, agent/provider maps, chart of accounts
 
-## Roadmap (grant milestones)
-- M1–M3: receipt/evidence alignment (TrustBench-compatible) + live collectors (Base, Solana)
-- M4–M6: per-agent subledger + QuickBooks/Xero journal sync, design partners
-- M7–M9: VAT/GST & disposal tax module + confidential-rail audit ingestion
+```
+scribe.py             CLI (demo / live / refresh)
+scribelib/ingest.py   canonical PaymentEvent + sample generator
+scribelib/live.py     Base adapter (Blockscout/Etherscan) + registry refresh
+scribelib/ledger.py   attribution, aggregation, journal entries, exceptions
+report.py             HTML monthly-close report
+config.yaml           chain, facilitators, agent/provider maps, chart of accounts
+tests/                offline test suite
+```
+
+## License
+
+Apache-2.0. Open core; use it, fork it, build on it.
