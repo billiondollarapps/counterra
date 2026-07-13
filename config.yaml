@@ -1,0 +1,45 @@
+# Scribe configuration
+# ---------------------------------------------------------------
+# LIVE DATA SETUP (one-time, ~10 minutes):
+#   1. Create a free API key at https://etherscan.io/apis
+#      (Etherscan V2 keys work for Base via chainid=8453)
+#   2. Put it in a file named `.env` next to scribe.py:
+#        ETHERSCAN_API_KEY=your_key_here
+#   3. Run:  python3 scribe.py live --limit 150
+# ---------------------------------------------------------------
+
+chain:
+  name: base
+  chain_id: 8453
+  api_base: "https://base.blockscout.com/api"
+  usdc_contract: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"   # USDC on Base mainnet
+  usdc_decimals: 6
+
+# Known x402 facilitator settlement wallets (tx senders for
+# transferWithAuthorization). Labeled on Basescan as
+# "Coinbase: x402 Facilitator N". Add more as discovered.
+facilitators:
+  - "0x9c09faa49c4235a09677159ff14f17498ac48738"   # Coinbase: x402 Facilitator 8 (~2.5M txs)
+  - "0xdbdf3d8ed80f84c35d01c6c9f9271761bad90ba6"   # Coinbase: x402 Facilitator 1
+
+# Map payer wallets to agent names (fill in when tracking a
+# specific company's agents; unknown payers get short labels)
+agents: {}
+#  "0x1234...": "research-agent"
+
+# Map seller wallets to (label, category); unknown sellers are
+# auto-labeled and land in the exception queue for classification
+providers: {}
+#  "0xabcd...": { label: "MarketFeed API", category: "Market data" }
+
+accounting:
+  asset_account: "1085 - Digital Assets (USDC)"
+  anomaly_threshold_usd: 40.0
+  expense_accounts:
+    Market data:      "6410 - Data & Research Services"
+    Mapping data:     "6410 - Data & Research Services"
+    Risk data:        "6410 - Data & Research Services"
+    AI inference:     "6420 - AI & Compute Services"
+    Compute:          "6420 - AI & Compute Services"
+    Document parsing: "6430 - Software Tooling"
+    Uncategorized:    "6490 - Uncategorized Agent Spend"
