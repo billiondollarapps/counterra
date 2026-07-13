@@ -61,10 +61,11 @@ def journal_entries(rows, period, accounting=None):
     for r in rows:
         if not r["ts"].startswith(period):
             continue
-        agg[(r["provider"], r["category"])]["amount"] += r["amount_usdc"]
-        agg[(r["provider"], r["category"])]["disposals"] += 1
+        key = (r["payee_wallet"], r["provider"], r["category"])
+        agg[key]["amount"] += r["amount_usdc"]
+        agg[key]["disposals"] += 1
     entries = []
-    for (provider, cat), v in sorted(agg.items(), key=lambda kv: -kv[1]["amount"]):
+    for (wallet, provider, cat), v in sorted(agg.items(), key=lambda kv: -kv[1]["amount"]):
         amt = round(v["amount"], 2)
         if amt < 0.01:
             continue
@@ -74,6 +75,7 @@ def journal_entries(rows, period, accounting=None):
             "credit_account": acc["asset_account"],
             "amount_usd": amt,
             "provider": provider,
+            "provider_wallet": wallet,
             "category": cat,
             "settlements": v["disposals"],
             "memo": f"Agent spend {period} - {provider} ({v['disposals']} settlements aggregated)",

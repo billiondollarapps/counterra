@@ -68,10 +68,17 @@ def main():
     sub = ap.add_subparsers(dest="mode", required=True)
     sub.add_parser("demo", help="run on simulated x402 traffic")
     sub.add_parser("refresh", help="update facilitator wallets from the x402scan registry")
+    wh = sub.add_parser("whois", help="identify a seller wallet via Bazaar + Blockscout")
+    wh.add_argument("address", help="the payee wallet to identify")
     lv = sub.add_parser("live", help="run on real Base-chain x402 data")
     lv.add_argument("--limit", type=int, default=150, help="settlements to sweep")
     lv.add_argument("--wallet", type=str, default=None, help="track one payer wallet")
     args = ap.parse_args()
+
+    if args.mode == "whois":
+        from scribelib.whois import whois
+        whois(args.address)
+        return
 
     if args.mode == "refresh":
         from scribelib.live import refresh_facilitators
