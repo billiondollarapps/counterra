@@ -72,7 +72,7 @@ def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)
       <h2>Exception queue (first 12)</h2>
       <table><tr><th>Time</th><th>Agent</th><th>Counterparty</th><th style="text-align:right">Amount</th><th>Reason</th></tr>{xrows}</table>
     </div>
-    <div class="foot"><span><b>SCRIBE v0.1</b> — agents move the money, Scribe makes it count</span>
+    <div class="foot"><span><b>SCRIBE v0.3</b> — agents move the money, Scribe makes it count</span>
     <span>Generated from {summary['n_events']:,} canonical PaymentEvents</span></div>
     </body></html>"""
     return html
