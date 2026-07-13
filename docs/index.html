@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scribe — Agent Spend Explorer</title>
+<meta name="description" content="Paste any Base wallet and get its x402 agent-spend books: attribution, journal entries, exceptions. Agents move the money. Scribe makes it count.">
+<style>
+  :root{--navy:#15243b;--acc:#2f6fed;--acc-d:#1f4fb0;--ink:#1c1e22;--mut:#5f6672;
+        --line:#e3e6ec;--bg:#f7f8fa;--green:#177245;--warn:#8a5a00}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--ink);background:#fff}
+  .hd{background:var(--navy);color:#fff;padding:34px 24px 30px;text-align:center}
+  .hd .k{font-size:11px;letter-spacing:4px;color:#8fb3f5;text-transform:uppercase}
+  .hd h1{font-size:30px;margin-top:6px}
+  .hd .s{color:#c8d4e8;font-size:14px;margin-top:8px;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.5}
+  .hd .s b{color:#fff}
+  .wrap{max-width:960px;margin:0 auto;padding:26px 20px 60px}
+  .inbar{display:flex;gap:10px;margin-top:-52px;background:#fff;border:1px solid var(--line);
+         border-radius:10px;padding:14px;box-shadow:0 6px 24px rgba(21,36,59,.12)}
+  .inbar input{flex:1;font-size:15px;padding:12px 14px;border:1px solid var(--line);
+               border-radius:7px;font-family:ui-monospace,Menlo,monospace}
+  .inbar input:focus{outline:2px solid var(--acc)}
+  button{background:var(--acc);color:#fff;border:none;border-radius:7px;padding:12px 20px;
+         font-size:14px;font-weight:600;cursor:pointer}
+  button:hover{background:var(--acc-d)}
+  button.ghost{background:#fff;color:var(--acc-d);border:1px solid var(--acc)}
+  .under{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px}
+  .under .hint{font-size:12.5px;color:var(--mut)}
+  #status{margin:26px 0;font-size:14px;color:var(--mut);text-align:center;line-height:1.6}
+  #status .err{color:#b23b3b}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:26px 0}
+  .card{border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:8px;
+        padding:14px 16px;background:var(--bg)}
+  .card .l{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut)}
+  .card .v{font-size:24px;font-weight:700;color:var(--navy);margin-top:4px}
+  h2{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--acc-d);margin:26px 0 10px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);
+     padding:6px 8px;border-bottom:1.5px solid var(--navy)}
+  td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.bar{width:42%}
+  td.bar div{height:12px;border-radius:3px;background:var(--acc);min-width:2px}
+  .named{color:var(--green);font-weight:600}
+  .mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  .note{font-size:11px;color:var(--mut);font-style:italic;margin-top:8px;line-height:1.6}
+  .foot{border-top:2px solid var(--acc);background:var(--bg);padding:16px 24px;margin-top:50px;
+        display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--mut)}
+  .foot b{color:var(--navy)} .foot a{color:var(--acc-d)}
+  #results{display:none}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--acc);
+        border-top-color:transparent;border-radius:50%;animation:sp .8s linear infinite;
+        vertical-align:-2px;margin-right:8px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="k">Scribe &middot; Open Accounting for Agentic Commerce</div>
+  <h1>Agent Spend Explorer</h1>
+  <div class="s">AI agents pay for data, tools and compute over x402 &mdash; micropayments with no invoices, no receipts, no books. Paste any Base wallet and watch Scribe close its books, live. <b>Agents move the money. Scribe makes it count.</b></div>
+</div>
+
+<div class="wrap">
+  <div class="inbar">
+    <input id="wallet" placeholder="0x… paste an agent wallet on Base" spellcheck="false">
+    <button onclick="run()">Close the books</button>
+  </div>
+  <div class="under">
+    <span class="hint">No wallet in mind? Pull one from live traffic &rarr;</span>
+    <button class="ghost" onclick="randomAgent()">&#127922; Random live agent</button>
+  </div>
+
+  <div id="status"></div>
+
+  <div id="results">
+    <div class="cards">
+      <div class="card"><div class="l">Total USDC spend</div><div class="v" id="c-total"></div></div>
+      <div class="card"><div class="l">Payments found</div><div class="v" id="c-n"></div></div>
+      <div class="card"><div class="l">Journal entries</div><div class="v" id="c-je"></div></div>
+      <div class="card"><div class="l">Needs classification</div><div class="v" id="c-ex"></div></div>
+    </div>
+
+    <h2>Spend by provider</h2>
+    <table id="t-prov"></table>
+
+    <h2 id="je-title">Aggregated journal entries (Dr expense / Cr Digital Assets USDC)</h2>
+    <table id="t-je"></table>
+    <div class="note">Each settlement is a potential digital-asset disposal for tax purposes; settlement counts retained per entry. Named providers come from Scribe's growing seller-mapping database &mdash; most x402 sellers are not publicly discoverable, which is rather the point of building it.</div>
+
+    <h2>Latest payments</h2>
+    <table id="t-tx"></table>
+    <div class="note" id="method"></div>
+  </div>
+</div>
+
+<div class="foot">
+  <span><b>SCRIBE</b> &mdash; open source, Apache-2.0 &middot; <a href="https://github.com/billiondollarapps/scribe" target="_blank">github.com/billiondollarapps/scribe</a></span>
+  <span>Reads public Base data via Blockscout &middot; non-custodial &middot; nothing leaves your browser</span>
+</div>
+
+<script>
+const USDC = "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
+const BS = "https://base.blockscout.com/api/v2";
+const REGISTRY = "https://raw.githubusercontent.com/Merit-Systems/x402scan/main/packages/external/facilitators/src/facilitators/coinbase.ts";
+const FALLBACK_FACS = [
+  "0x2a89407a98a0732b7fd578c4e156b7166540eb5a",
+  "0xe72f0af4cf41356d433723547f1412ca27fbb1b8",
+  "0xca5e87f82b3fa093800e6ad67d621a427d79c70d",
+  "0x4c934c63c786157fefd990945b25ea60a0fb0205"];
+const TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+
+// ---- Scribe's seller-mapping database (grows with every whois) ----
+const PROVIDERS = {
+  "0xe9030014f5dae217d0a152f02a043567b16c1abf": {label:"blockrun.ai", category:"Market data"},
+  "0x7c655d3d3944bd27994dd81a036c3afb19806c40": {label:"vaaya.ai",   category:"AI inference"},
+};
+const EXPENSE = {
+  "Market data":"6410 - Data & Research Services",
+  "Risk data":"6410 - Data & Research Services",
+  "AI inference":"6420 - AI & Compute Services",
+  "Compute":"6420 - AI & Compute Services",
+  "Uncategorized":"6490 - Uncategorized Agent Spend"};
+
+const $ = id => document.getElementById(id);
+const fmt = v => "$" + v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const short = a => a.slice(0,10) + "…";
+function status(html){ $("status").innerHTML = html; }
+
+async function bs(path){
+  const r = await fetch(BS + path);
+  if(!r.ok) throw new Error("Blockscout " + r.status + " on " + path);
+  return r.json();
+}
+
+async function fetchSpend(wallet){
+  let items = [], params = "", pages = 0;
+  while(pages < 5){
+    const d = await bs(`/addresses/${wallet}/token-transfers?type=ERC-20&filter=from${params}`);
+    const batch = d.items || [];
+    for(const it of batch){
+      const tok = ((it.token||{}).address_hash || (it.token||{}).address || "").toLowerCase();
+      if(tok !== USDC) continue;
+      const dec = parseInt((it.total||{}).decimals || (it.token||{}).decimals || 6);
+      items.push({
+        ts: it.timestamp,
+        to: ((it.to||{}).hash||"").toLowerCase(),
+        amount: parseInt((it.total||{}).value||"0") / 10**dec,
+        tx: it.transaction_hash || it.tx_hash || ""
+      });
+    }
+    if(!d.next_page_params){ break; }
+    params = "&" + Object.entries(d.next_page_params).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join("&");
+    pages++;
+  }
+  return items;
+}
+
+function close_books(items){
+  const byProv = {}, journal = {}, exceptions = [];
+  let total = 0;
+  for(const it of items){
+    total += it.amount;
+    const p = PROVIDERS[it.to];
+    const label = p ? p.label : short(it.to);
+    const cat = p ? p.category : "Uncategorized";
+    byProv[label] = byProv[label] || {amount:0, named:!!p, wallet:it.to};
+    byProv[label].amount += it.amount;
+    const jk = label + "|" + cat;
+    journal[jk] = journal[jk] || {label, cat, wallet:it.to, amount:0, n:0, named:!!p};
+    journal[jk].amount += it.amount; journal[jk].n++;
+    if(!p) exceptions.push(it);
+    else if(it.amount >= 40) exceptions.push(it);
+  }
+  return {total, byProv, journal:Object.values(journal).sort((a,b)=>b.amount-a.amount), exceptions};
+}
+
+function render(wallet, items, b){
+  $("c-total").textContent = fmt(b.total);
+  $("c-n").textContent = items.length;
+  $("c-je").textContent = b.journal.filter(j=>j.amount>=0.01).length;
+  $("c-ex").textContent = b.exceptions.length;
+
+  const provs = Object.entries(b.byProv).sort((a,c)=>c[1].amount-a[1].amount);
+  const max = provs.length ? provs[0][1].amount : 1;
+  $("t-prov").innerHTML = provs.slice(0,15).map(([label,v])=>
+    `<tr><td class="${v.named?'named':'mono'}">${label}</td>
+     <td class="bar"><div style="width:${Math.max(2, v.amount/max*100)}%"></div></td>
+     <td class="num">${fmt(v.amount)}</td>
+     <td class="num">${b.total? (v.amount/b.total*100).toFixed(0):0}%</td></tr>`).join("");
+
+  $("t-je").innerHTML =
+    `<tr><th>Debit</th><th>Credit</th><th style="text-align:right">Amount</th><th>Provider</th><th style="text-align:right">Settlements</th></tr>` +
+    b.journal.filter(j=>j.amount>=0.01).map(j=>
+    `<tr><td>${EXPENSE[j.cat]||EXPENSE["Uncategorized"]}</td>
+     <td>1085 - Digital Assets (USDC)</td>
+     <td class="num">${fmt(j.amount)}</td>
+     <td class="${j.named?'named':'mono'}">${j.label}</td>
+     <td class="num">${j.n}</td></tr>`).join("");
+
+  $("t-tx").innerHTML =
+    `<tr><th>Time (UTC)</th><th>To</th><th style="text-align:right">Amount</th><th>Status</th></tr>` +
+    items.slice(0,12).map(it=>{
+      const p = PROVIDERS[it.to];
+      return `<tr><td>${(it.ts||"").replace("T"," ").slice(0,16)}</td>
+      <td class="${p?'named':'mono'}">${p?p.label:short(it.to)}</td>
+      <td class="num">${fmt(it.amount)}</td>
+      <td>${p?'classified &rarr; '+(EXPENSE[p.category]||''):'needs classification'}</td></tr>`}).join("");
+
+  $("method").textContent =
+    `Methodology: outgoing USDC transfers on Base for ${wallet}, newest ${items.length} shown (up to ~250). ` +
+    `x402 settlements are USDC transfers submitted by facilitator wallets; this view includes all USDC outflows of the wallet.`;
+  $("results").style.display = "block";
+}
+
+async function run(addr){
+  const wallet = (addr || $("wallet").value).trim().toLowerCase();
+  if(!/^0x[0-9a-f]{40}$/.test(wallet)){
+    status('<span class="err">That doesn\'t look like a wallet address (0x + 40 hex characters).</span>'); return;
+  }
+  $("wallet").value = wallet;
+  location.hash = "wallet=" + wallet;
+  $("results").style.display = "none";
+  status('<span class="spin"></span>Reading Base via Blockscout & closing the books…');
+  try{
+    const items = await fetchSpend(wallet);
+    items.sort((a,c)=> (c.ts||"").localeCompare(a.ts||""));
+    if(!items.length){
+      status("No outgoing USDC payments found for this wallet on Base. Try the random live agent instead."); return;
+    }
+    render(wallet, items, close_books(items));
+    status("");
+  }catch(e){
+    status(`<span class="err">Couldn't fetch data: ${e.message}. Blockscout may be rate-limiting — wait a few seconds and retry.</span>`);
+  }
+}
+
+async function getFacilitators(){
+  try{
+    const t = await (await fetch(REGISTRY)).text();
+    const pairs = [...t.matchAll(/address:\s*'(0x[0-9a-fA-F]{40})'[\s\S]*?Date\('([\d-]+)'\)/g)]
+      .map(m=>[m[1].toLowerCase(), m[2]]).sort((a,b)=>b[1].localeCompare(a[1]));
+    if(pairs.length) return pairs.slice(0,6).map(p=>p[0]);
+  }catch(e){}
+  return FALLBACK_FACS;
+}
+
+async function randomAgent(){
+  $("results").style.display = "none";
+  status('<span class="spin"></span>Sampling live x402 traffic for an active agent…');
+  try{
+    const facs = await getFacilitators();
+    for(const fac of facs.sort(()=>Math.random()-.5)){
+      const d = await bs(`/addresses/${fac}/transactions?filter=from`);
+      const tx = (d.items||[]).find(it => (((it.to||{}).hash)||"").toLowerCase() === USDC && (it.status||"ok")==="ok");
+      if(!tx) continue;
+      const logs = await bs(`/transactions/${tx.hash}/logs`);
+      const log = (logs.items||[]).find(l=>{
+        const a = (typeof l.address==="object"? l.address.hash : l.address)||"";
+        return a.toLowerCase()===USDC && (l.topics||[])[0] && l.topics[0].toLowerCase()===TRANSFER_TOPIC;
+      });
+      if(!log) continue;
+      const payer = "0x" + log.topics[1].slice(-40);
+      status("Found an active agent in live traffic: " + payer);
+      return run(payer);
+    }
+    status('<span class="err">Couldn\'t find recent traffic just now — paste a wallet instead.</span>');
+  }catch(e){
+    status(`<span class="err">Sampling failed: ${e.message}</span>`);
+  }
+}
+
+// shareable links: #wallet=0x…
+window.addEventListener("load", ()=>{
+  const m = location.hash.match(/wallet=(0x[0-9a-fA-F]{40})/);
+  if(m) run(m[1]);
+});
+document.getElementById("wallet").addEventListener("keydown", e=>{ if(e.key==="Enter") run(); });
+</script>
+</body>
+</html>
