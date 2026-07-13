@@ -19,8 +19,13 @@ chain:
 # transferWithAuthorization). Labeled on Basescan as
 # "Coinbase: x402 Facilitator N". Add more as discovered.
 facilitators:
-  - "0x9c09faa49c4235a09677159ff14f17498ac48738"   # Coinbase: x402 Facilitator 8 (~2.5M txs)
-  - "0xdbdf3d8ed80f84c35d01c6c9f9271761bad90ba6"   # Coinbase: x402 Facilitator 1
+  # Coinbase x402 facilitator wallets, newest first (source:
+  # x402scan's registry, github.com/Merit-Systems/x402scan).
+  # Coinbase runs ~40 and rotates them; refresh from that repo when stale.
+  - "0x2a89407a98a0732b7fd578c4e156b7166540eb5a"   # first tx 2026-06-15
+  - "0xe72f0af4cf41356d433723547f1412ca27fbb1b8"   # first tx 2026-06-12
+  - "0xca5e87f82b3fa093800e6ad67d621a427d79c70d"   # first tx 2026-06-12
+  - "0x4c934c63c786157fefd990945b25ea60a0fb0205"   # first tx 2026-06-12
 
 # Map payer wallets to agent names (fill in when tracking a
 # specific company's agents; unknown payers get short labels)
