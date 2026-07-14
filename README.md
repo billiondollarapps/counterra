@@ -11,6 +11,12 @@ tax-relevant disposal counts, and an exception queue.
 
 *Agents move the money. Scribe makes it count.*
 
+## 🔴 Try it live — no install
+
+**[billiondollarapps.github.io/scribe](https://billiondollarapps.github.io/scribe/)** — paste any Base
+wallet (or hit "Random live agent") and watch Scribe close its books on
+real x402 traffic, in your browser. Non-custodial: nothing leaves your tab.
+
 ![Scribe monthly close on live Base data](docs/screenshot.png)
 
 *Above: a real monthly close generated from live Base mainnet data —
