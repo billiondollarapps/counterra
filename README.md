@@ -1,23 +1,23 @@
-# Scribe
+# Counterra
 
 **The open accounting & audit layer for agentic commerce.**
 
 AI agents now pay for data, tools, and compute over machine payment
 rails like [x402](https://x402.org) — millions of micropayments with
-**no invoices, no receipts, no books**. Scribe reads those payments
+**no invoices, no receipts, no books**. Counterra reads those payments
 straight off the chain and produces what a finance team actually
 needs: per-agent spend attribution, aggregated journal entries,
 tax-relevant disposal counts, and an exception queue.
 
-*Agents move the money. Scribe makes it count.*
+*Agents move the money. Counterra makes it count.*
 
 ## 🔴 Try it live — no install
 
-**[billiondollarapps.github.io/scribe](https://billiondollarapps.github.io/scribe/)** — paste any Base
-wallet (or hit "Random live agent") and watch Scribe close its books on
+**[counterra.xyz](https://counterra.xyz)** — paste any Base
+wallet (or hit "Random live agent") and watch Counterra close its books on
 real x402 traffic, in your browser. Non-custodial: nothing leaves your tab.
 
-![Scribe monthly close on live Base data](docs/screenshot.png)
+![Counterra monthly close on live Base data](docs/screenshot.png)
 
 *Above: a real monthly close generated from live Base mainnet data —
 71 x402 settlements made by an autonomous agent on the morning of
@@ -26,7 +26,7 @@ real x402 traffic, in your browser. Non-custodial: nothing leaves your tab.
 ## What it does
 
 - **Ingest** — sweeps settlements submitted by x402 facilitator
-  wallets on Base (Coinbase runs ~40 and rotates them; Scribe
+  wallets on Base (Coinbase runs ~40 and rotates them; Counterra
   auto-refreshes the list from the community registry), decodes the
   USDC transfers inside: payer (agent) → payee (seller) → amount.
 - **Ledger** — attributes spend per agent, aggregates thousands of
@@ -37,7 +37,7 @@ real x402 traffic, in your browser. Non-custodial: nothing leaves your tab.
   potential digital-asset disposal for tax purposes). VAT/GST module
   and confidential-rail audit ingestion are on the roadmap.
 
-Scribe is **non-custodial by design**: it reads public ledgers,
+Counterra is **non-custodial by design**: it reads public ledgers,
 never holds or moves funds, and has no token.
 
 ## Quick start
@@ -45,10 +45,10 @@ never holds or moves funds, and has no token.
 ```bash
 pip install pyyaml requests
 
-python3 scribe.py demo                    # simulated x402 traffic
-python3 scribe.py refresh                 # pull newest facilitator wallets
-python3 scribe.py live --limit 80         # real Base data (no API key needed)
-python3 scribe.py live --wallet 0xABC...  # track one payer wallet
+python3 counterra.py demo                    # simulated x402 traffic
+python3 counterra.py refresh                 # pull newest facilitator wallets
+python3 counterra.py live --limit 80         # real Base data (no API key needed)
+python3 counterra.py live --wallet 0xABC...  # track one payer wallet
 ```
 
 Outputs land in `out/`: `spend_report.html` (monthly close) and
@@ -78,7 +78,7 @@ them. Industry reviewers note that tax and invoicing remain
 unaddressed at the protocol level, and enterprises name the
 audit/accountability gap as the blocker for autonomous transactions.
 Every rail is bundling reporting for its own rail; nobody owns the
-neutral layer across rails. Scribe is that layer, built in the open.
+neutral layer across rails. Counterra is that layer, built in the open.
 
 ## Roadmap
 
@@ -95,10 +95,10 @@ neutral layer across rails. Scribe is that layer, built in the open.
 ## Repo map
 
 ```
-scribe.py             CLI (demo / live / refresh)
-scribelib/ingest.py   canonical PaymentEvent + sample generator
-scribelib/live.py     Base adapter (Blockscout/Etherscan) + registry refresh
-scribelib/ledger.py   attribution, aggregation, journal entries, exceptions
+counterra.py             CLI (demo / live / refresh)
+counterralib/ingest.py   canonical PaymentEvent + sample generator
+counterralib/live.py     Base adapter (Blockscout/Etherscan) + registry refresh
+counterralib/ledger.py   attribution, aggregation, journal entries, exceptions
 report.py             HTML monthly-close report
 config.yaml           chain, facilitators, agent/provider maps, chart of accounts
 tests/                offline test suite

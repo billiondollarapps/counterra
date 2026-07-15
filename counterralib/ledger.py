@@ -1,5 +1,5 @@
 """
-Scribe ledger engine (config-driven).
+Counterra ledger engine (config-driven).
 
 Takes canonical PaymentEvents plus mapping config and produces:
   - per-agent / per-provider / per-category spend summaries

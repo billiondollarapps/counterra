@@ -1,9 +1,9 @@
-# Scribe configuration
+# Counterra configuration
 # ---------------------------------------------------------------
 # LIVE DATA: uses Blockscout's free public API for Base (no key
 # needed). An Etherscan key in .env is optional (paid tiers/other
 # chains). To refresh facilitator wallets when they rotate:
-#   python3 scribe.py refresh
+#   python3 counterra.py refresh
 # ---------------------------------------------------------------
 
 chain:
@@ -17,7 +17,7 @@ chain:
 facilitator_registry: "https://raw.githubusercontent.com/Merit-Systems/x402scan/main/packages/external/facilitators/src/facilitators/coinbase.ts"
 
 # Coinbase x402 facilitator settlement wallets, newest first.
-# Coinbase runs ~40 and rotates them; run `scribe.py refresh` when stale.
+# Coinbase runs ~40 and rotates them; run `counterra.py refresh` when stale.
 facilitators:
   # Newest Coinbase x402 facilitator wallets (auto-refreshed from x402scan registry)
   - "0x2a89407a98a0732b7fd578c4e156b7166540eb5a"   # first tx 2026-06-15

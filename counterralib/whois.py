@@ -1,5 +1,5 @@
 """
-Seller identification for Scribe.
+Seller identification for Counterra.
 
 `whois(address)` builds a dossier on a payee wallet:
   1. Bazaar match - x402 sellers advertise endpoints with their payTo

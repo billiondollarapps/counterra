@@ -1,5 +1,5 @@
 """
-Live Base-chain adapter for Scribe.
+Live Base-chain adapter for Counterra.
 
 Primary data source: Blockscout's free public API (no key required).
 Legacy Etherscan V2 mode is retained for paid tiers / other chains
@@ -20,7 +20,7 @@ import os
 import re
 import time
 
-from scribelib.ingest import PaymentEvent
+from counterralib.ingest import PaymentEvent
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 
@@ -197,7 +197,7 @@ def refresh_facilitators(config_path, keep=6, session=None):
         r"address:\s*'(0x[0-9a-fA-F]{40})'.*?Date\('([\d-]+)'\)", src, re.S)
     if not pairs:
         raise SystemExit("registry format changed - no addresses found; "
-                         "update the parser in scribelib/live.py")
+                         "update the parser in counterralib/live.py")
     pairs.sort(key=lambda p: p[1], reverse=True)
     newest = pairs[:keep]
 

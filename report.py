@@ -1,4 +1,4 @@
-"""Shared HTML report renderer for Scribe."""
+"""Shared HTML report renderer for Counterra."""
 
 
 def bar_rows(d, total, color="#2f6fed", fmt="${:,.2f}"):
@@ -53,7 +53,7 @@ def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)
       font-size:10px;color:var(--mut);display:flex;justify-content:space-between}}
     .note{{font-size:10.5px;color:var(--mut);margin-top:4px;font-style:italic}}
     </style></head><body>
-    <div class="hd"><div class="k">Scribe &middot; Agent Spend Report</div>
+    <div class="hd"><div class="k">Counterra &middot; Agent Spend Report</div>
     <h1>Agentic Commerce — Monthly Close</h1>
     <div class="s">Period {period} &nbsp;&middot;&nbsp; Chain: Base &nbsp;&middot;&nbsp; Protocol: x402 &nbsp;&middot;&nbsp; Entity: {entity_label}</div></div>
     <div class="wrap">
@@ -72,7 +72,7 @@ def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)
       <h2>Exception queue (first 12)</h2>
       <table><tr><th>Time</th><th>Agent</th><th>Counterparty</th><th style="text-align:right">Amount</th><th>Reason</th></tr>{xrows}</table>
     </div>
-    <div class="foot"><span><b>SCRIBE v0.3</b> — agents move the money, Scribe makes it count</span>
+    <div class="foot"><span><b>COUNTERRA v0.3</b> — agents move the money, Counterra makes it count</span>
     <span>Generated from {summary['n_events']:,} canonical PaymentEvents</span></div>
     </body></html>"""
     return html

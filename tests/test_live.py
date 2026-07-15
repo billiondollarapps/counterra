@@ -7,7 +7,7 @@ import sys, os, json, tempfile
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import yaml
-from scribelib.live import BaseChainAdapter, refresh_facilitators, TRANSFER_TOPIC
+from counterralib.live import BaseChainAdapter, refresh_facilitators, TRANSFER_TOPIC
 
 USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
 PAYER = "1111000000000000000000000000000000000aa1"

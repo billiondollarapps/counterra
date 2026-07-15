@@ -1,5 +1,5 @@
 """
-Scribe ingestion layer.
+Counterra ingestion layer.
 
 Adapters produce canonical PaymentEvent records from a source.
 - SampleDataAdapter: deterministic, realistic simulated x402 traffic (for the MVP demo).

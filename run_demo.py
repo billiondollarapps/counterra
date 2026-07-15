@@ -1,4 +1,4 @@
-"""Scribe demo on simulated data. Prefer: python3 scribe.py demo"""
+"""Counterra demo on simulated data. Prefer: python3 counterra.py demo"""
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,4 +19,4 @@ SAMPLE_PROVIDERS = {
 
 if __name__ == "__main__":
     import subprocess
-    subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), "scribe.py"), "demo"])
+    subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), "counterra.py"), "demo"])
