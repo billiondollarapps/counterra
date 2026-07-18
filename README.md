@@ -48,6 +48,7 @@ pip install pyyaml requests
 python3 counterra.py demo                    # simulated x402 traffic
 python3 counterra.py refresh                 # pull newest facilitator wallets
 python3 counterra.py live --limit 80         # real Base data (no API key needed)
+python3 counterra.py live --chain solana --limit 40   # real Solana data (public RPC, no key)
 python3 counterra.py live --wallet 0xABC...  # track one payer wallet
 ```
 
@@ -56,8 +57,9 @@ Outputs land in `out/`: `spend_report.html` (monthly close) and
 the exception queue; map them under `providers:` in `config.yaml`
 and re-run to see them classified into proper expense accounts.
 
-Live data uses Blockscout's free public API for Base — no key
-required. An Etherscan key in `.env` enables Etherscan mode for
+Live data uses Blockscout's free public API for Base and Solana's
+public mainnet RPC — no keys required. For faster Solana sweeps, put
+a free Helius endpoint in `.env` as `SOLANA_RPC_URL=...`. An Etherscan key in `.env` enables Etherscan mode for
 other chains/paid tiers.
 
 ## Tests (offline, no key)
@@ -86,7 +88,7 @@ neutral layer across rails. Counterra is that layer, built in the open.
 - [x] Agentic subledger: attribution, aggregation, exceptions
 - [x] Facilitator auto-refresh from the x402scan community registry
 - [ ] Receipt/evidence alignment (TrustBench-compatible) via x402 Foundation process
-- [ ] Solana collector
+- [x] Solana collector — facilitator sweep + wallet tracking (Coinbase + PayAI facilitators), live-ready
 - [ ] QuickBooks/Xero journal sync
 - [ ] Public "agent spend explorer" (paste a wallet, get books)
 - [ ] VAT/GST & disposal tax module

@@ -28,6 +28,23 @@ facilitators:
   - "0xe74817f4cdc15844314812b2271276e64e890fae"   # first tx 2026-06-12
 
 
+
+# ---------------- Solana ----------------
+# Public RPC needs no key; set SOLANA_RPC_URL in .env for a faster
+# endpoint (e.g. a free Helius URL). Facilitators from the x402scan
+# registry: Coinbase runs 7 on Solana, PayAI (Solana-native) runs 3.
+solana:
+  rpc: "https://api.mainnet-beta.solana.com"
+  usdc_mint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+  usdc_decimals: 6
+  facilitators:
+    - "92QcYJZpkwYyacR3G69QNR2JfjadQxd16cp5d7x5GEzU"   # Coinbase, first tx 2026-06-12
+    - "BENrLoUbndxoNMUS5JXApGMtNykLjFXXixMtpDwDR9SP"   # Coinbase, 2025-12-16
+    - "BFK9TLC3edb13K6v4YyH3DwPb5DSUpkWvb7XnqCL9b4F"   # Coinbase, 2025-12-16
+    - "CjNFTjvBhbJJd2B5ePPMHRLx1ELZpa8dwQgGL727eKww"   # PayAI, 2025-12-08
+    - "8B5UKhwfAyFW67h58cBkQj1Ur6QXRgwWJJcQp8ZBsDPa"   # PayAI, 2025-12-08
+    - "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"   # PayAI, 2025-07-01
+
 # Map payer wallets to agent names (unknown payers get short labels)
 agents: {}
 

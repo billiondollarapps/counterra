@@ -41,7 +41,7 @@ def latest_full_period(rows):
     return months[-1] if months else "----"
 
 
-def run(events, cfg, entity_label):
+def run(events, cfg, entity_label, chain_name="Base"):
     agent_map = cfg.get("agents") or {}
     provider_map = cfg.get("providers") or {}
     accounting = cfg.get("accounting") or {}
@@ -57,7 +57,7 @@ def run(events, cfg, entity_label):
     os.makedirs(OUT, exist_ok=True)
     write_journal_csv(entries, os.path.join(OUT, "journal_entries.csv"))
     with open(os.path.join(OUT, "spend_report.html"), "w") as f:
-        f.write(render(summary, entries, exc, period, entity_label))
+        f.write(render(summary, entries, exc, period, entity_label, chain_name))
     print(f"events={len(rows)}  total=${summary['total']:,.2f}  "
           f"period={period}  journal_entries={len(entries)}  exceptions={len(exc)}")
     print("outputs: out/spend_report.html, out/journal_entries.csv")
@@ -72,6 +72,7 @@ def main():
     wh.add_argument("address", help="the payee wallet to identify")
     lv = sub.add_parser("live", help="run on real Base-chain x402 data")
     lv.add_argument("--limit", type=int, default=150, help="settlements to sweep")
+    lv.add_argument("--chain", choices=["base", "solana"], default="base", help="which chain to sweep")
     lv.add_argument("--wallet", type=str, default=None, help="track one payer wallet")
     args = ap.parse_args()
 
@@ -92,7 +93,7 @@ def main():
         cfg = dict(cfg)
         cfg["agents"] = SAMPLE_AGENTS
         cfg["providers"] = SAMPLE_PROVIDERS
-        run(SampleDataAdapter(days=30).fetch(), cfg, "Demo Co (simulated data)")
+        run(SampleDataAdapter(days=30).fetch(), cfg, "Demo Co (simulated data)", "Base")
     else:
         load_env()
         if "etherscan" in (cfg.get("chain", {}).get("api_base") or "") and \
@@ -100,15 +101,21 @@ def main():
             print("Etherscan mode needs ETHERSCAN_API_KEY in .env "
                   "(or switch api_base to Blockscout, which needs no key).")
             sys.exit(1)
-        from counterralib.live import BaseChainAdapter
-        adapter = BaseChainAdapter(cfg)
+        if args.chain == "solana":
+            from counterralib.solana import SolanaChainAdapter
+            adapter = SolanaChainAdapter(cfg)
+            chain_name = "Solana"
+        else:
+            from counterralib.live import BaseChainAdapter
+            adapter = BaseChainAdapter(cfg)
+            chain_name = "Base"
         if args.wallet:
             events = adapter.fetch_wallet(args.wallet)
-            label = f"Wallet {args.wallet[:10]}… (live Base data)"
+            label = f"Wallet {args.wallet[:10]}… (live {chain_name} data)"
         else:
             events = adapter.fetch(limit=args.limit)
-            label = "x402 facilitator sweep (live Base data)"
-        run(events, cfg, label)
+            label = f"x402 facilitator sweep (live {chain_name} data)"
+        run(events, cfg, label, chain_name)
 
 
 if __name__ == "__main__":
