@@ -14,8 +14,15 @@ import requests
 
 DISCOVERY_ENDPOINTS = [
     "https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources",
-    "https://x402.org/facilitator/discovery/resources",
+    "https://facilitator.payai.network/discovery/resources",
 ]
+
+
+def _norm(addr):
+    """EVM addresses compare case-insensitively; Solana base58 is
+    case-SENSITIVE and must match exactly."""
+    a = str(addr)
+    return a.lower() if a.startswith("0x") else a
 
 
 def _bazaar_items(session, limit_pages=12):
@@ -43,8 +50,6 @@ def _bazaar_items(session, limit_pages=12):
             offset += pag.get("limit", len(items))
             if offset >= total or offset // 100 >= limit_pages:
                 break
-        if got_any:
-            return
 
 
 def _extract_paytos(item):
@@ -56,13 +61,14 @@ def _extract_paytos(item):
     for a in accepts:
         pt = (a or {}).get("payTo") or (a or {}).get("pay_to")
         if pt:
-            out.append(str(pt).lower())
+            out.append(_norm(pt))
     return out
 
 
 def whois(address, config_providers=None, session=None):
     s = session or requests.Session()
-    addr = address.lower()
+    addr = _norm(address)
+    is_evm = str(address).startswith("0x")
     print(f"Dossier for {address}")
 
     # ---- 1. Bazaar / discovery catalogs ----
@@ -87,8 +93,12 @@ def whois(address, config_providers=None, session=None):
         print("  no Bazaar listing found (seller may use a private or "
               "non-discoverable endpoint)")
 
-    # ---- 2. Blockscout metadata ----
+    # ---- 2. Chain metadata ----
+    if not is_evm:
+        print(f"  Solana address - inspect manually: https://solscan.io/account/{address}")
     try:
+        if not is_evm:
+            raise StopIteration
         r = s.get(f"https://base.blockscout.com/api/v2/addresses/{address}",
                   timeout=30)
         r.raise_for_status()
@@ -100,6 +110,8 @@ def whois(address, config_providers=None, session=None):
         print(f"  Blockscout: {kind}"
               + (f", name: {name}" if name else "")
               + (f", tags: {', '.join(tags)}" if tags else ""))
+    except StopIteration:
+        pass
     except Exception as e:
         print(f"  (Blockscout lookup failed: {e})")
 
