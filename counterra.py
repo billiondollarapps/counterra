@@ -90,11 +90,62 @@ def main():
     sub.add_parser("refresh", help="update facilitator wallets from the x402scan registry")
     wh = sub.add_parser("whois", help="identify a seller wallet via Bazaar + Blockscout")
     wh.add_argument("address", help="the payee wallet to identify")
+    cl = sub.add_parser("classify", help="batch-identify all unmapped sellers from the last run")
+    cl.add_argument("--write", action="store_true",
+                    help="append identified sellers to docs/providers.json")
     lv = sub.add_parser("live", help="run on real Base-chain x402 data")
     lv.add_argument("--limit", type=int, default=150, help="settlements to sweep")
     lv.add_argument("--chain", choices=["base", "solana"], default="base", help="which chain to sweep")
     lv.add_argument("--wallet", type=str, default=None, help="track one payer wallet")
     args = ap.parse_args()
+
+    if args.mode == "classify":
+        import csv as _csv, json as _json, datetime as _dt
+        from counterralib.whois import identify
+        path = os.path.join(OUT, "journal_entries.csv")
+        if not os.path.exists(path):
+            print("No previous run found - run a sweep first (counterra.py live ...)")
+            sys.exit(1)
+        cfg0 = load_config()
+        known = set((cfg0.get("providers") or {}).keys())
+        rows0 = list(_csv.DictReader(open(path)))
+        unmapped, seen = [], set()
+        for r in rows0:
+            w0 = r.get("provider_wallet", "")
+            k = w0.lower() if w0.startswith("0x") else w0
+            if w0 and k not in known and w0 not in seen and r.get("category") == "Uncategorized":
+                seen.add(w0)
+                unmapped.append((w0, float(r.get("amount_usd", 0))))
+        unmapped.sort(key=lambda x: -x[1])
+        print(f"{len(unmapped)} unmapped sellers in last run; identifying...")
+        found, missed = [], 0
+        for w0, amt in unmapped:
+            ident = identify(w0)
+            if ident["label"]:
+                entry = {"wallet": w0.lower() if w0.startswith("0x") else w0,
+                         "chain": ident["chain"], "label": ident["label"],
+                         "category": ident["category_suggestion"] or "Uncategorized",
+                         "evidence": ident["evidence"] + " (category auto-suggested - review)",
+                         "added": _dt.date.today().isoformat()}
+                found.append(entry)
+                print(f"  IDENTIFIED  {w0[:14]}... -> {ident['label']} "
+                      f"[{entry['category']}]  (${amt:.2f} in last run)")
+            else:
+                missed += 1
+                print(f"  unknown     {w0[:14]}...  (${amt:.2f})")
+        print(f"\nresult: {len(found)} identified, {missed} remain unknown")
+        if found and args.write:
+            reg_path = os.path.join(HERE, "docs", "providers.json")
+            reg = _json.load(open(reg_path))
+            have = {p["wallet"] for p in reg["providers"]}
+            added = [e for e in found if e["wallet"] not in have]
+            reg["providers"].extend(added)
+            _json.dump(reg, open(reg_path, "w"), indent=2)
+            print(f"appended {len(added)} entries to docs/providers.json - "
+                  "review categories, then commit & push")
+        elif found:
+            print("(dry run - rerun with --write to append to docs/providers.json)")
+        return
 
     if args.mode == "whois":
         from counterralib.whois import whois

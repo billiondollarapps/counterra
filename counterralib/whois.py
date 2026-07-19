@@ -65,15 +65,30 @@ def _extract_paytos(item):
     return out
 
 
-def whois(address, config_providers=None, session=None):
+CATEGORY_HINTS = [
+    (("search", "news", "feed", "market", "price", "defillama", "data",
+      "scrape", "crawl", "enrich"), "Market data"),
+    (("llm", "inference", "generate", "image", "fal", "model", "ai"), "AI inference"),
+    (("gpu", "compute", "sandbox", "render", "task"), "Compute"),
+    (("parse", "document", "pdf", "ocr"), "Document parsing"),
+]
+
+
+def suggest_category(urls):
+    text = " ".join(urls).lower()
+    for keys, cat in CATEGORY_HINTS:
+        if any(k in text for k in keys):
+            return cat
+    return "Uncategorized"
+
+
+def identify(address, session=None):
+    """Programmatic identification. Returns:
+    {chain, matches:[(url,desc)], label, evidence, category_suggestion}"""
     s = session or requests.Session()
     addr = _norm(address)
-    is_evm = str(address).startswith("0x")
-    print(f"Dossier for {address}")
-
-    # ---- 1. Bazaar / discovery catalogs ----
+    chain = "base" if str(address).startswith("0x") else "solana"
     matches = []
-    print("  searching facilitator discovery catalogs...")
     for item in _bazaar_items(s):
         if addr in _extract_paytos(item):
             res = item.get("resource") or {}
@@ -83,6 +98,20 @@ def whois(address, config_providers=None, session=None):
                 url = res.get("url", "?")
                 desc = res.get("description", "")
             matches.append((url, desc))
+    label = matches[0][0].split("//")[-1].split("/")[0] if matches else None
+    evidence = (f"Discovery catalog payTo match: {len(matches)} resources at {label}/*"
+                if matches else None)
+    return {"chain": chain, "matches": matches, "label": label,
+            "evidence": evidence,
+            "category_suggestion": suggest_category([u for u, _ in matches]) if matches else None}
+
+
+def whois(address, config_providers=None, session=None):
+    print(f"Dossier for {address}")
+    print("  searching facilitator discovery catalogs...")
+    ident = identify(address, session=session)
+    matches = ident["matches"]
+    is_evm = str(address).startswith("0x")
     if matches:
         print(f"  BAZAAR MATCH - this wallet sells {len(matches)} resource(s):")
         for url, desc in matches[:10]:
@@ -116,15 +145,13 @@ def whois(address, config_providers=None, session=None):
         print(f"  (Blockscout lookup failed: {e})")
 
     # ---- 3. suggested config snippet ----
-    label = matches[0][0].split("//")[-1].split("/")[0] if matches else "UNKNOWN"
-    chain = "base" if str(address).startswith("0x") else "solana"
-    if matches:
-        ev = f"Discovery catalog payTo match: {len(matches)} resources at {label}/*"
-    else:
-        ev = "REPLACE WITH EVIDENCE - no catalog match found"
+    label = ident["label"] or "UNKNOWN"
+    chain = ident["chain"]
+    ev = ident["evidence"] or "REPLACE WITH EVIDENCE - no catalog match found"
     import json, datetime
     entry = {"wallet": address if chain == "solana" else address.lower(),
-             "chain": chain, "label": label, "category": "REPLACE (e.g. Market data / AI inference / Compute)",
+             "chain": chain, "label": label,
+             "category": ((ident["category_suggestion"] or "REPLACE") + " (auto-suggested - review)") if matches else "REPLACE",
              "evidence": ev, "added": datetime.date.today().isoformat()}
     print("\n  Ready-to-PR registry entry for docs/providers.json:")
     print("  " + json.dumps(entry, indent=2).replace("\n", "\n  "))

@@ -49,6 +49,7 @@ python3 counterra.py demo                    # simulated x402 traffic
 python3 counterra.py refresh                 # pull newest facilitator wallets
 python3 counterra.py live --limit 80         # real Base data (no API key needed)
 python3 counterra.py live --chain solana --limit 40   # real Solana data (public RPC, no key)
+python3 counterra.py classify --write        # auto-identify unmapped sellers into the registry
 python3 counterra.py live --wallet 0xABC...  # track one payer wallet
 ```
 
@@ -87,6 +88,7 @@ neutral layer across rails. Counterra is that layer, built in the open.
 - [x] Base collector (facilitator sweep + wallet tracking), live-verified
 - [x] Agentic subledger: attribution, aggregation, exceptions
 - [x] Facilitator auto-refresh from the x402scan community registry
+- [x] Auto-classification — `counterra.py classify [--write]`: batch-identifies every unmapped seller from the last run and appends evidenced entries to the registry
 - [x] Open seller-mapping registry — `docs/providers.json`, served live at counterra.xyz/providers.json; evidence-required community contributions (see CONTRIBUTING.md)
 - [ ] Receipt/evidence alignment (TrustBench-compatible) via x402 Foundation process
 - [x] Solana collector — facilitator sweep + wallet tracking (Coinbase + PayAI facilitators), live-ready
