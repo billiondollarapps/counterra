@@ -56,6 +56,16 @@ def run(events, cfg, entity_label, chain_name="Base"):
     exc = exceptions(rows, accounting)
     os.makedirs(OUT, exist_ok=True)
     write_journal_csv(entries, os.path.join(OUT, "journal_entries.csv"))
+    # full agent addresses, copy-paste ready
+    import csv as _csv
+    agg = {}
+    for r in rows:
+        a = agg.setdefault(r["payer_wallet"], {"agent": r["agent"], "total": 0.0, "n": 0})
+        a["total"] += r["amount_usdc"]; a["n"] += 1
+    with open(os.path.join(OUT, "agents.csv"), "w", newline="") as f:
+        w = _csv.writer(f); w.writerow(["payer_wallet", "label", "total_usd", "payments"])
+        for k, v in sorted(agg.items(), key=lambda kv: -kv[1]["total"]):
+            w.writerow([k, v["agent"], round(v["total"], 4), v["n"]])
     with open(os.path.join(OUT, "spend_report.html"), "w") as f:
         f.write(render(summary, entries, exc, period, entity_label, chain_name))
     print(f"events={len(rows)}  total=${summary['total']:,.2f}  "
