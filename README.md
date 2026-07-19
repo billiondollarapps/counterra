@@ -87,6 +87,7 @@ neutral layer across rails. Counterra is that layer, built in the open.
 - [x] Base collector (facilitator sweep + wallet tracking), live-verified
 - [x] Agentic subledger: attribution, aggregation, exceptions
 - [x] Facilitator auto-refresh from the x402scan community registry
+- [x] Open seller-mapping registry — `docs/providers.json`, served live at counterra.xyz/providers.json; evidence-required community contributions (see CONTRIBUTING.md)
 - [ ] Receipt/evidence alignment (TrustBench-compatible) via x402 Foundation process
 - [x] Solana collector — facilitator sweep + wallet tracking (Coinbase + PayAI facilitators), live-ready
 - [ ] QuickBooks/Xero journal sync

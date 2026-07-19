@@ -22,7 +22,17 @@ OUT = os.path.join(HERE, "out")
 
 def load_config():
     with open(os.path.join(HERE, "config.yaml")) as f:
-        return yaml.safe_load(f)
+        cfg = yaml.safe_load(f)
+    # open seller registry (public) underlies config.yaml providers (private overrides)
+    reg_path = os.path.join(HERE, "docs", "providers.json")
+    if os.path.exists(reg_path):
+        import json
+        reg = json.load(open(reg_path))
+        merged = {p["wallet"]: {"label": p["label"], "category": p["category"]}
+                  for p in reg.get("providers", [])}
+        merged.update(cfg.get("providers") or {})
+        cfg["providers"] = merged
+    return cfg
 
 
 def load_env():

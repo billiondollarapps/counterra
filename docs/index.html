@@ -224,6 +224,16 @@ const PROVIDERS = {
   "8mTdwZCZDPeDhso3iAk2znuuzWWXrq7Cni67WJ6Tc167": {label:"Solidus", category:"Market data"},
 };
 const prov = a => PROVIDERS[a && a.startsWith("0x") ? a.toLowerCase() : a];
+
+// live registry load: counterra.xyz/providers.json is the open API;
+// the baked map above is the offline fallback
+fetch("providers.json").then(r => r.ok ? r.json() : null).then(reg => {
+  if(!reg || !reg.providers) return;
+  for(const p of reg.providers){
+    const k = p.wallet.startsWith("0x") ? p.wallet.toLowerCase() : p.wallet;
+    PROVIDERS[k] = {label: p.label, category: p.category};
+  }
+}).catch(()=>{});
 const EXPENSE = {
   "Market data":"6410 - Data & Research Services",
   "Risk data":"6410 - Data & Research Services",

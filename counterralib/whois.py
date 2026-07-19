@@ -117,6 +117,15 @@ def whois(address, config_providers=None, session=None):
 
     # ---- 3. suggested config snippet ----
     label = matches[0][0].split("//")[-1].split("/")[0] if matches else "UNKNOWN"
-    print("\n  To label this seller, add under providers: in config.yaml:")
-    print(f'    "{address}": {{ label: "{label}", category: "AI inference" }}')
-    print("  (adjust label/category as appropriate, then re-run the sweep)")
+    chain = "base" if str(address).startswith("0x") else "solana"
+    if matches:
+        ev = f"Discovery catalog payTo match: {len(matches)} resources at {label}/*"
+    else:
+        ev = "REPLACE WITH EVIDENCE - no catalog match found"
+    import json, datetime
+    entry = {"wallet": address if chain == "solana" else address.lower(),
+             "chain": chain, "label": label, "category": "REPLACE (e.g. Market data / AI inference / Compute)",
+             "evidence": ev, "added": datetime.date.today().isoformat()}
+    print("\n  Ready-to-PR registry entry for docs/providers.json:")
+    print("  " + json.dumps(entry, indent=2).replace("\n", "\n  "))
+    print("  (set the category, verify the evidence, then PR - see CONTRIBUTING.md)")
