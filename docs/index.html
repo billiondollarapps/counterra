@@ -362,23 +362,31 @@ async function getFacilitators(){
 }
 
 async function randomAgentSolana(){
+  // gather a pool of distinct payers from a wider sample, then roll the dice
+  const pool = new Set();
   const facs = [...SOL_FACS].sort(()=>Math.random()-.5);
   for(const fac of facs){
-    const sigs = (await sol("getSignaturesForAddress", [fac, {limit: 12}]) || [])
-      .filter(s => !s.err && s.blockTime);
-    for(const sg of sigs.slice(0, 6)){
+    let sigs = (await sol("getSignaturesForAddress", [fac, {limit: 25}]) || [])
+      .filter(x => !x.err && x.blockTime);
+    sigs = sigs.sort(()=>Math.random()-.5).slice(0, 8);
+    for(const sg of sigs){
       try{
         const tx = await sol("getTransaction", [sg.signature,
           {encoding: "jsonParsed", maxSupportedTransactionVersion: 0}]);
-        const evs = decodeSolTx(tx);
-        if(evs.length && evs[0].payer){
-          status("Found an active agent in live Solana traffic: " + evs[0].payer);
-          return run(evs[0].payer);
-        }
+        for(const ev of decodeSolTx(tx)) if(ev.payer) pool.add(ev.payer);
       }catch(e){}
+      if(pool.size >= 5) break;
     }
+    if(pool.size >= 5) break;
+    status(`<span class="spin"></span>Sampling live Solana traffic… ${pool.size} distinct agents found so far`);
   }
-  status('<span class="err">Couldn\'t find recent Solana traffic just now — paste a wallet instead.</span>');
+  if(pool.size){
+    const arr = [...pool];
+    const pick = arr[Math.floor(Math.random() * arr.length)];
+    status("Rolled the dice across " + arr.length + " active agents — picked: " + pick);
+    return run(pick);
+  }
+  status('<span class="err">Could not find recent Solana traffic just now — paste a wallet instead.</span>');
 }
 
 async function randomAgent(){
