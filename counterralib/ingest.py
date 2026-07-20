@@ -21,6 +21,10 @@ class PaymentEvent:
     amount_usdc: float    # settled amount in USDC
     protocol: str         # "x402"
     memo: str             # resource identifier if present (x402 v2 sessions)
+    app_code: str = ""               # ERC-8021 'a': app that served the endpoint
+    facilitator_code: str = ""       # ERC-8021 'w': facilitator that settled
+    service_codes: str = ""          # ERC-8021 's': client-side code(s), comma-joined
+    attribution_evidence: str = ""   # raw ERC-8021 suffix hex, for evidence trail
 
     def to_dict(self):
         d = asdict(self)

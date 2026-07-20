@@ -11,6 +11,12 @@ We list each facilitator's newest transactions, keep the ones that
 call the USDC contract, and decode the ERC-20 Transfer inside:
 payer (agent) -> payee (seller) -> amount.
 
+ERC-8021 attribution: settlements may carry a builder-code suffix in
+their calldata (which app served the endpoint, which facilitator
+settled, which client paid). When a settlement yields payment events,
+we fetch its calldata once and attach any decoded attribution to
+every event from that settlement.
+
 `refresh_facilitators()` pulls the community-maintained registry
 (x402scan repo) and rewrites config.yaml with the newest wallets -
 field-learned feature: hardcoded facilitator lists go stale.
@@ -21,6 +27,7 @@ import re
 import time
 
 from counterralib.ingest import PaymentEvent
+from .erc8021 import parse_attribution
 
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 
@@ -149,6 +156,19 @@ class BaseChainAdapter:
         return events
 
     # ---------------- log decoding ----------------
+    def _get_tx_input(self, tx_hash):
+        """Fetch a transaction's calldata (where ERC-8021 suffixes live)."""
+        try:
+            if self.is_etherscan:
+                rec = self._get({"module": "proxy",
+                                 "action": "eth_getTransactionByHash",
+                                 "txhash": tx_hash}).get("result") or {}
+                return rec.get("input", "") or ""
+            tx = self._get_v2(f"/transactions/{tx_hash}") or {}
+            return tx.get("raw_input", "") or ""
+        except Exception:
+            return ""
+
     def _decode_tx_logs(self, tx_hash, ts_unix):
         if self.is_etherscan:
             rec = self._get({"module": "proxy",
@@ -178,6 +198,14 @@ class BaseChainAdapter:
                 protocol="x402",
                 memo="facilitator-settled",
             ))
+        if out:
+            attr = parse_attribution(self._get_tx_input(tx_hash))
+            if attr:
+                for ev in out:
+                    ev.app_code = attr.app_code or ""
+                    ev.facilitator_code = attr.facilitator_code or ""
+                    ev.service_codes = ",".join(attr.service_codes)
+                    ev.attribution_evidence = attr.raw_suffix_hex
         return out
 
 
