@@ -26,6 +26,7 @@ concurrency:
 jobs:
   ingest:
     runs-on: ubuntu-latest
+    timeout-minutes: 12   # kill a stuck run instead of hanging (saves Actions minutes)
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -39,8 +40,12 @@ jobs:
         run: pip install requests pyyaml
 
       - name: Sweep Base and accumulate into the running ledger
+        timeout-minutes: 8
         run: |
-          python3 counterra.py live --continuous --chain base --limit 150
+          # Limit kept modest: the free Blockscout public API is throttled,
+          # and a large sweep from GitHub's network can stall. 40 is a safe
+          # steady cadence; the ledger accumulates across runs anyway.
+          python3 counterra.py live --continuous --chain base --limit 40
           echo "--- status after run ---"
           python3 counterra.py status
 
