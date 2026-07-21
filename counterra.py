@@ -66,6 +66,10 @@ def run(events, cfg, entity_label, chain_name="Base"):
     exc = exceptions(rows, accounting)
     os.makedirs(OUT, exist_ok=True)
     write_journal_csv(entries, os.path.join(OUT, "journal_entries.csv"))
+    # Accounting-system exports: QuickBooks + Xero import-ready CSVs
+    from counterralib.exports import write_quickbooks_csv, write_xero_csv
+    write_quickbooks_csv(entries, os.path.join(OUT, "journal_quickbooks.csv"))
+    write_xero_csv(entries, os.path.join(OUT, "journal_xero.csv"))
     # full agent addresses, copy-paste ready
     import csv as _csv
     agg = {}
@@ -80,7 +84,8 @@ def run(events, cfg, entity_label, chain_name="Base"):
         f.write(render(summary, entries, exc, period, entity_label, chain_name))
     print(f"events={len(rows)}  total=${summary['total']:,.2f}  "
           f"period={period}  journal_entries={len(entries)}  exceptions={len(exc)}")
-    print("outputs: out/spend_report.html, out/journal_entries.csv")
+    print("outputs: out/spend_report.html, out/journal_entries.csv, "
+          "out/journal_quickbooks.csv, out/journal_xero.csv")
 
 
 def main():
