@@ -1,6 +1,14 @@
 .env
-out/
 __pycache__/
 */__pycache__/
 .DS_Store
 diagnose.py
+
+# Ignore everything under out/ EXCEPT the worker-maintained running ledger
+# and published reports (Option 1: the db lives in the repo). Note we ignore
+# out/* (contents), not out/ (the dir), so the negations below can take effect.
+out/*
+!out/counterra.db
+!out/spend_report.html
+!out/journal_entries.csv
+!out/agents.csv

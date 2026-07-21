@@ -1,0 +1,59 @@
+name: Continuous ingestion
+
+# The running-ledger worker: sweeps Base x402 settlements on a schedule,
+# accumulates them into the persistent SQLite ledger (out/counterra.db),
+# and commits the updated db + human-readable reports back to the repo.
+#
+# Base uses Blockscout's free public API, so no secrets are required.
+# Runs on a schedule and on-demand (workflow_dispatch button in the Actions tab).
+
+on:
+  schedule:
+    # Every 6 hours (00:00, 06:00, 12:00, 18:00 UTC). Cron is in UTC.
+    # Adjust the frequency here if you want it more/less often.
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab
+
+# Allow the job to push commits back to the repo.
+permissions:
+  contents: write
+
+# Never run two ingests at once (they'd race on the db); queue instead.
+concurrency:
+  group: continuous-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests pyyaml
+
+      - name: Sweep Base and accumulate into the running ledger
+        run: |
+          python3 counterra.py live --continuous --chain base --limit 150
+          echo "--- status after run ---"
+          python3 counterra.py status
+
+      - name: Commit updated ledger and reports
+        run: |
+          git config user.name  "counterra-bot"
+          git config user.email "actions@github.com"
+          git add out/counterra.db out/spend_report.html out/journal_entries.csv out/agents.csv
+          if git diff --cached --quiet; then
+            echo "No new data this run — nothing to commit."
+          else
+            git commit -m "chore(ledger): scheduled ingest $(date -u +'%Y-%m-%dT%H:%MZ')"
+            # Rebase-pull in case anything else pushed since checkout, then push.
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
