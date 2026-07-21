@@ -97,7 +97,24 @@ def main():
     lv.add_argument("--limit", type=int, default=150, help="settlements to sweep")
     lv.add_argument("--chain", choices=["base", "solana"], default="base", help="which chain to sweep")
     lv.add_argument("--wallet", type=str, default=None, help="track one payer wallet")
+    lv.add_argument("--continuous", action="store_true",
+                    help="persist this run and accumulate: books carry over between runs")
+    sub.add_parser("status", help="show continuous-ingestion progress per chain/source")
     args = ap.parse_args()
+
+    if args.mode == "status":
+        from counterralib.continuous import status
+        rows = status()
+        if not rows:
+            print("No continuous runs yet. Use: counterra.py live --continuous ...")
+            return
+        print("Continuous ingestion status:")
+        for r in rows:
+            print(f"  {r['chain']:>7} / {r['source']:<20} "
+                  f"events={r['events_total']:<6} "
+                  f"through={ (r['watermark_ts'] or '?')[:19] }  "
+                  f"last_run={ (r['last_run_ts'] or '?')[:19] }")
+        return
 
     if args.mode == "classify":
         import csv as _csv, json as _json, datetime as _dt
@@ -183,9 +200,18 @@ def main():
         if args.wallet:
             events = adapter.fetch_wallet(args.wallet)
             label = f"Wallet {args.wallet[:10]}… (live {chain_name} data)"
+            source = f"wallet:{args.wallet.lower()}"
         else:
             events = adapter.fetch(limit=args.limit)
             label = f"x402 facilitator sweep (live {chain_name} data)"
+            source = "sweep"
+
+        if getattr(args, "continuous", False):
+            from counterralib.continuous import ingest_run
+            events, stats = ingest_run(events, chain=args.chain, source=source)
+            print(f"continuous: +{stats['new_this_run']} new this run, "
+                  f"{stats['total_events']} total accumulated on {chain_name}")
+            label = f"{label} — running ledger"
         run(events, cfg, label, chain_name)
 
 
