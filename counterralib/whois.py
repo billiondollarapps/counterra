@@ -101,8 +101,18 @@ def identify(address, session=None):
     label = matches[0][0].split("//")[-1].split("/")[0] if matches else None
     evidence = (f"Discovery catalog payTo match: {len(matches)} resources at {label}/*"
                 if matches else None)
+    # Second, independent evidence source: ERC-8021 builder codes decoded from
+    # settlement calldata in our own accumulated ledger.
+    try:
+        from counterralib.buildercodes import builder_code_evidence
+        bc_ev = builder_code_evidence(addr, chain=chain)
+    except Exception:
+        bc_ev = None
+    if bc_ev:
+        evidence = f"{evidence}; {bc_ev}" if evidence else bc_ev
     return {"chain": chain, "matches": matches, "label": label,
             "evidence": evidence,
+            "builder_code_evidence": bc_ev,
             "category_suggestion": suggest_category([u for u, _ in matches]) if matches else None}
 
 
@@ -121,6 +131,22 @@ def whois(address, config_providers=None, session=None):
     else:
         print("  no Bazaar listing found (seller may use a private or "
               "non-discoverable endpoint)")
+
+    # ---- 1b. ERC-8021 builder-code evidence from our own ledger ----
+    if ident.get("builder_code_evidence"):
+        print(f"  BUILDER CODE: {ident['builder_code_evidence']}")
+        try:
+            from counterralib.buildercodes import codes_for_wallet, wallets_for_code
+            for code in codes_for_wallet(address, chain=ident["chain"]):
+                others = [w for w in wallets_for_code(code, chain=ident["chain"])
+                          if w != str(address).lower()]
+                if others:
+                    print(f"    note: code {code} also settles to "
+                          f"{len(others)} other wallet(s) - likely same operator:")
+                    for w in others[:5]:
+                        print(f"      {w}")
+        except Exception:
+            pass
 
     # ---- 2. Chain metadata ----
     if not is_evm:

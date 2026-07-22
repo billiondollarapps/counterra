@@ -105,7 +105,37 @@ def main():
     lv.add_argument("--continuous", action="store_true",
                     help="persist this run and accumulate: books carry over between runs")
     sub.add_parser("status", help="show continuous-ingestion progress per chain/source")
+    sub.add_parser("codes", help="ERC-8021 builder-code findings: registry candidates + conflicts")
     args = ap.parse_args()
+
+    if args.mode == "codes":
+        from counterralib.buildercodes import unregistered_with_codes, detect_conflicts
+        cfg_c = load_config()
+        provs = cfg_c.get("providers") or {}
+        cands = unregistered_with_codes(provs)
+        print(f"Builder-code registry candidates ({len(cands)} wallet(s) self-identified "
+              f"but not yet in the registry):")
+        if not cands:
+            print("  none - every wallet carrying a builder code is already registered.")
+        for c in cands:
+            codes = ", ".join(f"{k} x{v}" for k, v in c["codes"].items())
+            print(f"  {c['wallet']}  ${c['amount_usdc']:.4f} over "
+                  f"{c['settlements']} settlement(s)   codes: {codes}")
+        conflicts = detect_conflicts(provs)
+        print(f"\nConflicts / clusters ({len(conflicts)}):")
+        if not conflicts:
+            print("  none - observed builder codes are consistent with the registry.")
+        for c in conflicts:
+            if c["type"] == "shared_code":
+                print(f"  [cluster] code {c['code']} settles to {len(c['wallets'])} wallets "
+                      f"{c['registry_labels'] or '(unlabelled)'}")
+                for w in c["wallets"]:
+                    print(f"      {w}")
+            else:
+                print(f"  [multi]   wallet {c['wallet']} "
+                      f"({c.get('registry_label') or 'unlabelled'}) carries codes "
+                      f"{', '.join(c['codes'])}")
+        return
 
     if args.mode == "status":
         from counterralib.continuous import status
