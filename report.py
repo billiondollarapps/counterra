@@ -1,18 +1,59 @@
 """Shared HTML report renderer for Counterra."""
 
 
-def bar_rows(d, total, color="#2f6fed", fmt="${:,.2f}"):
+def fmt_usd(v):
+    """
+    Format a USD amount so sub-cent agent payments stay readable.
+
+    Agent spend is dominated by micropayments — the median x402 settlement is
+    a fraction of a cent — so a fixed 2-decimal format renders most of a real
+    report as "$0.00", which reads as broken rather than small. Scale the
+    precision to the magnitude instead.
+    """
+    try:
+        a = abs(float(v))
+    except (TypeError, ValueError):
+        return "$0.00"
+    if a == 0:
+        return "$0.00"
+    if a < 0.01:
+        return f"${v:,.6f}".rstrip("0").rstrip(".")
+    if a < 1:
+        return f"${v:,.4f}".rstrip("0").rstrip(".")
+    return f"${v:,.2f}"
+
+
+def bar_rows(d, total, color="#2f6fed", fmt=None, top=12):
+    """
+    Render a ranked bar table, collapsing the long tail into one summary row.
+
+    Agent-spend distributions have a very long tail of sub-cent counterparties;
+    listing all of them (77 rows of "$0.00 0%") buries the signal. Show the top
+    `top` entries and roll the remainder into a single line that still accounts
+    for every dollar, so nothing is silently dropped.
+    """
+    items = sorted(d.items(), key=lambda kv: -kv[1])
+    head, tail = items[:top], items[top:]
     rows = ""
-    for k, v in sorted(d.items(), key=lambda kv: -kv[1]):
+    for k, v in head:
         pct = (v / total * 100) if total else 0
+        label = fmt.format(v) if fmt else fmt_usd(v)
         rows += f"""<tr><td class="k">{k}</td>
         <td class="bar"><div style="width:{pct:.1f}%;background:{color}"></div></td>
-        <td class="v">{fmt.format(v)}</td><td class="p">{pct:.0f}%</td></tr>"""
+        <td class="v">{label}</td><td class="p">{pct:.1f}%</td></tr>"""
+    if tail:
+        tsum = sum(v for _, v in tail)
+        pct = (tsum / total * 100) if total else 0
+        label = fmt.format(tsum) if fmt else fmt_usd(tsum)
+        rows += f"""<tr><td class="k" style="font-style:italic;color:#5f6672">
+        and {len(tail):,} more (long tail)</td>
+        <td class="bar"><div style="width:{pct:.1f}%;background:#b9c0cc"></div></td>
+        <td class="v">{label}</td><td class="p">{pct:.1f}%</td></tr>"""
     return rows
 
 
 def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)",
-           chain_name="Base", attribution=None):
+           chain_name="Base", attribution=None, grouped_exc=None):
     daily = summary["by_day"]
     maxd = max(daily.values()) if daily else 1
     spark = "".join(
@@ -24,10 +65,14 @@ def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)
         <td class="num">${e['amount_usd']:,.2f}</td><td>{e['provider']}</td>
         <td class="num">{e['settlements']:,}</td></tr>""" for e in entries
     )
+    gx = grouped_exc if grouped_exc is not None else []
     xrows = "".join(
-        f"""<tr><td>{x['ts'][:16].replace('T',' ')}</td><td>{x['agent']}</td>
-        <td>{x['provider']}</td><td class="num">${x['amount_usdc']:,.2f}</td>
-        <td>{x['reason']}</td></tr>""" for x in exc[:12]
+        f"""<tr><td>{x['counterparty'][:20]}…</td>
+        <td class="num">{x['settlements']:,}</td>
+        <td class="num">{x['distinct_payers']:,}</td>
+        <td class="num">{fmt_usd(x['amount_usdc'])}</td>
+        <td>{x['first_ts'][:10]} → {x['last_ts'][:10]}</td>
+        <td>{x['reason']}</td></tr>""" for x in gx[:15]
     )
     # ERC-8021 attribution block (omitted entirely when nothing was captured)
     attr_html = ""
@@ -89,7 +134,7 @@ def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)
         <div class="card"><div class="l">Total agent spend</div><div class="v">${summary['total']:,.2f}</div></div>
         <div class="card"><div class="l">Settlements ingested</div><div class="v">{summary['n_events']:,}</div></div>
         <div class="card"><div class="l">Journal entries produced</div><div class="v">{len(entries)}</div></div>
-        <div class="card"><div class="l">Exceptions flagged</div><div class="v">{len(exc)}</div></div>
+        <div class="card"><div class="l">Exceptions flagged</div><div class="v">{len(gx)}</div></div>
       </div>
       <h2>Daily spend</h2><div class="spark">{spark}</div>
       <h2>Spend by agent</h2><table>{bar_rows(summary['by_agent'], summary['total'])}</table>
@@ -97,8 +142,13 @@ def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)
       <h2>Aggregated journal entries — {period} (Dr expense / Cr Digital Assets USDC)</h2>
       <table><tr><th>Debit</th><th>Credit</th><th style="text-align:right">Amount</th><th>Provider</th><th style="text-align:right">Settlements</th></tr>{jrows}</table>
       <div class="note">Each settlement is a potential digital-asset disposal for tax purposes; disposal counts retained per entry. Sub-materiality amounts swept to period-end rollup.</div>{attr_html}
-      <h2>Exception queue (first 12)</h2>
-      <table><tr><th>Time</th><th>Agent</th><th>Counterparty</th><th style="text-align:right">Amount</th><th>Reason</th></tr>{xrows}</table>
+      <h2>Exception queue — {len(gx)} item(s), grouped by counterparty</h2>
+      <p style="font-size:11px;color:var(--mut);margin-bottom:6px">
+        One row per underlying problem, not per settlement: repeated payments to the
+        same unmapped counterparty are a single classification task.</p>
+      <table><tr><th>Counterparty</th><th style="text-align:right">Settlements</th>
+      <th style="text-align:right">Payers</th><th style="text-align:right">Amount</th>
+      <th>Window</th><th>Reason</th></tr>{xrows}</table>
     </div>
     <div class="foot"><span><b>COUNTERRA v0.3</b> — agents move the money, Counterra makes it count</span>
     <span>Generated from {summary['n_events']:,} canonical PaymentEvents</span></div>

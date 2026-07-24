@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import yaml
 
-from counterralib.ledger import attribution_summary, enrich, summarize, journal_entries, exceptions, write_journal_csv
+from counterralib.ledger import attribution_summary, grouped_exceptions, enrich, summarize, journal_entries, exceptions, write_journal_csv
 from report import render  # shared HTML renderer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -73,6 +73,7 @@ def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
     entries = journal_entries(rows, period, accounting)
     exc = exceptions(rows, accounting)
     attribution = attribution_summary(rows)
+    gexc = grouped_exceptions(rows, accounting)
     os.makedirs(OUT, exist_ok=True)
     write_journal_csv(entries, os.path.join(OUT, f"journal_entries{out_suffix}.csv"))
     # Accounting-system exports: QuickBooks + Xero import-ready CSVs
@@ -90,9 +91,9 @@ def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
         for k, v in sorted(agg.items(), key=lambda kv: -kv[1]["total"]):
             w.writerow([k, v["agent"], round(v["total"], 4), v["n"]])
     with open(os.path.join(OUT, f"spend_report{out_suffix}.html"), "w") as f:
-        f.write(render(summary, entries, exc, period, entity_label, chain_name, attribution))
+        f.write(render(summary, entries, exc, period, entity_label, chain_name, attribution, gexc))
     print(f"events={len(rows)}  total=${summary['total']:,.2f}  "
-          f"period={period}  journal_entries={len(entries)}  exceptions={len(exc)}")
+          f"period={period}  journal_entries={len(entries)}  exceptions={len(gexc)} grouped ({len(exc)} settlements)")
     print(f"outputs: out/spend_report{out_suffix}.html, out/journal_entries{out_suffix}.csv, "
           f"out/journal_quickbooks{out_suffix}.csv, out/journal_xero{out_suffix}.csv")
 

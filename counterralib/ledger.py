@@ -143,6 +143,60 @@ def exceptions(rows, accounting=None):
     return out
 
 
+def grouped_exceptions(rows, accounting=None):
+    """
+    Exceptions collapsed to one row per underlying problem.
+
+    `exceptions()` returns one entry per settlement, which inflates the count
+    and makes the queue unactionable: 131 settlements to a single unmapped
+    counterparty is ONE thing to fix, not 131. Anomalies (single large
+    payments) stay per-settlement, because each is individually reviewable.
+
+    Returns rows sorted by amount, each with: reason, counterparty, provider,
+    settlements, amount_usdc, first_ts, last_ts, distinct_payers.
+    """
+    acc = {**DEFAULT_ACCOUNTING, **(accounting or {})}
+    thr = float(acc.get("anomaly_threshold_usd", 40.0))
+    unmapped = {}
+    anomalies = []
+    for r in rows:
+        if r["amount_usdc"] >= thr:
+            anomalies.append({
+                "reason": f"Amount >= ${thr:.0f} - review",
+                "counterparty": r["payee_wallet"],
+                "provider": r["provider"],
+                "settlements": 1,
+                "amount_usdc": r["amount_usdc"],
+                "first_ts": r["ts"], "last_ts": r["ts"],
+                "distinct_payers": 1,
+            })
+        elif r["category"] == "Uncategorized":
+            w = r["payee_wallet"].lower()
+            g = unmapped.setdefault(w, {
+                "reason": "Unmapped counterparty - needs classification",
+                "counterparty": r["payee_wallet"],
+                "provider": r["provider"],
+                "settlements": 0, "amount_usdc": 0.0,
+                "first_ts": r["ts"], "last_ts": r["ts"],
+                "_payers": set(),
+            })
+            g["settlements"] += 1
+            g["amount_usdc"] += r["amount_usdc"]
+            g["_payers"].add(r["payer_wallet"])
+            if r["ts"] < g["first_ts"]:
+                g["first_ts"] = r["ts"]
+            if r["ts"] > g["last_ts"]:
+                g["last_ts"] = r["ts"]
+    out = []
+    for g in unmapped.values():
+        g["distinct_payers"] = len(g.pop("_payers"))
+        g["amount_usdc"] = round(g["amount_usdc"], 6)
+        out.append(g)
+    out.extend(anomalies)
+    out.sort(key=lambda g: -g["amount_usdc"])
+    return out
+
+
 def write_journal_csv(entries, path):
     if not entries:
         open(path, "w").write("")
