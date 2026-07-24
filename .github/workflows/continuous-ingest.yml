@@ -39,6 +39,17 @@ jobs:
       - name: Install dependencies
         run: pip install requests pyyaml
 
+      - name: Sweep Solana and accumulate (non-fatal)
+        timeout-minutes: 6
+        continue-on-error: true
+        run: |
+          # Solana runs FIRST and is allowed to fail: the public RPC
+          # (api.mainnet-beta.solana.com) rate-limits datacenter IPs like GitHub
+          # runners, and a throttled Solana sweep must never block Base
+          # ingestion or the commit below. Base runs second so the committed
+          # reports reflect the larger dataset.
+          python3 counterra.py live --continuous --chain solana --limit 30
+
       - name: Sweep Base and accumulate into the running ledger
         timeout-minutes: 8
         run: |

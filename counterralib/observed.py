@@ -76,6 +76,35 @@ def ledger_window(db_path=None, chain=None):
             "days": days}
 
 
+def infer_chain(wallet):
+    """
+    Best-effort chain of a payTo address from its format.
+
+    EVM addresses are 0x + 40 hex chars; Solana addresses are base58 and never
+    start with 0x. Returns "base", "solana", or None when unrecognised.
+    """
+    w = (wallet or "").strip()
+    if w.lower().startswith("0x") and len(w) == 42:
+        return "base"
+    if 32 <= len(w) <= 44 and not w.startswith("0x"):
+        return "solana"
+    return None
+
+
+def chains_covered(db_path=None):
+    """
+    Which chains the ledger actually holds data for, and how much.
+
+    Needed so that an unobserved seller on a chain we have never swept is
+    reported as missing COVERAGE rather than missing demand — the two mean
+    very different things and conflating them would misrepresent sellers.
+    """
+    out = {}
+    for e in _load_events(db_path, None):
+        out[e.chain] = out.get(e.chain, 0) + 1
+    return out
+
+
 def observed_stats(wallet, db_path=None, chain=None):
     """
     Demand stats for one payTo wallet, or None if never observed.

@@ -111,14 +111,17 @@ def main():
 
     if args.mode == "observed":
         from counterralib.observed import (annotate_registry, ledger_window,
-                                          demand_concentration)
+                                          demand_concentration, chains_covered,
+                                          infer_chain)
         cfg_o = load_config()
         win = ledger_window()
         if not win:
             print("No accumulated ledger yet. Run: counterra.py live --continuous ...")
             return
+        covered = chains_covered()
         print(f"Ledger window: {win['events']} settlements, "
               f"{win['first_ts'][:10]} to {win['last_ts'][:10]} ({win['days']} days)")
+        print("Chain coverage: " + ", ".join(f"{c}={n}" for c, n in sorted(covered.items())))
         con = demand_concentration()
         if con:
             print(f"Distinct payees seen: {con['payees']}; "
@@ -134,7 +137,12 @@ def main():
                       f"{s['settlements']:>4} settlements  ${s['amount_usdc']:>9.6f}  "
                       f"{s['days_active']}d active")
             else:
-                print(f"  {name:<36}   - not yet observed in this ledger window")
+                ch = infer_chain(r["wallet"])
+                if ch and not covered.get(ch):
+                    print(f"  {name:<36}   no {ch} data in ledger yet "
+                          f"(coverage gap, not a demand signal)")
+                else:
+                    print(f"  {name:<36}   - not yet observed in this ledger window")
         print("\nNote: the ledger samples facilitator wallets, so absence here is "
               "weak evidence of absent demand, not proof.")
         return

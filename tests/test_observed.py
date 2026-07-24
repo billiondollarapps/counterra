@@ -138,6 +138,24 @@ def test_empty_and_missing_ledger_graceful():
     print("missing ledger graceful OK")
 
 
+
+def test_infer_chain():
+    assert ob.infer_chain("0x" + "a" * 40) == "base"
+    assert ob.infer_chain("DdeMfXrDae49VAkvHiGnUAkAPCFRhBpwsc7yVDvyKqYb") == "solana"
+    assert ob.infer_chain("8mTdwZCZDPeDhso3") is None   # truncated, too short to trust
+    assert ob.infer_chain("") is None
+    assert ob.infer_chain("0xshort") is None
+    print("infer_chain OK")
+
+
+def test_chains_covered():
+    db = _db([_ev(1, "0xS", "0xA"), _ev(2, "0xS", "0xB")])
+    c = ob.chains_covered(db)
+    assert c == {"base": 2}, c
+    assert "solana" not in c   # coverage gap, not zero demand
+    os.unlink(db)
+    print("chains_covered OK")
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_"):
