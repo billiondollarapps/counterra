@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import yaml
 
-from counterralib.ledger import enrich, summarize, journal_entries, exceptions, write_journal_csv
+from counterralib.ledger import attribution_summary, enrich, summarize, journal_entries, exceptions, write_journal_csv
 from report import render  # shared HTML renderer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -51,7 +51,15 @@ def latest_full_period(rows):
     return months[-1] if months else "----"
 
 
-def run(events, cfg, entity_label, chain_name="Base"):
+def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
+    """
+    Render books for one dataset.
+
+    out_suffix namespaces the output files (e.g. "_base", "_solana", "_demo")
+    so runs on different chains no longer overwrite each other's reports. The
+    accumulated ledger is already chain-namespaced in the store; this makes the
+    human-readable outputs match.
+    """
     agent_map = cfg.get("agents") or {}
     provider_map = cfg.get("providers") or {}
     accounting = cfg.get("accounting") or {}
@@ -64,28 +72,29 @@ def run(events, cfg, entity_label, chain_name="Base"):
     period = latest_full_period(rows)
     entries = journal_entries(rows, period, accounting)
     exc = exceptions(rows, accounting)
+    attribution = attribution_summary(rows)
     os.makedirs(OUT, exist_ok=True)
-    write_journal_csv(entries, os.path.join(OUT, "journal_entries.csv"))
+    write_journal_csv(entries, os.path.join(OUT, f"journal_entries{out_suffix}.csv"))
     # Accounting-system exports: QuickBooks + Xero import-ready CSVs
     from counterralib.exports import write_quickbooks_csv, write_xero_csv
-    write_quickbooks_csv(entries, os.path.join(OUT, "journal_quickbooks.csv"))
-    write_xero_csv(entries, os.path.join(OUT, "journal_xero.csv"))
+    write_quickbooks_csv(entries, os.path.join(OUT, f"journal_quickbooks{out_suffix}.csv"))
+    write_xero_csv(entries, os.path.join(OUT, f"journal_xero{out_suffix}.csv"))
     # full agent addresses, copy-paste ready
     import csv as _csv
     agg = {}
     for r in rows:
         a = agg.setdefault(r["payer_wallet"], {"agent": r["agent"], "total": 0.0, "n": 0})
         a["total"] += r["amount_usdc"]; a["n"] += 1
-    with open(os.path.join(OUT, "agents.csv"), "w", newline="") as f:
+    with open(os.path.join(OUT, f"agents{out_suffix}.csv"), "w", newline="") as f:
         w = _csv.writer(f); w.writerow(["payer_wallet", "label", "total_usd", "payments"])
         for k, v in sorted(agg.items(), key=lambda kv: -kv[1]["total"]):
             w.writerow([k, v["agent"], round(v["total"], 4), v["n"]])
-    with open(os.path.join(OUT, "spend_report.html"), "w") as f:
-        f.write(render(summary, entries, exc, period, entity_label, chain_name))
+    with open(os.path.join(OUT, f"spend_report{out_suffix}.html"), "w") as f:
+        f.write(render(summary, entries, exc, period, entity_label, chain_name, attribution))
     print(f"events={len(rows)}  total=${summary['total']:,.2f}  "
           f"period={period}  journal_entries={len(entries)}  exceptions={len(exc)}")
-    print("outputs: out/spend_report.html, out/journal_entries.csv, "
-          "out/journal_quickbooks.csv, out/journal_xero.csv")
+    print(f"outputs: out/spend_report{out_suffix}.html, out/journal_entries{out_suffix}.csv, "
+          f"out/journal_quickbooks{out_suffix}.csv, out/journal_xero{out_suffix}.csv")
 
 
 def main():
@@ -255,7 +264,7 @@ def main():
         cfg = dict(cfg)
         cfg["agents"] = SAMPLE_AGENTS
         cfg["providers"] = SAMPLE_PROVIDERS
-        run(SampleDataAdapter(days=30).fetch(), cfg, "Demo Co (simulated data)", "Base")
+        run(SampleDataAdapter(days=30).fetch(), cfg, "Demo Co (simulated data)", "Base", out_suffix="_demo")
     else:
         load_env()
         if "etherscan" in (cfg.get("chain", {}).get("api_base") or "") and \
@@ -286,7 +295,7 @@ def main():
             print(f"continuous: +{stats['new_this_run']} new this run, "
                   f"{stats['total_events']} total accumulated on {chain_name}")
             label = f"{label} — running ledger"
-        run(events, cfg, label, chain_name)
+        run(events, cfg, label, chain_name, out_suffix=f"_{args.chain}")
 
 
 if __name__ == "__main__":

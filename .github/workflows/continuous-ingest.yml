@@ -64,7 +64,10 @@ jobs:
         run: |
           git config user.name  "counterra-bot"
           git config user.email "actions@github.com"
-          git add out/counterra.db out/spend_report.html out/journal_entries.csv out/agents.csv
+          # Only the ledger + the Base report: the CSV exports are
+          # regenerable from the ledger and committing them caused a
+          # local/bot collision on every local run.
+          git add out/counterra.db out/spend_report_base.html
           if git diff --cached --quiet; then
             echo "No new data this run — nothing to commit."
           else

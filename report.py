@@ -11,7 +11,8 @@ def bar_rows(d, total, color="#2f6fed", fmt="${:,.2f}"):
     return rows
 
 
-def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)", chain_name="Base"):
+def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)",
+           chain_name="Base", attribution=None):
     daily = summary["by_day"]
     maxd = max(daily.values()) if daily else 1
     spark = "".join(
@@ -28,6 +29,33 @@ def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)
         <td>{x['provider']}</td><td class="num">${x['amount_usdc']:,.2f}</td>
         <td>{x['reason']}</td></tr>""" for x in exc[:12]
     )
+    # ERC-8021 attribution block (omitted entirely when nothing was captured)
+    attr_html = ""
+    if attribution and attribution.get("total_rows"):
+        cov = attribution["coverage"]
+        def _tbl(d, label):
+            if not d:
+                return ""
+            rows_ = "".join(
+                f"""<tr><td>{code}</td><td class="num">${v['amount']:,.6f}</td>
+                <td class="num">{v['settlements']:,}</td></tr>"""
+                for code, v in sorted(d.items(), key=lambda kv: -kv[1]["amount"])[:10]
+            )
+            return (f"<h3 style='font-size:12px;color:var(--mut);margin:10px 0 4px'>{label}</h3>"
+                    f"<table><tr><th>Code</th><th class='num'>Amount</th>"
+                    f"<th class='num'>Settlements</th></tr>{rows_}</table>")
+        blocks = (_tbl(attribution["apps"], "Seller app codes (a)")
+                  + _tbl(attribution["facilitators"], "Facilitator codes (w)")
+                  + _tbl(attribution["services"], "Client/service codes (s)"))
+        if blocks:
+            attr_html = f"""
+      <h2>ERC-8021 attribution (decoded from settlement calldata)</h2>
+      <p style="font-size:11px;color:var(--mut);margin-bottom:6px">
+        Coverage: app {cov['app']*100:.0f}% &middot; facilitator {cov['facilitator']*100:.0f}%
+        &middot; client {cov['service']*100:.0f}% of {attribution['total_rows']:,} settlements.
+        Attribution is opt-in per payment, so partial coverage is expected.
+      </p>{blocks}"""
+
     html = f"""<!DOCTYPE html><html><head><meta charset="utf-8"><style>
     :root{{--navy:#15243b;--acc:#2f6fed;--mut:#5f6672;--line:#e3e6ec;--bg:#f7f8fa}}
     *{{margin:0;padding:0;box-sizing:border-box}}
@@ -68,7 +96,7 @@ def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)
       <h2>Spend by provider</h2><table>{bar_rows(summary['by_provider'], summary['total'], '#177245')}</table>
       <h2>Aggregated journal entries — {period} (Dr expense / Cr Digital Assets USDC)</h2>
       <table><tr><th>Debit</th><th>Credit</th><th style="text-align:right">Amount</th><th>Provider</th><th style="text-align:right">Settlements</th></tr>{jrows}</table>
-      <div class="note">Each settlement is a potential digital-asset disposal for tax purposes; disposal counts retained per entry. Sub-materiality amounts swept to period-end rollup.</div>
+      <div class="note">Each settlement is a potential digital-asset disposal for tax purposes; disposal counts retained per entry. Sub-materiality amounts swept to period-end rollup.</div>{attr_html}
       <h2>Exception queue (first 12)</h2>
       <table><tr><th>Time</th><th>Agent</th><th>Counterparty</th><th style="text-align:right">Amount</th><th>Reason</th></tr>{xrows}</table>
     </div>

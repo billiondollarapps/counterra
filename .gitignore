@@ -3,13 +3,14 @@ __pycache__/
 */__pycache__/
 .DS_Store
 diagnose.py
+counterra-positioning-and-roadmap.md
 
-# Ignore everything under out/ EXCEPT the worker-maintained running ledger
-# and published reports (Option 1: the db lives in the repo). Note we ignore
-# out/* (contents), not out/ (the dir), so the negations below can take effect.
+# Ignore everything under out/ EXCEPT the two artifacts the scheduled worker
+# maintains: the running ledger itself, and the Base spend report as a public
+# view of it. The CSV exports and per-chain variants are regenerable from the
+# ledger in one command, and committing them caused constant local/bot
+# collisions on every local run. Note we ignore out/* (contents), not out/
+# (the dir), so these negations take effect.
 out/*
 !out/counterra.db
-!out/spend_report.html
-!out/journal_entries.csv
-!out/agents.csv
-counterra-positioning-and-roadmap.md
+!out/spend_report_base.html
