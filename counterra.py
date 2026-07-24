@@ -117,7 +117,53 @@ def main():
     sub.add_parser("status", help="show continuous-ingestion progress per chain/source")
     sub.add_parser("codes", help="ERC-8021 builder-code findings: registry candidates + conflicts")
     sub.add_parser("observed", help="observed-demand evidence per registry seller (from the accumulated ledger)")
+    pr = sub.add_parser("profile", help="fingerprint an unknown seller wallet from its settlement pattern")
+    pr.add_argument("wallet", nargs="?", default=None,
+                    help="payTo wallet to profile; omit to list the top unidentified wallets")
     args = ap.parse_args()
+
+    if args.mode == "profile":
+        from counterralib.profile import profile_wallet, unidentified_ranked
+        cfg_p = load_config()
+        provs = cfg_p.get("providers") or {}
+        if not args.wallet:
+            ranked = unidentified_ranked(provs, limit=10)
+            if not ranked:
+                print("No unidentified wallets in the ledger. Nothing to investigate.")
+                return
+            print("Top unidentified payTo wallets (ranked by impact on the books):")
+            for r in ranked:
+                print(f"  {r['wallet']}  ${r['amount_usdc']:>10.6f}  "
+                      f"{r['settlements']:>4} settlements  {r['distinct_payers']:>3} payers")
+            print("\nProfile one with: counterra.py profile <wallet>")
+            return
+        p = profile_wallet(args.wallet, provs)
+        if not p:
+            print(f"No settlements to {args.wallet} in the accumulated ledger.")
+            return
+        print(f"Profile: {p['wallet']}")
+        print(f"  {p['settlements']} settlements, {p['distinct_payers']} distinct payers, "
+              f"${p['amount_usdc']:.6f} total")
+        print(f"  window: {p['first_ts'][:16]} to {p['last_ts'][:16]}")
+        print(f"  price ladder ({p['tier_count']} tier(s)): "
+              + ", ".join(f"${a:g} x{n}" for a, n in p["price_ladder"]))
+        if p["cadence"]:
+            c = p["cadence"]
+            print(f"  cadence: median gap {c['median_gap_s']/60:.1f} min "
+                  f"(min {c['min_gap_s']/60:.1f}, max {c['max_gap_s']/60:.1f})")
+        if p["builder_codes"]:
+            print(f"  builder codes: {', '.join(p['builder_codes'])}")
+        print(f"  payer exclusivity: {p['exclusivity']*100:.0f}% "
+              f"({p['exclusive_payers']}/{p['distinct_payers']} buy from no other visible seller)")
+        if p["payer_overlap"]:
+            print("  payers also buy from: "
+                  + ", ".join(f"{k} ({v})" for k, v in p["payer_overlap"]))
+        print("\n  Leads:")
+        for note in p["notes"]:
+            print(f"    - {note}")
+        print("\n  These are hints from a bounded sample, not an identification.")
+        print(f"  Next: basescan.org/address/{p['wallet']}")
+        return
 
     if args.mode == "observed":
         from counterralib.observed import (annotate_registry, ledger_window,
