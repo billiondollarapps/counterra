@@ -148,6 +148,15 @@ def whois(address, config_providers=None, session=None):
         except Exception:
             pass
 
+    # ---- 1c. observed-demand evidence from our own accumulated ledger ----
+    try:
+        from counterralib.observed import observed_evidence
+        obs = observed_evidence(address, chain=ident["chain"])
+        if obs:
+            print(f"  DEMAND: {obs}")
+    except Exception:
+        pass
+
     # ---- 2. Chain metadata ----
     if not is_evm:
         print(f"  Solana address - inspect manually: https://solscan.io/account/{address}")

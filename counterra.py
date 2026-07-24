@@ -106,7 +106,38 @@ def main():
                     help="persist this run and accumulate: books carry over between runs")
     sub.add_parser("status", help="show continuous-ingestion progress per chain/source")
     sub.add_parser("codes", help="ERC-8021 builder-code findings: registry candidates + conflicts")
+    sub.add_parser("observed", help="observed-demand evidence per registry seller (from the accumulated ledger)")
     args = ap.parse_args()
+
+    if args.mode == "observed":
+        from counterralib.observed import (annotate_registry, ledger_window,
+                                          demand_concentration)
+        cfg_o = load_config()
+        win = ledger_window()
+        if not win:
+            print("No accumulated ledger yet. Run: counterra.py live --continuous ...")
+            return
+        print(f"Ledger window: {win['events']} settlements, "
+              f"{win['first_ts'][:10]} to {win['last_ts'][:10]} ({win['days']} days)")
+        con = demand_concentration()
+        if con:
+            print(f"Distinct payees seen: {con['payees']}; "
+                  f"top payee is {con['top_share_settlements']*100:.0f}% of settlements")
+        print("\nObserved demand per registry seller "
+              "(ranked by distinct payers, then value):")
+        rows = annotate_registry(cfg_o.get("providers") or {})
+        for r in rows:
+            name = (r.get("label") or r["wallet"])[:34]
+            s = r["observed"]
+            if s:
+                print(f"  {name:<36} {s['distinct_payers']:>3} payers  "
+                      f"{s['settlements']:>4} settlements  ${s['amount_usdc']:>9.6f}  "
+                      f"{s['days_active']}d active")
+            else:
+                print(f"  {name:<36}   - not yet observed in this ledger window")
+        print("\nNote: the ledger samples facilitator wallets, so absence here is "
+              "weak evidence of absent demand, not proof.")
+        return
 
     if args.mode == "codes":
         from counterralib.buildercodes import unregistered_with_codes, detect_conflicts
