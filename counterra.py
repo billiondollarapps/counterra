@@ -119,10 +119,38 @@ def main():
     sub.add_parser("status", help="show continuous-ingestion progress per chain/source")
     sub.add_parser("codes", help="ERC-8021 builder-code findings: registry candidates + conflicts")
     sub.add_parser("observed", help="observed-demand evidence per registry seller (from the accumulated ledger)")
+    rcp = sub.add_parser("receipt", help="turn an x402-receipts/v0.3 JSON receipt into an enriched journal entry")
+    rcp.add_argument("path", help="path to a receipt JSON file (or - for stdin)")
     pr = sub.add_parser("profile", help="fingerprint an unknown seller wallet from its settlement pattern")
     pr.add_argument("wallet", nargs="?", default=None,
                     help="payTo wallet to profile; omit to list the top unidentified wallets")
     args = ap.parse_args()
+
+    if args.mode == "receipt":
+        import json as _json
+        from counterralib.receipts import receipt_to_journal, ReceiptError
+        cfg_r = load_config()
+        provs = cfg_r.get("providers") or {}
+        acct = (cfg_r.get("accounting") or {}).get("expense_accounts") or {}
+        raw = sys.stdin.read() if args.path == "-" else open(args.path).read()
+        try:
+            receipt = _json.loads(raw)
+            j = receipt_to_journal(receipt, registry=provs, expense_accounts=acct)
+        except (ReceiptError, ValueError) as e:
+            print(f"Could not consume receipt: {e}")
+            return
+        print("Journal entry from x402 receipt:")
+        print(f"  {j['date']}  Dr {j['debit_account']}")
+        print(f"              Cr {j['credit_account']}")
+        print(f"  amount:   ${j['amount_usd']:.6f}  to {j['provider']}")
+        print(f"  bought:   {j['resource_method']} -> {j['goods_description'] or j['goods_kind'] or 'n/a'}")
+        print(f"  delivery: {j['delivery_status']}  (HTTP {j['http_status']}, {j['latency_ms']}ms)")
+        print(f"  audit:    tx {str(j['tx_hash'])[:18]}...  body_sha256 {str(j['body_sha256'])[:14]}...")
+        if j["bookable"]:
+            print("  status:   BOOKABLE - clean source document")
+        else:
+            print(f"  status:   EXCEPTION - {j['exception_reason']}")
+        return
 
     if args.mode == "profile":
         from counterralib.profile import profile_wallet, unidentified_ranked
