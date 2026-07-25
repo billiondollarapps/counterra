@@ -104,7 +104,9 @@ def main():
     sub.add_parser("demo", help="run on simulated x402 traffic")
     sub.add_parser("refresh", help="update facilitator wallets from the x402scan registry")
     wh = sub.add_parser("whois", help="identify a seller wallet via Bazaar + Blockscout")
-    wh.add_argument("address", help="the payee wallet to identify")
+    wh.add_argument("address", nargs="?", default=None, help="the payee wallet to identify")
+    wh.add_argument("--url", default=None,
+                    help="resolve a seller's payTo from its URL, then identify it")
     cl = sub.add_parser("classify", help="batch-identify all unmapped sellers from the last run")
     cl.add_argument("--write", action="store_true",
                     help="append identified sellers to docs/providers.json")
@@ -296,7 +298,23 @@ def main():
 
     if args.mode == "whois":
         from counterralib.whois import whois
-        whois(args.address)
+        address = args.address
+        if args.url:
+            from counterralib.resolve import resolve_payto
+            print(f"Resolving payTo from {args.url} ...")
+            res = resolve_payto(args.url)
+            if not res:
+                print("  Could not find a payTo. Try the exact resource URL, or "
+                      "pass the address directly once you have it.")
+                return
+            print(f"  payTo: {res['payto']}")
+            print(f"  source: {res['source']}  ({res['detail']})")
+            print()
+            address = res["payto"]
+        if not address:
+            print("Provide a wallet address, or --url <seller URL>.")
+            return
+        whois(address)
         return
 
     if args.mode == "refresh":
