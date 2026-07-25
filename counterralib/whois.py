@@ -117,9 +117,11 @@ def identify(address, session=None):
 
 
 def whois(address, config_providers=None, session=None):
+    import requests
+    s = session or requests.Session()
     print(f"Dossier for {address}")
     print("  searching facilitator discovery catalogs...")
-    ident = identify(address, session=session)
+    ident = identify(address, session=s)
     matches = ident["matches"]
     is_evm = str(address).startswith("0x")
     if matches:
