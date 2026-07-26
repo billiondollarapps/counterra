@@ -120,6 +120,9 @@ def main():
                     help="persist this run and accumulate: books carry over between runs")
     sub.add_parser("status", help="show continuous-ingestion progress per chain/source")
     sub.add_parser("codes", help="ERC-8021 builder-code findings: registry candidates + conflicts")
+    an = sub.add_parser("analyze", help="explain the books in plain language (deterministic findings, optional LLM narration)")
+    an.add_argument("--chain", choices=["base", "solana"], default=None, help="limit to one chain")
+    an.add_argument("--no-llm", action="store_true", help="template narration only, never call an LLM")
     sub.add_parser("observed", help="observed-demand evidence per registry seller (from the accumulated ledger)")
     bk = sub.add_parser("books", help="one command: a wallet's books, auto-detect chain, no config needed (design-partner handoff)")
     bk.add_argument("--wallet", required=True, help="the agent wallet to produce books for")
@@ -266,6 +269,16 @@ def main():
                     print(f"  {name:<36}   - not yet observed in this ledger window")
         print("\nNote: the ledger samples facilitator wallets, so absence here is "
               "weak evidence of absent demand, not proof.")
+        return
+
+    if args.mode == "analyze":
+        from counterralib.analyze import findings, narrate
+        cfg_a = load_config()
+        finds = findings(registry=cfg_a.get("providers") or {}, chain=args.chain)
+        if not finds:
+            print("No agent spend in the ledger yet. Run: counterra.py live --continuous ...")
+            return
+        print(narrate(finds, use_llm=not args.no_llm))
         return
 
     if args.mode == "codes":
