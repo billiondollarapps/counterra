@@ -1,0 +1,549 @@
+{
+  "spec": "CAAP-1",
+  "version": "1.0.0-draft",
+  "note": "Golden conformance vectors. An implementation is CAAP-1 conformant if receipt_to_journal reproduces every 'expect' from its 'input'.",
+  "vectors": [
+    {
+      "name": "known_seller_delivered_bookable",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "3000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xc000000000000000000000000000000000000001"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 200,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "BTC-USD signal",
+            "kind": "api-response",
+            "summary": null,
+            "body_sha256": "0xbody",
+            "bytes": 42,
+            "preview": null
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        }
+      },
+      "expect": {
+        "debit_account": "6410 - Data & Research Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.003,
+        "category": "Market data",
+        "bookable": true,
+        "exception_reason": null,
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "name": "unknown_seller_uncategorized",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "3000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 200,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "BTC-USD signal",
+            "kind": "api-response",
+            "summary": null,
+            "body_sha256": "0xbody",
+            "bytes": 42,
+            "preview": null
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        }
+      },
+      "expect": {
+        "debit_account": "6420 - AI & Compute Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.003,
+        "category": "AI & Compute Services",
+        "bookable": true,
+        "exception_reason": null,
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "name": "failed_delivery_exception",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "3000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xc000000000000000000000000000000000000001"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 200,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "BTC-USD signal",
+            "kind": "api-response",
+            "summary": null,
+            "body_sha256": "0xbody",
+            "bytes": 42,
+            "preview": null
+          },
+          "delivery": {
+            "status": "failed"
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        }
+      },
+      "expect": {
+        "debit_account": "6410 - Data & Research Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.003,
+        "category": "Market data",
+        "bookable": false,
+        "exception_reason": "Receipt reports delivery.status=failed - payment made, nothing delivered",
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "name": "partial_delivery_exception",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "3000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xc000000000000000000000000000000000000001"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 200,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "BTC-USD signal",
+            "kind": "api-response",
+            "summary": null,
+            "body_sha256": "0xbody",
+            "bytes": 42,
+            "preview": null
+          },
+          "delivery": {
+            "status": "partial"
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        }
+      },
+      "expect": {
+        "debit_account": "6410 - Data & Research Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.003,
+        "category": "Market data",
+        "bookable": false,
+        "exception_reason": "Receipt reports delivery.status=partial - revenue recognition undefined (no delivered_fraction in v0.3)",
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "name": "http_error_exception",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "3000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xc000000000000000000000000000000000000001"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 500,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "BTC-USD signal",
+            "kind": "api-response",
+            "summary": null,
+            "body_sha256": "0xbody",
+            "bytes": 42,
+            "preview": null
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        }
+      },
+      "expect": {
+        "debit_account": "6410 - Data & Research Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.003,
+        "category": "Market data",
+        "bookable": false,
+        "exception_reason": "Receipt response.status=500 - not a success response",
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "name": "dataset_category_from_goods",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "3000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xffffffffffffffffffffffffffffffffffffffff"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 200,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "d",
+            "kind": "dataset",
+            "summary": null,
+            "body_sha256": "h",
+            "bytes": 1,
+            "preview": null
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        }
+      },
+      "expect": {
+        "debit_account": "6410 - Data & Research Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.003,
+        "category": "Data & Research Services",
+        "bookable": true,
+        "exception_reason": null,
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "name": "large_amount_15usdc",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "15000000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xc000000000000000000000000000000000000001"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 200,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "BTC-USD signal",
+            "kind": "api-response",
+            "summary": null,
+            "body_sha256": "0xbody",
+            "bytes": 42,
+            "preview": null
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        }
+      },
+      "expect": {
+        "debit_account": "6410 - Data & Research Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 15.0,
+        "category": "Market data",
+        "bookable": true,
+        "exception_reason": null,
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "name": "subcent_smoke_test",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "3000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xc000000000000000000000000000000000000001"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 200,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "BTC-USD signal",
+            "kind": "api-response",
+            "summary": null,
+            "body_sha256": "0xbody",
+            "bytes": 42,
+            "preview": null
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        }
+      },
+      "expect": {
+        "debit_account": "6410 - Data & Research Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.003,
+        "category": "Market data",
+        "bookable": true,
+        "exception_reason": null,
+        "date": "2026-07-25"
+      }
+    }
+  ]
+}
