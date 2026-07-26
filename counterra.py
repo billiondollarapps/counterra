@@ -70,6 +70,8 @@ def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
         return
     summary = summarize(rows)
     period = latest_full_period(rows)
+    _dates = sorted(r["ts"][:10] for r in rows) if rows else []
+    date_range = (_dates[0], _dates[-1]) if _dates else None
     entries = journal_entries(rows, period, accounting)
     exc = exceptions(rows, accounting)
     attribution = attribution_summary(rows)
@@ -91,7 +93,7 @@ def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
         for k, v in sorted(agg.items(), key=lambda kv: -kv[1]["total"]):
             w.writerow([k, v["agent"], round(v["total"], 4), v["n"]])
     with open(os.path.join(OUT, f"spend_report{out_suffix}.html"), "w") as f:
-        f.write(render(summary, entries, exc, period, entity_label, chain_name, attribution, gexc))
+        f.write(render(summary, entries, exc, period, entity_label, chain_name, attribution, gexc, date_range))
     print(f"events={len(rows)}  total=${summary['total']:,.2f}  "
           f"period={period}  journal_entries={len(entries)}  exceptions={len(gexc)} grouped ({len(exc)} settlements)")
     print(f"outputs: out/spend_report{out_suffix}.html, out/journal_entries{out_suffix}.csv, "
@@ -122,6 +124,7 @@ def main():
     bk = sub.add_parser("books", help="one command: a wallet's books, auto-detect chain, no config needed (design-partner handoff)")
     bk.add_argument("--wallet", required=True, help="the agent wallet to produce books for")
     bk.add_argument("--limit", type=int, default=500, help="max settlements to sweep")
+    bk.add_argument("--receipts", default=None, help="folder of x402 receipt JSON files to enrich the books with delivery context")
     rcp = sub.add_parser("receipt", help="turn an x402-receipts/v0.3 JSON receipt into an enriched journal entry")
     rcp.add_argument("path", help="path to a receipt JSON file (or - for stdin)")
     pr = sub.add_parser("profile", help="fingerprint an unknown seller wallet from its settlement pattern")
@@ -142,6 +145,12 @@ def main():
         if chain is None:
             return
         print(partner_summary(events, chain))
+        if args.receipts:
+            from counterralib.books import load_receipts, enrich_events_with_receipts
+            rc = load_receipts(args.receipts)
+            events, matched = enrich_events_with_receipts(events, rc)
+            print(f"receipts: matched {matched} of {len(events)} settlements "
+                  f"to delivery receipts from {args.receipts}")
         # feed the standard pipeline so the partner gets the same reports/exports
         label = f"Agent wallet {args.wallet[:10]}\u2026"
         run(events, cfg_b, label, chain.title(), out_suffix="_books")

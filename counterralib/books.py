@@ -82,3 +82,56 @@ def partner_summary(events, chain):
     sellers = len({e.payee_wallet.lower() for e in events})
     return (f"{len(events)} payments on {chain.title()}, ${total:,.4f} total, "
             f"across {sellers} seller(s).")
+
+
+def load_receipts(folder):
+    """
+    Load x402 receipts from a folder of .json files, keyed by settlement tx_hash.
+
+    A design partner exports their receipts (one JSON per payment, or a JSON
+    array) into a folder and points --receipts at it. Best-effort: unreadable
+    files are skipped, never fatal.
+    """
+    import glob
+    import json
+    out = {}
+    if not folder or not os.path.isdir(folder):
+        return out
+    for path in glob.glob(os.path.join(folder, "*.json")):
+        try:
+            data = json.load(open(path))
+        except Exception:
+            continue
+        items = data if isinstance(data, list) else [data]
+        for r in items:
+            if not isinstance(r, dict):
+                continue
+            tx = (((r.get("payment") or {}).get("tx_hash")) or "").lower()
+            if tx:
+                out[tx] = r
+    return out
+
+
+def enrich_events_with_receipts(events, receipts_by_tx):
+    """
+    Attach receipt delivery context to swept PaymentEvents by tx_hash.
+
+    The settlement stays the source of truth for amount; the receipt only adds
+    the 'what / whether-delivered' the chain can't show. Returns (events,
+    matched_count).
+    """
+    if not receipts_by_tx:
+        return events, 0
+    matched = 0
+    for e in events:
+        r = receipts_by_tx.get(str(e.tx_hash).lower())
+        if not r:
+            continue
+        matched += 1
+        goods = r.get("goods") or {}
+        delivery = (r.get("delivery") or {}).get("status", "delivered")
+        resp = r.get("response") or {}
+        desc = goods.get("description") or goods.get("kind") or ""
+        e.memo = (f"{(r.get('request') or {}).get('method','')} {desc} "
+                  f"[{delivery}, HTTP {resp.get('status','?')}]").strip()
+    return events, matched

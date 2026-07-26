@@ -60,3 +60,39 @@ if __name__ == "__main__":
         if name.startswith("test_"):
             fn()
     print("\nALL BOOKS TESTS PASSED")
+
+
+def test_load_receipts_from_folder():
+    import json, tempfile, os
+    d = tempfile.mkdtemp()
+    r = {"payment": {"tx_hash": "0xABC123"}, "goods": {"description": "signal"}}
+    json.dump(r, open(os.path.join(d, "r1.json"), "w"))
+    json.dump([{"payment": {"tx_hash": "0xDEF456"}}], open(os.path.join(d, "r2.json"), "w"))
+    open(os.path.join(d, "junk.json"), "w").write("not json{{{")
+    loaded = bk.load_receipts(d)
+    assert "0xabc123" in loaded and "0xdef456" in loaded
+    assert len(loaded) == 2  # junk skipped
+    print("load_receipts OK")
+
+
+def test_enrich_events_with_receipts():
+    from types import SimpleNamespace
+    events = [SimpleNamespace(tx_hash="0xABC", memo="facilitator-settled"),
+              SimpleNamespace(tx_hash="0xZZZ", memo="facilitator-settled")]
+    receipts = {"0xabc": {"request": {"method": "GET"},
+                          "goods": {"description": "BTC signal"},
+                          "delivery": {"status": "delivered"},
+                          "response": {"status": 200}}}
+    events, matched = bk.enrich_events_with_receipts(events, receipts)
+    assert matched == 1
+    assert "BTC signal" in events[0].memo and "delivered" in events[0].memo
+    assert events[1].memo == "facilitator-settled"  # unmatched untouched
+    print("enrich_events_with_receipts OK")
+
+
+def test_enrich_with_no_receipts_is_noop():
+    from types import SimpleNamespace
+    events = [SimpleNamespace(tx_hash="0xABC", memo="x")]
+    events, matched = bk.enrich_events_with_receipts(events, {})
+    assert matched == 0 and events[0].memo == "x"
+    print("no-receipts noop OK")

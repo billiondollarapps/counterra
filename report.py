@@ -53,7 +53,12 @@ def bar_rows(d, total, color="#2f6fed", fmt=None, top=12):
 
 
 def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)",
-           chain_name="Base", attribution=None, grouped_exc=None):
+           chain_name="Base", attribution=None, grouped_exc=None, date_range=None):
+    from datetime import datetime, timezone
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    span = ""
+    if date_range and date_range[0]:
+        span = f" &nbsp;&middot;&nbsp; Activity: {date_range[0]} to {date_range[1]}"
     daily = summary["by_day"]
     maxd = max(daily.values()) if daily else 1
     spark = "".join(
@@ -128,7 +133,8 @@ def render(summary, entries, exc, period, entity_label="Demo Co (simulated data)
     </style></head><body>
     <div class="hd"><div class="k">Counterra &middot; Agent Spend Report</div>
     <h1>Agentic Commerce — Monthly Close</h1>
-    <div class="s">Period {period} &nbsp;&middot;&nbsp; Chain: {chain_name} &nbsp;&middot;&nbsp; Protocol: x402 &nbsp;&middot;&nbsp; Entity: {entity_label}</div></div>
+    <div class="s">Period {period}{span} &nbsp;&middot;&nbsp; Chain: {chain_name} &nbsp;&middot;&nbsp; Protocol: x402 &nbsp;&middot;&nbsp; {entity_label}</div>
+    <div class="s" style="font-size:10px;margin-top:2px">Generated {generated} by Counterra &middot; non-custodial &middot; counterra.xyz</div></div>
     <div class="wrap">
       <div class="cards">
         <div class="card"><div class="l">Total agent spend</div><div class="v">${summary['total']:,.2f}</div></div>
