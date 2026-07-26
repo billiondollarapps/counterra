@@ -1,27 +1,69 @@
 # Counterra
 
-**The open accounting & audit layer for agentic commerce.**
+**Financial telemetry for agent payments — see, attribute, and explain every dollar your agents spend. Accounting is the output, not the ask.**
 
-AI agents now pay for data, tools, and compute over machine payment
-rails like [x402](https://x402.org) — millions of micropayments with
-**no invoices, no receipts, no books**. Counterra reads those payments
-straight off the chain and produces what a finance team actually
-needs: per-agent spend attribution, aggregated journal entries,
-tax-relevant disposal counts, and an exception queue.
+AI agents now pay for data, tools, and compute over machine payment rails like
+[x402](https://x402.org) — millions of micropayments with **no invoices, no
+receipts, no books**. Counterra reads those payments straight off the chain
+(Base + Solana) and turns them into per-agent spend attribution, journal
+entries, and exports your accountant can import into QuickBooks or Xero.
 
 *Agents move the money. Counterra makes it count.*
 
-## 🔴 Try it live — no install
+## Get your agent's books in one command
 
-**[counterra.xyz](https://counterra.xyz)** — paste any Base
-wallet (or hit "Random live agent") and watch Counterra close its books on
-real x402 traffic, in your browser. Non-custodial: nothing leaves your tab.
+You don't need to configure anything. Point Counterra at an agent wallet and it
+auto-detects the chain, sweeps its x402 spend, and produces books:
 
-![Counterra monthly close on live Base data](docs/screenshot.png)
+```bash
+pip install pyyaml requests
+python3 counterra.py books --wallet 0xYOUR_AGENT_WALLET
+```
 
-*Above: a real monthly close generated from live Base mainnet data —
-71 x402 settlements made by an autonomous agent on the morning of
-13 July 2026, decoded, attributed, and rolled into books.*
+You get, in `out/`:
+- `spend_report_books.html` — open in any browser
+- `journal_quickbooks_books.csv` — import into QuickBooks
+- `journal_xero_books.csv` — import into Xero
+
+Non-custodial: Counterra reads public ledgers, never holds or moves funds, and
+has no token. Nothing leaves your machine.
+
+**Running paying agents and want your books closed?** I'm onboarding 2–3 design
+partners free, in exchange for feedback — open an issue or reach out.
+
+## Try it live — no install
+
+**[counterra.xyz](https://counterra.xyz)** — paste any Base wallet and watch
+Counterra close its books on real x402 traffic, in your browser.
+
+## The standard
+
+Counterra authors **[CAAP-1](spec/CAAP-1.md)** — the open standard for turning
+an x402 settlement (and optional [x402-receipts](https://github.com/StelarDigital/x402-receipts)
+delivery receipt) into a double-entry accounting record: amount normalization,
+double-entry mapping, bookability rules, and exception handling. The spec ships
+with golden conformance vectors (`spec/caap1_vectors.json`) — any implementation
+is CAAP-1 conformant if it reproduces them. x402 standardizes payments;
+x402-receipts standardizes delivery; **CAAP-1 standardizes accounting.**
+
+## Operator commands (for running your own ledger)
+
+```bash
+python3 counterra.py demo                     # simulated x402 traffic
+python3 counterra.py live --continuous --chain base    # sweep + accumulate Base
+python3 counterra.py live --continuous --chain solana  # sweep + accumulate Solana
+python3 counterra.py status                    # continuous-ingestion progress
+python3 counterra.py classify --write          # auto-identify unmapped sellers
+python3 counterra.py observed                   # observed demand per registry seller
+python3 counterra.py profile <wallet>           # fingerprint an unknown seller
+python3 counterra.py codes                       # ERC-8021 builder-code findings
+python3 counterra.py receipt <receipt.json>      # consume an x402 receipt into a journal entry
+python3 counterra.py whois --url <seller-url>    # resolve a seller's payTo and identify it
+```
+
+Live data uses Blockscout's free public API for Base and Solana's public
+mainnet RPC — no keys required. For faster Solana sweeps, put a free Helius
+endpoint in `.env` as `SOLANA_RPC_URL=...`.
 
 ## What it does
 
@@ -39,29 +81,6 @@ real x402 traffic, in your browser. Non-custodial: nothing leaves your tab.
 
 Counterra is **non-custodial by design**: it reads public ledgers,
 never holds or moves funds, and has no token.
-
-## Quick start
-
-```bash
-pip install pyyaml requests
-
-python3 counterra.py demo                    # simulated x402 traffic
-python3 counterra.py refresh                 # pull newest facilitator wallets
-python3 counterra.py live --limit 80         # real Base data (no API key needed)
-python3 counterra.py live --chain solana --limit 40   # real Solana data (public RPC, no key)
-python3 counterra.py classify --write        # auto-identify unmapped sellers into the registry
-python3 counterra.py live --wallet 0xABC...  # track one payer wallet
-```
-
-Outputs land in `out/`: `spend_report.html` (monthly close) and
-`journal_entries.csv` (ERP-import ready). Unknown sellers appear in
-the exception queue; map them under `providers:` in `config.yaml`
-and re-run to see them classified into proper expense accounts.
-
-Live data uses Blockscout's free public API for Base and Solana's
-public mainnet RPC — no keys required. For faster Solana sweeps, put
-a free Helius endpoint in `.env` as `SOLANA_RPC_URL=...`. An Etherscan key in `.env` enables Etherscan mode for
-other chains/paid tiers.
 
 ## Tests (offline, no key)
 
@@ -86,27 +105,46 @@ neutral layer across rails. Counterra is that layer, built in the open.
 ## Roadmap
 
 - [x] Base collector (facilitator sweep + wallet tracking), live-verified
+- [x] Solana collector — facilitator sweep + wallet tracking (Coinbase + PayAI), live
 - [x] Agentic subledger: attribution, aggregation, exceptions
+- [x] Continuous ingestion — persistent SQLite ledger accumulates across runs; scheduled worker sweeps both chains every 6h
 - [x] Facilitator auto-refresh from the x402scan community registry
-- [x] Auto-classification — `counterra.py classify [--write]`: batch-identifies every unmapped seller from the last run and appends evidenced entries to the registry
-- [x] Open seller-mapping registry — `docs/providers.json`, served live at counterra.xyz/providers.json; evidence-required community contributions (see CONTRIBUTING.md)
-- [ ] Receipt/evidence alignment (TrustBench-compatible) via x402 Foundation process
-- [x] Solana collector — facilitator sweep + wallet tracking (Coinbase + PayAI facilitators), live-ready
-- [ ] QuickBooks/Xero journal sync
-- [ ] Public "agent spend explorer" (paste a wallet, get books)
+- [x] Auto-classification — `classify [--write]`: batch-identifies unmapped sellers into the registry
+- [x] Open seller-mapping registry — `docs/providers.json`, served at counterra.xyz/providers.json; evidence-required contributions
+- [x] ERC-8021 builder-code decoding — per-app attribution from settlement calldata
+- [x] QuickBooks/Xero journal exports
+- [x] x402-receipts consumer — delivery-enriched journal entries
+- [x] CAAP-1 spec + golden conformance vectors — the accounting standard
+- [x] Observed-demand scoring + seller fingerprinting
+- [x] One-command design-partner handoff — `books --wallet`
+- [ ] Receipt/evidence alignment via x402 Foundation process (issue #2833)
+- [ ] Public "agent spend explorer" (paste a wallet, get books, in-browser)
 - [ ] VAT/GST & disposal tax module
 - [ ] Confidential-rail audit ingestion (viewing keys)
 
 ## Repo map
 
 ```
-counterra.py             CLI (demo / live / refresh)
-counterralib/ingest.py   canonical PaymentEvent + sample generator
-counterralib/live.py     Base adapter (Blockscout/Etherscan) + registry refresh
-counterralib/ledger.py   attribution, aggregation, journal entries, exceptions
-report.py             HTML monthly-close report
-config.yaml           chain, facilitators, agent/provider maps, chart of accounts
-tests/                offline test suite
+counterra.py              CLI (books / live / demo / classify / observed / profile / receipt / whois / codes / status)
+counterralib/ingest.py    canonical PaymentEvent + sample generator
+counterralib/live.py      Base adapter (Blockscout/Etherscan) + facilitator refresh
+counterralib/solana.py    Solana SPL-USDC adapter
+counterralib/store.py     persistent SQLite event store (running ledger)
+counterralib/continuous.py  accumulation orchestration
+counterralib/ledger.py    attribution, aggregation, journal entries, exceptions
+counterralib/exports.py   QuickBooks + Xero exporters
+counterralib/receipts.py  x402-receipts v0.3 consumer (CAAP-1 reference impl)
+counterralib/erc8021.py   ERC-8021 builder-code decoder
+counterralib/observed.py  observed-demand evidence
+counterralib/profile.py   seller fingerprinting
+counterralib/buildercodes.py  builder-code registry evidence
+counterralib/resolve.py   URL -> payTo resolver
+counterralib/books.py     one-command design-partner handoff
+counterralib/whois.py     seller identification
+report.py                 HTML report
+spec/CAAP-1.md            the accounting standard + spec/caap1_vectors.json
+config.yaml               chains, facilitators, maps, chart of accounts
+tests/                    offline test suite (14 suites)
 ```
 
 ## License
