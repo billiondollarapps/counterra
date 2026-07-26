@@ -119,12 +119,38 @@ def main():
     sub.add_parser("status", help="show continuous-ingestion progress per chain/source")
     sub.add_parser("codes", help="ERC-8021 builder-code findings: registry candidates + conflicts")
     sub.add_parser("observed", help="observed-demand evidence per registry seller (from the accumulated ledger)")
+    bk = sub.add_parser("books", help="one command: a wallet's books, auto-detect chain, no config needed (design-partner handoff)")
+    bk.add_argument("--wallet", required=True, help="the agent wallet to produce books for")
+    bk.add_argument("--limit", type=int, default=500, help="max settlements to sweep")
     rcp = sub.add_parser("receipt", help="turn an x402-receipts/v0.3 JSON receipt into an enriched journal entry")
     rcp.add_argument("path", help="path to a receipt JSON file (or - for stdin)")
     pr = sub.add_parser("profile", help="fingerprint an unknown seller wallet from its settlement pattern")
     pr.add_argument("wallet", nargs="?", default=None,
                     help="payTo wallet to profile; omit to list the top unidentified wallets")
     args = ap.parse_args()
+
+    if args.mode == "books":
+        from counterralib.books import build_books, detect_chain, partner_summary
+        cfg_b = load_config()
+        chain = detect_chain(args.wallet)
+        if chain == "base":
+            # point config at the Base chain block if the loader is chain-aware
+            pass
+        events, chain, warnings = build_books(args.wallet, cfg_b, limit=args.limit)
+        for w in warnings:
+            print(f"note: {w}")
+        if chain is None:
+            return
+        print(partner_summary(events, chain))
+        # feed the standard pipeline so the partner gets the same reports/exports
+        label = f"Agent wallet {args.wallet[:10]}\u2026"
+        run(events, cfg_b, label, chain.title(), out_suffix="_books")
+        print()
+        print("Your books are ready:")
+        print("  out/spend_report_books.html      - open in any browser")
+        print("  out/journal_quickbooks_books.csv - import into QuickBooks")
+        print("  out/journal_xero_books.csv       - import into Xero")
+        return
 
     if args.mode == "receipt":
         import json as _json
