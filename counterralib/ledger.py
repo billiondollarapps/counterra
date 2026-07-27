@@ -102,6 +102,12 @@ def summarize(rows):
     }
 
 
+def latest_full_period(rows):
+    """Most recent YYYY-MM present in the data."""
+    months = sorted({r["ts"][:7] for r in rows})
+    return months[-1] if months else "----"
+
+
 def journal_entries(rows, period, accounting=None):
     acc = {**DEFAULT_ACCOUNTING, **(accounting or {})}
     exp = acc["expense_accounts"]

@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import yaml
 
-from counterralib.ledger import attribution_summary, grouped_exceptions, enrich, summarize, journal_entries, exceptions, write_journal_csv
+from counterralib.ledger import attribution_summary, grouped_exceptions, latest_full_period, enrich, summarize, journal_entries, exceptions, write_journal_csv
 from report import render  # shared HTML renderer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -43,12 +43,6 @@ def load_env():
             if line and not line.startswith("#") and "=" in line:
                 k, v = line.split("=", 1)
                 os.environ.setdefault(k.strip(), v.strip())
-
-
-def latest_full_period(rows):
-    """Most recent YYYY-MM present in the data."""
-    months = sorted({r["ts"][:7] for r in rows})
-    return months[-1] if months else "----"
 
 
 def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
