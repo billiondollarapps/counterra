@@ -45,6 +45,21 @@ def load_env():
                 os.environ.setdefault(k.strip(), v.strip())
 
 
+def _provider_map_cli(cfg):
+    import json as _json, os as _os
+    merged = {}
+    rp = _os.path.join("docs", "providers.json")
+    if _os.path.exists(rp):
+        try:
+            reg = _json.load(open(rp))
+            for p in reg.get("providers", []):
+                merged[p["wallet"]] = {"label": p["label"], "category": p["category"]}
+        except Exception:
+            pass
+    merged.update(cfg.get("providers") or {})
+    return merged
+
+
 def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
     """
     Render books for one dataset.
@@ -114,6 +129,8 @@ def main():
                     help="persist this run and accumulate: books carry over between runs")
     sub.add_parser("status", help="show continuous-ingestion progress per chain/source")
     sub.add_parser("codes", help="ERC-8021 builder-code findings: registry candidates + conflicts")
+    tb = sub.add_parser("trialbalance", help="trial balance from the accumulated agent-spend sub-ledger (proves debits == credits)")
+    tb.add_argument("--chain", choices=["base", "solana"], default=None)
     an = sub.add_parser("analyze", help="explain the books in plain language (deterministic findings, optional LLM narration)")
     an.add_argument("--chain", choices=["base", "solana"], default=None, help="limit to one chain")
     an.add_argument("--no-llm", action="store_true", help="template narration only, never call an LLM")
@@ -263,6 +280,45 @@ def main():
                     print(f"  {name:<36}   - not yet observed in this ledger window")
         print("\nNote: the ledger samples facilitator wallets, so absence here is "
               "weak evidence of absent demand, not proof.")
+        return
+
+    if args.mode == "trialbalance":
+        import json as _json
+        from counterralib.store import EventStore
+        from counterralib.ledger import enrich, journal_entries, latest_full_period
+        from counterralib.glbook import trial_balance, summarize_trial_balance
+        cfg_t = load_config()
+        db = os.path.join(OUT, "counterra.db")
+        if not os.path.exists(db):
+            print("No accumulated ledger yet. Run: counterra.py live --continuous ...")
+            return
+        store = EventStore(db)
+        events = store.all_events(args.chain)
+        store.close()
+        pm = _provider_map_cli(cfg_t)
+        rows = enrich(events, cfg_t.get("agents") or {}, pm)
+        if not rows:
+            print("No entries to build a trial balance from.")
+            return
+        period = latest_full_period(rows)
+        entries = journal_entries(rows, period, cfg_t.get("accounting"))
+        tb = trial_balance(entries)
+        print(f"Agent-spend sub-ledger trial balance - period {period}")
+        print("=" * 66)
+        print(f"{'Account':<40}{'Debit':>12}{'Credit':>12}")
+        print("-" * 66)
+        for a in tb["accounts"]:
+            d = f"${a['debit']:,.2f}" if a["debit"] else ""
+            c = f"${a['credit']:,.2f}" if a["credit"] else ""
+            print(f"{a['account'][:38]:<40}{d:>12}{c:>12}")
+        print("-" * 66)
+        print(f"{'TOTALS':<40}{'$'+format(tb['total_debit'],',.2f'):>12}"
+              f"{'$'+format(tb['total_credit'],',.2f'):>12}")
+        print("=" * 66)
+        if tb["balanced"]:
+            print("BALANCED - debits equal credits. Books are internally consistent.")
+        else:
+            print(f"OUT OF BALANCE by ${tb['out_of_balance']:.2f} - do not rely on these books.")
         return
 
     if args.mode == "analyze":
