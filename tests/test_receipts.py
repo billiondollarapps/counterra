@@ -154,3 +154,25 @@ if __name__ == "__main__":
         if name.startswith("test_"):
             fn()
     print("\nALL RECEIPT TESTS PASSED")
+
+
+def test_v051_asset_address_resolves_decimals():
+    """v0.5.1 alignment: a contract-bound Base USDC receipt resolves to 6 decimals."""
+    r = _receipt(payment={"asset": "SOMETHING_ODD",
+                          "asset_address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                          "amount": "3000"})
+    j = rc.receipt_to_journal(r)
+    assert j["amount_usd"] == 0.003, j["amount_usd"]
+    print("v0.5.1 asset_address decimals OK")
+
+
+def test_v051_full_shape_still_books():
+    """A full v0.5.1-shaped receipt (asset_address, goods, delivery) books cleanly."""
+    r = _receipt(
+        payment={"asset": "USDC",
+                 "asset_address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                 "amount": "15000000"},
+        delivery={"status": "delivered"})
+    j = rc.receipt_to_journal(r)
+    assert j["amount_usd"] == 15.0 and j["bookable"] is True
+    print("v0.5.1 full-shape books OK")

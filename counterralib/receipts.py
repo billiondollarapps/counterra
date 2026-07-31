@@ -65,9 +65,16 @@ def _require(d, path):
     return cur
 
 
-def _decimals_for(asset, decimals_hint=None):
+def _decimals_for(asset, decimals_hint=None, asset_address=None):
     if decimals_hint is not None:
         return int(decimals_hint)
+    # v0.5.1 binds an optional asset_address (CAIP-19 / contract). Base USDC is
+    # 6 decimals; recognise it explicitly so a contract-bound receipt resolves
+    # without relying on the symbol string.
+    if asset_address:
+        aa = str(asset_address).lower()
+        if aa.endswith("833589fcd6edb6e08f4c7c32d4f71b54bda02913"):  # Base USDC
+            return 6
     if not asset:
         return DEFAULT_DECIMALS
     sym = asset.upper()
@@ -75,15 +82,16 @@ def _decimals_for(asset, decimals_hint=None):
     return ASSET_DECIMALS.get(sym, DEFAULT_DECIMALS)
 
 
-def amount_to_usd(atomic_amount, asset="USDC", decimals=None):
+def amount_to_usd(atomic_amount, asset="USDC", decimals=None, asset_address=None):
     """
     Convert a receipt's atomic-unit amount string to a decimal value.
 
     Gap #1 in the docstring: the receipt gives "1000000" and expects the
-    consumer to know USDC has 6 decimals. We resolve it, but flag that the
-    schema pushes this onto every accounting consumer.
+    consumer to know USDC has 6 decimals. v0.5.1 adds an optional asset_address
+    (contract binding) we use when present; otherwise we resolve by symbol, but
+    still flag that the schema pushes this onto every accounting consumer.
     """
-    d = _decimals_for(asset, decimals)
+    d = _decimals_for(asset, decimals, asset_address)
     try:
         return int(str(atomic_amount)) / (10 ** d)
     except (ValueError, TypeError):
@@ -112,7 +120,7 @@ def receipt_to_journal(receipt, registry=None, expense_accounts=None,
 
     payee = str(pay["payee"]).lower()
     asset = pay.get("asset", "USDC")
-    usd = amount_to_usd(pay["amount"], asset)
+    usd = amount_to_usd(pay["amount"], asset, asset_address=pay.get("asset_address"))
 
     reg = registry or {}
     entry_meta = reg.get(payee) or {}
@@ -200,7 +208,7 @@ def reconcile_with_settlement(receipt, payment_event):
         problems.append(f"tx_hash mismatch: receipt {rtx[:14]} vs ledger {etx[:14]}")
 
     try:
-        r_usd = amount_to_usd(pay.get("amount"), pay.get("asset", "USDC"))
+        r_usd = amount_to_usd(pay.get("amount"), pay.get("asset", "USDC"), asset_address=pay.get("asset_address"))
         e_usd = float(getattr(payment_event, "amount_usdc", 0))
         if abs(r_usd - e_usd) > 1e-6:
             problems.append(f"amount mismatch: receipt ${r_usd:.6f} vs ledger ${e_usd:.6f}")

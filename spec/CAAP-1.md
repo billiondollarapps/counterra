@@ -2,6 +2,8 @@
 
 **Status:** Draft · **Version:** 1.0.0-draft · **Authors:** Counterra (billiondollarapps/counterra) · **License:** Apache-2.0
 
+**Aligned to:** x402-receipts **v0.5.1** (StelarDigital/x402-receipts, commit `debc94f`). CAAP-1's envelope field names are pinned to v0.5.1 naming so the two specs stay diffable as both move (per x402-foundation/x402#2833). When x402-receipts advances, this header records the receipts version CAAP-1's reference consumer is verified against.
+
 A normative, reproducible mapping from an x402 settlement (optionally with an
 x402-receipts delivery receipt) to a double-entry accounting record.
 
