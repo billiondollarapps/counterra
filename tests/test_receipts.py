@@ -176,3 +176,14 @@ def test_v051_full_shape_still_books():
     j = rc.receipt_to_journal(r)
     assert j["amount_usd"] == 15.0 and j["bookable"] is True
     print("v0.5.1 full-shape books OK")
+
+
+def test_unverified_receipt_is_exception():
+    """CAAP-1 v1.1: verified=False must block booking even if delivery is clean."""
+    r = _receipt()  # delivered/200
+    assert rc.receipt_to_journal(r)["bookable"] is True          # trusted default
+    assert rc.receipt_to_journal(r, verified=True)["bookable"] is True
+    j = rc.receipt_to_journal(r, verified=False)
+    assert j["bookable"] is False
+    assert "verifyReceiptFull" in j["exception_reason"]
+    print("unverified receipt -> exception OK")

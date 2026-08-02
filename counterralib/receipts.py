@@ -99,16 +99,21 @@ def amount_to_usd(atomic_amount, asset="USDC", decimals=None, asset_address=None
 
 
 def receipt_to_journal(receipt, registry=None, expense_accounts=None,
-                       digital_asset_account="1085 - Digital Assets (USDC)"):
+                       digital_asset_account="1085 - Digital Assets (USDC)",
+                       verified=None):
     """
     Turn a trusted x402 receipt into an enriched journal entry.
+
+    `verified`: the verdict from x402-receipts verifyReceiptFull, if the caller
+    ran it. CAAP-1 does NOT recompute verification (that's the receipts spec's
+    job) — but if the caller passes verified=False, the receipt MUST NOT be
+    booked: it becomes an 'unverified-receipt' exception. Passing None means
+    "caller asserts this receipt is already trusted" (the default, for callers
+    that verify upstream before handing receipts to the books).
 
     Returns a dict with the double-entry lines plus the delivery context a
     settlement alone can't provide (what was bought, whether it was delivered,
     latency, and the hashes that bind the entry to a verifiable receipt).
-
-    `registry`: optional {wallet: {label, category}} to name the payee.
-    `expense_accounts`: optional {category: account} map for the debit line.
     """
     scheme = receipt.get("scheme", "")
     if not str(scheme).startswith("x402-receipts/"):
@@ -139,8 +144,20 @@ def receipt_to_journal(receipt, registry=None, expense_accounts=None,
     # is an error is NOT clean revenue/expense — it belongs in the exception
     # queue, not silently booked. This is exactly the kind of call the trust
     # layer doesn't make and the books must.
-    bookable = (delivery == "delivered"
-                and isinstance(resp_status, int) and 200 <= resp_status < 300)
+    delivery_ok = (delivery == "delivered"
+                   and isinstance(resp_status, int) and 200 <= resp_status < 300)
+    # CAAP-1 v1.1: if the caller ran verification and it FAILED, the receipt must
+    # not be booked regardless of delivery — an unverified receipt is not an
+    # audit-ready source document. verified=None means "caller asserts trusted".
+    verification_failed = (verified is False)
+    bookable = delivery_ok and not verification_failed
+
+    exc_reason = None
+    if verification_failed:
+        exc_reason = ("Receipt failed verifyReceiptFull - not a trusted source "
+                      "document, must not be booked")
+    elif not delivery_ok:
+        exc_reason = _exception_reason(delivery, resp_status)
 
     return {
         "date": (pay.get("settled_ts") or resp.get("ts") or req.get("ts", ""))[:10],
@@ -162,7 +179,7 @@ def receipt_to_journal(receipt, registry=None, expense_accounts=None,
         "body_sha256": resp.get("body_sha256"),
         "payment_requirements_sha256": req.get("payment_requirements_sha256"),
         "bookable": bookable,
-        "exception_reason": None if bookable else _exception_reason(delivery, resp_status),
+        "exception_reason": None if bookable else exc_reason,
     }
 
 
