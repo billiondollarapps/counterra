@@ -100,7 +100,7 @@ def amount_to_usd(atomic_amount, asset="USDC", decimals=None, asset_address=None
 
 def receipt_to_journal(receipt, registry=None, expense_accounts=None,
                        digital_asset_account="1085 - Digital Assets (USDC)",
-                       verified=None):
+                       verified=None, failure_code=None):
     """
     Turn a trusted x402 receipt into an enriched journal entry.
 
@@ -140,24 +140,41 @@ def receipt_to_journal(receipt, registry=None, expense_accounts=None,
     goods = receipt.get("goods") or {}
     resp_status = resp.get("status")
 
-    # Accounting judgement: a receipt whose delivery failed or whose HTTP status
-    # is an error is NOT clean revenue/expense — it belongs in the exception
-    # queue, not silently booked. This is exactly the kind of call the trust
-    # layer doesn't make and the books must.
+    # Bookability + exception routing.
+    #
+    # CAAP-1 v1.1 aligns its exception codes to the ReceiptFailure taxonomy
+    # proposed by PatrickPi1312 (eucompliance.tools) in x402-foundation/x402#2833,
+    # which routes on WHO MUST ACT rather than where the failure was detected:
+    #
+    #   settlement_missing  delivery claimed, no matching on-chain settlement  -> buyer / payment side
+    #   delivery_failed     settled on-chain, seller says delivery failed      -> seller (refund case)
+    #   receipt_invalid     signature / schema / issuer failed                 -> seller (reissue)
+    #   receipt_tampered    content hash != signed digest (altered after issue) -> hard stop, manual review
+    #
+    # `failure_code`: if the caller ran verifyReceiptFull and it failed, they
+    # pass the ReceiptFailure.code here and CAAP-1 routes on it directly.
+    # `verified=False` without a code maps to receipt_invalid (generic).
+    # A tampered receipt is NEVER booked and is flagged for manual review, not
+    # just reissue — an altered document (e.g. a corrected VAT rate after
+    # signing) is a fraud signal, which is exactly why Patrick's split matters
+    # to the books: it must not land in the same bucket as an expired key.
     delivery_ok = (delivery == "delivered"
                    and isinstance(resp_status, int) and 200 <= resp_status < 300)
-    # CAAP-1 v1.1: if the caller ran verification and it FAILED, the receipt must
-    # not be booked regardless of delivery — an unverified receipt is not an
-    # audit-ready source document. verified=None means "caller asserts trusted".
-    verification_failed = (verified is False)
-    bookable = delivery_ok and not verification_failed
 
-    exc_reason = None
-    if verification_failed:
-        exc_reason = ("Receipt failed verifyReceiptFull - not a trusted source "
-                      "document, must not be booked")
+    exc_code = None
+    if failure_code in ("settlement_missing", "delivery_failed",
+                        "receipt_invalid", "receipt_tampered"):
+        exc_code = failure_code
+    elif verified is False:
+        exc_code = "receipt_invalid"
     elif not delivery_ok:
-        exc_reason = _exception_reason(delivery, resp_status)
+        # no explicit verification verdict, but the receipt's own delivery
+        # status / HTTP code says the service didn't deliver
+        exc_code = "delivery_failed"
+
+    bookable = (exc_code is None)
+    exc_reason = _exception_reason_for_code(exc_code, delivery, resp_status)
+    who_acts = _who_acts(exc_code)
 
     return {
         "date": (pay.get("settled_ts") or resp.get("ts") or req.get("ts", ""))[:10],
@@ -179,7 +196,9 @@ def receipt_to_journal(receipt, registry=None, expense_accounts=None,
         "body_sha256": resp.get("body_sha256"),
         "payment_requirements_sha256": req.get("payment_requirements_sha256"),
         "bookable": bookable,
+        "exception_code": exc_code,
         "exception_reason": None if bookable else exc_reason,
+        "exception_actor": None if bookable else who_acts,
     }
 
 
@@ -196,7 +215,42 @@ def _goods_category(receipt):
     return mapping.get(kind, "Uncategorized")
 
 
-def _exception_reason(delivery, http_status):
+def _exception_reason_for_code(code, delivery, http_status):
+    """Human-readable reason for each ReceiptFailure code (or delivery detail)."""
+    if code is None:
+        return None
+    if code == "settlement_missing":
+        return ("Delivery claimed but no matching on-chain settlement - "
+                "payment side must resolve")
+    if code == "delivery_failed":
+        if delivery == "partial":
+            return ("Receipt reports delivery.status=partial - revenue "
+                    "recognition undefined (no delivered_fraction); seller/refund")
+        if isinstance(http_status, int) and not (200 <= http_status < 300):
+            return (f"Settled but response.status={http_status} - service did not "
+                    f"deliver a success response; seller/refund case")
+        return ("Receipt reports delivery.status=failed - payment made, nothing "
+                "delivered; seller/refund case")
+    if code == "receipt_invalid":
+        return ("Receipt failed verification (signature/schema/issuer) - not a "
+                "trusted source document; seller must reissue")
+    if code == "receipt_tampered":
+        return ("Receipt content hash does not match the signed digest - altered "
+                "after issuance; HARD STOP, manual review (fraud signal)")
+    return "Unbookable receipt - review"
+
+
+def _who_acts(code):
+    """Route each exception to who must act on it — Patrick's key insight."""
+    return {
+        "settlement_missing": "buyer",     # payment side
+        "delivery_failed": "seller",       # refund case
+        "receipt_invalid": "seller",       # reissue
+        "receipt_tampered": "manual",      # hard stop, human review
+    }.get(code)
+
+
+def _legacy_exception_reason(delivery, http_status):
     if delivery == "failed":
         return "Receipt reports delivery.status=failed - payment made, nothing delivered"
     if delivery == "partial":

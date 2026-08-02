@@ -203,7 +203,7 @@
         "amount_usd": 0.003,
         "category": "Market data",
         "bookable": false,
-        "exception_reason": "Receipt reports delivery.status=failed - payment made, nothing delivered",
+        "exception_reason": "Receipt reports delivery.status=failed - payment made, nothing delivered; seller/refund case",
         "date": "2026-07-25"
       }
     },
@@ -273,7 +273,7 @@
         "amount_usd": 0.003,
         "category": "Market data",
         "bookable": false,
-        "exception_reason": "Receipt reports delivery.status=partial - revenue recognition undefined (no delivered_fraction in v0.3)",
+        "exception_reason": "Receipt reports delivery.status=partial - revenue recognition undefined (no delivered_fraction); seller/refund",
         "date": "2026-07-25"
       }
     },
@@ -340,7 +340,7 @@
         "amount_usd": 0.003,
         "category": "Market data",
         "bookable": false,
-        "exception_reason": "Receipt response.status=500 - not a success response",
+        "exception_reason": "Settled but response.status=500 - service did not deliver a success response; seller/refund case",
         "date": "2026-07-25"
       }
     },

@@ -101,21 +101,41 @@ An implementation MUST NOT collapse distinct known categories into one account.
 
 ## 4. Bookability and exceptions (NORMATIVE)
 
-Not every trusted settlement is clean expense. An implementation MUST classify a
-record as **bookable** only if BOTH:
+Not every settlement is clean expense. An implementation MUST classify a record
+as **bookable** only if ALL hold:
+- the caller's verification verdict is not a failure (see §4.1), AND
 - delivery status is `delivered` (or no receipt is present — settlement-only
   records are assumed delivered), AND
 - if a receipt is present, `response.status` is in [200,300).
 
-Records failing either test MUST be routed to an **exception queue**, not booked
-as clean expense, with a reason:
+Records failing any test MUST be routed to an **exception queue**, not booked as
+clean expense.
 
-| Condition                          | Exception reason (normative meaning)                        |
-|------------------------------------|-------------------------------------------------------------|
-| `delivery.status == "failed"`      | payment made, nothing delivered — not an expense            |
-| `delivery.status == "partial"`     | revenue recognition undefined (no delivered_fraction in v0) |
-| `response.status` outside [200,300)| payment made against an error response — review             |
-| payee not in registry              | unmapped counterparty — needs classification                |
+### 4.1 Exception taxonomy (routes on who must act)
+
+CAAP-1 exception codes align to the `ReceiptFailure` taxonomy proposed by
+PatrickPi1312 (eucompliance.tools) in x402-foundation/x402#2833. The key
+principle is that an exception routes on **who must act**, which is a different
+axis from where the failure was detected:
+
+| code                 | meaning                                              | actor  |
+|----------------------|------------------------------------------------------|--------|
+| `settlement_missing` | delivery claimed, no matching on-chain settlement    | buyer  |
+| `delivery_failed`    | settled, but `delivery.status=failed`/partial or non-2xx | seller (refund) |
+| `receipt_invalid`    | signature / schema / issuer verification failed      | seller (reissue) |
+| `receipt_tampered`   | content hash ≠ signed digest (altered after issuance) | manual (hard stop) |
+
+The distinction between `receipt_invalid` and `receipt_tampered` is load-bearing
+for the books: a tampered receipt (e.g. a VAT rate edited after signing) is a
+**fraud signal** that MUST hard-stop to manual review, while an invalid one (an
+expired key, schema drift) is a seller-side operational problem. Collapsing both
+into one code forces manual triage of routine issues — which is exactly what an
+exception queue should avoid.
+
+A caller that ran x402-receipts `verifyReceiptFull` SHOULD pass the resulting
+`ReceiptFailure.code`; CAAP-1 routes on it directly. Absent an explicit code, a
+failed verification verdict maps to `receipt_invalid`, and a receipt whose own
+delivery status or HTTP code indicates non-delivery maps to `delivery_failed`.
 
 > **Standards note:** `delivery.status == "partial"` is unbookable under CAAP-1
 > because v0 carries no magnitude. If x402-receipts adds

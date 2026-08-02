@@ -187,3 +187,40 @@ def test_unverified_receipt_is_exception():
     assert j["bookable"] is False
     assert "verifyReceiptFull" in j["exception_reason"]
     print("unverified receipt -> exception OK")
+
+
+def test_exception_taxonomy_codes_and_actors():
+    """CAAP-1 v1.1: exceptions carry Patrick's ReceiptFailure code + who-acts routing."""
+    # delivery failed -> seller
+    j = rc.receipt_to_journal(_receipt(delivery={"status": "failed"}))
+    assert j["exception_code"] == "delivery_failed"
+    assert j["exception_actor"] == "seller"
+    # verification failed generic -> receipt_invalid, seller reissue
+    j = rc.receipt_to_journal(_receipt(), verified=False)
+    assert j["exception_code"] == "receipt_invalid"
+    assert j["exception_actor"] == "seller"
+    # explicit settlement_missing -> buyer
+    j = rc.receipt_to_journal(_receipt(), failure_code="settlement_missing")
+    assert j["exception_code"] == "settlement_missing"
+    assert j["exception_actor"] == "buyer"
+    # tampered -> manual hard stop
+    j = rc.receipt_to_journal(_receipt(), failure_code="receipt_tampered")
+    assert j["exception_code"] == "receipt_tampered"
+    assert j["exception_actor"] == "manual"
+    assert "fraud" in j["exception_reason"].lower() or "HARD STOP" in j["exception_reason"]
+    print("exception taxonomy codes + actors OK")
+
+
+def test_clean_receipt_has_no_exception_code():
+    j = rc.receipt_to_journal(_receipt())
+    assert j["bookable"] is True
+    assert j["exception_code"] is None
+    assert j["exception_actor"] is None
+    print("clean receipt no exception code OK")
+
+
+def test_failure_code_overrides_clean_delivery():
+    """Even a delivered/200 receipt is an exception if verification found tampering."""
+    j = rc.receipt_to_journal(_receipt(), failure_code="receipt_tampered")
+    assert j["bookable"] is False
+    print("failure_code overrides clean delivery OK")
