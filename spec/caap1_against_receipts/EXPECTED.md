@@ -29,5 +29,12 @@ isolation.
 
 | Vector | Amount | Delivery / HTTP | CAAP-1 result (delivery layer only) |
 |---|---|---|---|
+| neg-countersig-not-payer | $0.005000 | delivered/200 | BOOKABLE → 6490 - Uncategorized Agent Spend |
+| neg-delivered-not-settled | $0.005000 | delivered/200 | BOOKABLE → 6490 - Uncategorized Agent Spend |
+| neg-funded-not-delivered | $0.005000 | failed/502 | EXCEPTION — Receipt reports delivery.status=failed - payment made, nothing delivered |
+| neg-leaf-not-in-anchored-root | $0.005000 | delivered/200 | BOOKABLE → 6490 - Uncategorized Agent Spend |
+| neg-settled-to-expected-solver-mismatch | $0.005000 | delivered/200 | BOOKABLE → 6490 - Uncategorized Agent Spend |
+| pass-countersigned-anchored | $0.005000 | delivered/200 | BOOKABLE → 6490 - Uncategorized Agent Spend |
+| pass-settled-delivered | $0.005000 | delivered/200 | BOOKABLE → 6490 - Uncategorized Agent Spend |
 
 _CAAP-1 aligned to x402-receipts v0.5.1 (`debc94f`). Field names pinned per #2833._

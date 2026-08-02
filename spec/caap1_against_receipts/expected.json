@@ -1,5 +1,111 @@
 {
   "spec": "CAAP-1",
   "aligned_to": "x402-receipts v0.5.1 (debc94f)",
-  "rows": []
+  "rows": [
+    {
+      "vector": "neg-countersig-not-payer",
+      "caap1": {
+        "date": "2026-07-11",
+        "debit_account": "6490 - Uncategorized Agent Spend",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.005,
+        "delivery_status": "delivered",
+        "http_status": 200,
+        "bookable": true,
+        "exception_reason": null,
+        "tx_hash": "0xdeb5872c039a88ae37b66ae490c0c8da9b6a4c652d84494ddcc9a05211d6cc80"
+      },
+      "note": null
+    },
+    {
+      "vector": "neg-delivered-not-settled",
+      "caap1": {
+        "date": "2026-07-11",
+        "debit_account": "6490 - Uncategorized Agent Spend",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.005,
+        "delivery_status": "delivered",
+        "http_status": 200,
+        "bookable": true,
+        "exception_reason": null,
+        "tx_hash": "0xdededededededededededededededededededededededededededededededede"
+      },
+      "note": null
+    },
+    {
+      "vector": "neg-funded-not-delivered",
+      "caap1": {
+        "date": "2026-07-11",
+        "debit_account": "6420 - AI & Compute Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.005,
+        "delivery_status": "failed",
+        "http_status": 502,
+        "bookable": false,
+        "exception_reason": "Receipt reports delivery.status=failed - payment made, nothing delivered",
+        "tx_hash": "0xdeb5872c039a88ae37b66ae490c0c8da9b6a4c652d84494ddcc9a05211d6cc80"
+      },
+      "note": null
+    },
+    {
+      "vector": "neg-leaf-not-in-anchored-root",
+      "caap1": {
+        "date": "2026-07-11",
+        "debit_account": "6490 - Uncategorized Agent Spend",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.005,
+        "delivery_status": "delivered",
+        "http_status": 200,
+        "bookable": true,
+        "exception_reason": null,
+        "tx_hash": "0xdeb5872c039a88ae37b66ae490c0c8da9b6a4c652d84494ddcc9a05211d6cc80"
+      },
+      "note": null
+    },
+    {
+      "vector": "neg-settled-to-expected-solver-mismatch",
+      "caap1": {
+        "date": "2026-07-11",
+        "debit_account": "6490 - Uncategorized Agent Spend",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.005,
+        "delivery_status": "delivered",
+        "http_status": 200,
+        "bookable": true,
+        "exception_reason": null,
+        "tx_hash": "0xdeb5872c039a88ae37b66ae490c0c8da9b6a4c652d84494ddcc9a05211d6cc80"
+      },
+      "note": null
+    },
+    {
+      "vector": "pass-countersigned-anchored",
+      "caap1": {
+        "date": "2026-07-11",
+        "debit_account": "6490 - Uncategorized Agent Spend",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.005,
+        "delivery_status": "delivered",
+        "http_status": 200,
+        "bookable": true,
+        "exception_reason": null,
+        "tx_hash": "0xdeb5872c039a88ae37b66ae490c0c8da9b6a4c652d84494ddcc9a05211d6cc80"
+      },
+      "note": null
+    },
+    {
+      "vector": "pass-settled-delivered",
+      "caap1": {
+        "date": "2026-07-11",
+        "debit_account": "6490 - Uncategorized Agent Spend",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.005,
+        "delivery_status": "delivered",
+        "http_status": 200,
+        "bookable": true,
+        "exception_reason": null,
+        "tx_hash": "0xdeb5872c039a88ae37b66ae490c0c8da9b6a4c652d84494ddcc9a05211d6cc80"
+      },
+      "note": null
+    }
+  ]
 }
