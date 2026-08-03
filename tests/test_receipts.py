@@ -224,3 +224,40 @@ def test_failure_code_overrides_clean_delivery():
     j = rc.receipt_to_journal(_receipt(), failure_code="receipt_tampered")
     assert j["bookable"] is False
     print("failure_code overrides clean delivery OK")
+
+
+def test_receipt_expired_code():
+    """receipt_expired (Patrick's suggestion): routine expiry, seller re-request, not booked."""
+    j = rc.receipt_to_journal(_receipt(), failure_code="receipt_expired")
+    assert j["bookable"] is False
+    assert j["exception_code"] == "receipt_expired"
+    assert j["exception_actor"] == "seller"
+    assert "re-request" in j["exception_reason"]
+    print("receipt_expired code OK")
+
+
+def test_expired_distinct_from_invalid():
+    """Expiry must NOT collapse into receipt_invalid — different queue behaviour."""
+    inv = rc.receipt_to_journal(_receipt(), failure_code="receipt_invalid")
+    exp = rc.receipt_to_journal(_receipt(), failure_code="receipt_expired")
+    assert inv["exception_code"] != exp["exception_code"]
+    # both route to seller, but the reasons differ (reissue vs re-request)
+    assert inv["exception_reason"] != exp["exception_reason"]
+    print("expired distinct from invalid OK")
+
+
+def test_all_five_codes_route():
+    """The full five-way taxonomy each routes to the right actor."""
+    expected = {
+        "settlement_missing": "buyer",
+        "delivery_failed": "seller",
+        "receipt_invalid": "seller",
+        "receipt_expired": "seller",
+        "receipt_tampered": "manual",
+    }
+    for code, actor in expected.items():
+        j = rc.receipt_to_journal(_receipt(), failure_code=code)
+        assert j["exception_code"] == code, code
+        assert j["exception_actor"] == actor, (code, j["exception_actor"])
+        assert j["bookable"] is False
+    print("all five codes route OK")

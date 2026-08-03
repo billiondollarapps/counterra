@@ -544,6 +544,142 @@
         "exception_reason": null,
         "date": "2026-07-25"
       }
+    },
+    {
+      "name": "expired_receipt_reroute",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "3000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xc000000000000000000000000000000000000001"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 200,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "BTC signal",
+            "kind": "api-response",
+            "summary": null,
+            "body_sha256": "0xbody",
+            "bytes": 42,
+            "preview": null
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        },
+        "failure_code": "receipt_expired"
+      },
+      "expect": {
+        "debit_account": "6410 - Data & Research Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.003,
+        "category": "Market data",
+        "bookable": false,
+        "exception_reason": "Receipt is past valid_until - routine seller-side expiry, not a defect; re-request rather than queue for review",
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "name": "tampered_receipt_hardstop",
+      "input": {
+        "receipt": {
+          "scheme": "x402-receipts/v0",
+          "payment": {
+            "chain_id": 8453,
+            "tx_hash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "asset": "USDC",
+            "amount": "3000",
+            "payer": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "payee": "0xc000000000000000000000000000000000000001"
+          },
+          "request": {
+            "method": "GET",
+            "url_hash": "u",
+            "params_hash": "p",
+            "ts": "2026-07-25T12:00:00.000Z",
+            "payment_requirements_sha256": "0xreq"
+          },
+          "response": {
+            "status": 200,
+            "body_sha256": "0xbody",
+            "content_type": "application/json",
+            "ts": "2026-07-25T12:00:00.340Z",
+            "latency_ms": 340
+          },
+          "seller": {
+            "erc8004_agent_id": "x",
+            "sig": null
+          },
+          "buyer": {
+            "countersig": null
+          },
+          "anchor": null,
+          "goods": {
+            "description": "BTC signal",
+            "kind": "api-response",
+            "summary": null,
+            "body_sha256": "0xbody",
+            "bytes": 42,
+            "preview": null
+          }
+        },
+        "registry": {
+          "0xc000000000000000000000000000000000000001": {
+            "label": "blockrun.ai",
+            "category": "Market data"
+          }
+        },
+        "expense_accounts": {
+          "Market data": "6410 - Data & Research Services",
+          "AI & Compute Services": "6420 - AI & Compute Services",
+          "Data & Research Services": "6410 - Data & Research Services",
+          "Uncategorized": "6490 - Uncategorized Agent Spend"
+        },
+        "failure_code": "receipt_tampered"
+      },
+      "expect": {
+        "debit_account": "6410 - Data & Research Services",
+        "credit_account": "1085 - Digital Assets (USDC)",
+        "amount_usd": 0.003,
+        "category": "Market data",
+        "bookable": false,
+        "exception_reason": "Receipt content hash does not match the signed digest - altered after issuance; HARD STOP, manual review (fraud signal)",
+        "date": "2026-07-25"
+      }
     }
   ]
 }

@@ -123,7 +123,13 @@ axis from where the failure was detected:
 | `settlement_missing` | delivery claimed, no matching on-chain settlement    | buyer  |
 | `delivery_failed`    | settled, but `delivery.status=failed`/partial or non-2xx | seller (refund) |
 | `receipt_invalid`    | signature / schema / issuer verification failed      | seller (reissue) |
+| `receipt_expired`    | past `valid_until` — routine expiry, not a defect    | seller (re-request) |
 | `receipt_tampered`   | content hash ≠ signed digest (altered after issuance) | manual (hard stop) |
+
+`receipt_expired` is kept distinct from `receipt_invalid` (per PatrickPi1312,
+#2833): an expired receipt is routine seller-side ops, so a books consumer may
+re-request it rather than queue it for review — a different queue behaviour than
+a structural defect.
 
 The distinction between `receipt_invalid` and `receipt_tampered` is load-bearing
 for the books: a tampered receipt (e.g. a VAT rate edited after signing) is a

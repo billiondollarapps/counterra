@@ -41,7 +41,9 @@ def test_reference_implementation_is_conformant():
         inp = v["input"]
         got = receipt_to_journal(inp["receipt"],
                                  registry=inp.get("registry"),
-                                 expense_accounts=inp.get("expense_accounts"))
+                                 expense_accounts=inp.get("expense_accounts"),
+                                 verified=inp.get("verified"),
+                                 failure_code=inp.get("failure_code"))
         for f in NORMATIVE_FIELDS:
             if got.get(f) != v["expect"].get(f):
                 failures.append(f"{v['name']}.{f}: expected {v['expect'].get(f)!r}, "

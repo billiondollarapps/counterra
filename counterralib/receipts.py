@@ -150,6 +150,13 @@ def receipt_to_journal(receipt, registry=None, expense_accounts=None,
     #   delivery_failed     settled on-chain, seller says delivery failed      -> seller (refund case)
     #   receipt_invalid     signature / schema / issuer failed                 -> seller (reissue)
     #   receipt_tampered    content hash != signed digest (altered after issue) -> hard stop, manual review
+    #   receipt_expired     past valid_until - routine, not a defect           -> seller (re-request)
+    #
+    # receipt_expired (added at PatrickPi1312's suggestion, #2833) is split out
+    # from receipt_invalid on purpose: an expired receipt is routine seller-side
+    # ops, so a books consumer may re-request rather than queue it for review —
+    # a different queue behaviour than a structural defect. Same who-acts
+    # principle: distinct action => distinct code.
     #
     # `failure_code`: if the caller ran verifyReceiptFull and it failed, they
     # pass the ReceiptFailure.code here and CAAP-1 routes on it directly.
@@ -163,7 +170,7 @@ def receipt_to_journal(receipt, registry=None, expense_accounts=None,
 
     exc_code = None
     if failure_code in ("settlement_missing", "delivery_failed",
-                        "receipt_invalid", "receipt_tampered"):
+                        "receipt_invalid", "receipt_tampered", "receipt_expired"):
         exc_code = failure_code
     elif verified is False:
         exc_code = "receipt_invalid"
@@ -237,6 +244,9 @@ def _exception_reason_for_code(code, delivery, http_status):
     if code == "receipt_tampered":
         return ("Receipt content hash does not match the signed digest - altered "
                 "after issuance; HARD STOP, manual review (fraud signal)")
+    if code == "receipt_expired":
+        return ("Receipt is past valid_until - routine seller-side expiry, not a "
+                "defect; re-request rather than queue for review")
     return "Unbookable receipt - review"
 
 
@@ -246,6 +256,7 @@ def _who_acts(code):
         "settlement_missing": "buyer",     # payment side
         "delivery_failed": "seller",       # refund case
         "receipt_invalid": "seller",       # reissue
+        "receipt_expired": "seller",        # re-request (routine)
         "receipt_tampered": "manual",      # hard stop, human review
     }.get(code)
 
