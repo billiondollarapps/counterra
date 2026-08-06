@@ -144,6 +144,20 @@ def main():
     pr = sub.add_parser("profile", help="fingerprint an unknown seller wallet from its settlement pattern")
     pr.add_argument("wallet", nargs="?", default=None,
                     help="payTo wallet to profile; omit to list the top unidentified wallets")
+    ag = sub.add_parser("autogrow", help="grow the registry automatically: catalogs + on-chain names + endpoint crawl (verified auto-appends, probable queues for review)")
+    ag.add_argument("--write", action="store_true",
+                    help="append verified hits to docs/providers.json and queue probables in docs/pending-providers.json (default: dry run)")
+    ag.add_argument("--limit", type=int, default=20,
+                    help="max unknown wallets to look up this run (volume-ranked)")
+    ag.add_argument("--crawl-limit", type=int, default=25,
+                    help="max candidate endpoint URLs to resolve this run")
+    ag.add_argument("--no-crawl", action="store_true",
+                    help="skip the endpoint crawl (catalogs + on-chain enrichment only)")
+    pd = sub.add_parser("pending", help="review the probable-identification queue (docs/pending-providers.json)")
+    pd.add_argument("--approve", default=None,
+                    help="publish pending entry N to the registry (or 'all')")
+    pd.add_argument("--reject", type=int, default=None,
+                    help="discard pending entry N")
     args = ap.parse_args()
 
     if args.mode == "books":
@@ -372,6 +386,141 @@ def main():
                   f"events={r['events_total']:<6} "
                   f"through={ (r['watermark_ts'] or '?')[:19] }  "
                   f"last_run={ (r['last_run_ts'] or '?')[:19] }")
+        return
+
+    if args.mode == "autogrow":
+        # The background registry-growth machine. Three sources, one pass:
+        #   1. catalogs (whois.identify)      -> VERIFIED, auto-append
+        #   2. on-chain names (enrich)        -> VERIFIED or PROBABLE->queue
+        #   3. endpoint crawl (crawl)         -> VERIFIED, auto-append
+        # Unknowns are ranked by dollar volume from the accumulated ledger,
+        # so the lookup budget always chases the money, not the tail.
+        from counterralib import registry as rg
+        from counterralib.enrich import enrich_wallet, enrichment_candidate
+        from counterralib.whois import catalog_index, identify_from_index
+        from counterralib.store import EventStore
+        import requests as _rq
+
+        sess = _rq.Session()
+        reg = rg.load_registry()
+        pend = rg.load_pending()
+        known = rg.known_wallets(reg)
+        verified, queued = [], []
+
+        st = EventStore()
+        try:
+            events = st.all_events()
+        finally:
+            st.close()
+        unknowns = rg.unknown_sellers(events, known)
+        total_unknown_usd = sum(u[2] for u in unknowns)
+        batch = unknowns[:args.limit]
+        print(f"{len(unknowns)} unknown sellers in the accumulated ledger "
+              f"(${total_unknown_usd:,.2f} unidentified volume); "
+              f"looking up top {len(batch)} by volume...")
+        print("fetching discovery catalogs once...")
+        idx = catalog_index(session=sess)
+        print(f"  catalog index: {len(idx)} listed payTo wallets")
+
+        for w, ch, usd, n in batch:
+            # source 1: discovery catalogs (pre-fetched index)
+            ident = identify_from_index(w, idx, chain=ch)
+            if ident["label"]:
+                verified.append(rg.make_entry(
+                    w, ch, ident["label"],
+                    ident["category_suggestion"] or "Uncategorized",
+                    ident["evidence"] + " (category auto-suggested - review)"))
+                print(f"  CATALOG     {w[:14]}... -> {ident['label']}  (${usd:.2f})")
+                continue
+            # source 2: on-chain names (Base only for now)
+            if ch == "base":
+                info = enrich_wallet(w, session=sess)
+                cand = enrichment_candidate(w, info) if info else None
+                if cand and cand["tier"] == "verified":
+                    verified.append(rg.make_entry(
+                        w, ch, cand["label"], cand["category"], cand["evidence"]))
+                    print(f"  ON-CHAIN    {w[:14]}... -> {cand['label']}  (${usd:.2f})")
+                    continue
+                if cand:
+                    e = rg.make_entry(w, ch, cand["label"], cand["category"],
+                                      cand["evidence"])
+                    if rg.queue_probable(pend, e, "probable", known):
+                        queued.append(e)
+                        print(f"  probable    {w[:14]}... -> {cand['label']}  "
+                              f"(queued for review)  (${usd:.2f})")
+                        continue
+            print(f"  unknown     {w[:14]}...  (${usd:.2f}, {n} settlements)")
+
+        # source 3: endpoint crawl (sellers name THEMSELVES in 402 responses)
+        if not args.no_crawl:
+            from counterralib import crawl as cw
+            seeds = cw.load_seeds()
+            state = cw.load_state()
+            cands = list(seeds.get("urls") or [])
+            cands += cw.harvest_lists(seeds.get("list_urls") or [], session=sess)
+            if seeds.get("github_search", True):
+                cands += cw.harvest_github(session=sess)
+            print(f"crawl: {len(cands)} candidate endpoint URLs harvested; "
+                  f"resolving up to {args.crawl_limit} "
+                  f"(hosts on {7}-day cooldown skipped)...")
+            hits, crawl_probables = cw.crawl(cands, known, session=sess,
+                                             max_lookups=args.crawl_limit,
+                                             state=state)
+            verified.extend(hits)
+            for e in crawl_probables:
+                if rg.queue_probable(pend, e, "probable", known):
+                    queued.append(e)
+            cw.save_state(state)
+
+        known_before = len(reg["providers"])
+        print(f"\nresult: {len(verified)} verified, {len(queued)} queued "
+              f"for review, registry currently {known_before} entries")
+        if args.write:
+            added = rg.append_verified(reg, verified)
+            rg.save_registry(reg)
+            rg.save_pending(pend)
+            print(f"wrote {len(added)} verified entries to docs/providers.json; "
+                  f"{len(pend['pending'])} total in docs/pending-providers.json "
+                  f"(review: counterra.py pending)")
+        else:
+            print("(dry run - rerun with --write to persist)")
+        return
+
+    if args.mode == "pending":
+        from counterralib import registry as rg
+        pend = rg.load_pending()
+        rows_p = pend["pending"]
+        if args.reject is not None:
+            gone = rg.reject_pending(pend, args.reject)
+            rg.save_pending(pend)
+            print(f"rejected: {gone['wallet'] if gone else 'no such entry'}")
+            return
+        if args.approve is not None:
+            reg = rg.load_registry()
+            if str(args.approve).lower() == "all":
+                moved = 0
+                while pend["pending"]:
+                    if rg.approve_pending(pend, reg, 1):
+                        moved += 1
+                print(f"approved {moved} entries into docs/providers.json")
+            else:
+                e = rg.approve_pending(pend, reg, int(args.approve))
+                print(f"approved: {e['wallet']} -> {e['label']}" if e
+                      else "no such entry")
+            rg.save_registry(reg)
+            rg.save_pending(pend)
+            print("commit & push docs/providers.json to publish")
+            return
+        if not rows_p:
+            print("Pending queue is empty - nothing awaiting review.")
+            return
+        print(f"{len(rows_p)} probable identification(s) awaiting review:")
+        for i, p in enumerate(rows_p, 1):
+            print(f"  [{i}] {p['wallet'][:16]}...  {p['label']}  "
+                  f"[{p['category']}]")
+            print(f"      evidence: {p['evidence']}")
+        print("approve: counterra.py pending --approve N (or 'all')   "
+              "reject: --reject N")
         return
 
     if args.mode == "classify":

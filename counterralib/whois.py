@@ -82,6 +82,43 @@ def suggest_category(urls):
     return "Uncategorized"
 
 
+def catalog_index(session=None):
+    """Fetch the discovery catalogs ONCE and index them payTo -> [(url, desc)].
+    Batch callers (autogrow, classify) use this instead of re-sweeping the
+    whole catalog per wallet."""
+    s = session or requests.Session()
+    idx = {}
+    for item in _bazaar_items(s):
+        res = item.get("resource") or {}
+        if isinstance(res, str):
+            url, desc = res, ""
+        else:
+            url, desc = res.get("url", "?"), res.get("description", "")
+        for pt in _extract_paytos(item):
+            idx.setdefault(pt, []).append((url, desc))
+    return idx
+
+
+def identify_from_index(address, idx, chain=None):
+    """identify() semantics, but against a pre-fetched catalog_index."""
+    addr = _norm(address)
+    ch = chain or ("base" if str(address).startswith("0x") else "solana")
+    matches = idx.get(addr, [])
+    label = matches[0][0].split("//")[-1].split("/")[0] if matches else None
+    evidence = (f"Discovery catalog payTo match: {len(matches)} resources at {label}/*"
+                if matches else None)
+    try:
+        from counterralib.buildercodes import builder_code_evidence
+        bc_ev = builder_code_evidence(addr, chain=ch)
+    except Exception:
+        bc_ev = None
+    if bc_ev:
+        evidence = f"{evidence}; {bc_ev}" if evidence else bc_ev
+    return {"chain": ch, "matches": matches, "label": label,
+            "evidence": evidence, "builder_code_evidence": bc_ev,
+            "category_suggestion": suggest_category([u for u, _ in matches]) if matches else None}
+
+
 def identify(address, session=None):
     """Programmatic identification. Returns:
     {chain, matches:[(url,desc)], label, evidence, category_suggestion}"""

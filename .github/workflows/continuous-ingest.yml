@@ -60,6 +60,21 @@ jobs:
           echo "--- status after run ---"
           python3 counterra.py status
 
+      - name: Grow the seller registry (autogrow - non-fatal)
+        timeout-minutes: 6
+        continue-on-error: true
+        env:
+          # Lets the crawler's GitHub harvest run authenticated (higher
+          # rate limits); provided automatically by Actions.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Three sources every run: discovery catalogs, on-chain names
+          # (Basenames / verified contracts), and the endpoint crawl.
+          # VERIFIED (mechanical) evidence auto-appends to providers.json;
+          # PROBABLE evidence only queues in pending-providers.json for
+          # human review - nothing unverified is ever published.
+          python3 counterra.py autogrow --write --limit 15 --crawl-limit 20
+
       - name: Commit updated ledger and reports
         run: |
           git config user.name  "counterra-bot"
@@ -68,6 +83,8 @@ jobs:
           # regenerable from the ledger and committing them caused a
           # local/bot collision on every local run.
           git add out/counterra.db out/spend_report_base.html
+          # Registry growth from autogrow (safe if unchanged this run):
+          git add docs/providers.json docs/pending-providers.json out/crawl_state.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No new data this run — nothing to commit."
           else
