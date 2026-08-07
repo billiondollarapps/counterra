@@ -71,8 +71,15 @@ def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
     """
     agent_map = cfg.get("agents") or {}
     provider_map = cfg.get("providers") or {}
-    accounting = cfg.get("accounting") or {}
-    rows = enrich(events, agent_map, provider_map)
+    accounting = dict(cfg.get("accounting") or {})
+    # Stage 5: categorise unidentified sellers by settlement shape, so spend
+    # nobody can name still books to a meaningful account instead of 6490.
+    from counterralib.shapes import (shape_map as _shape_map, coverage as _coverage,
+                                     merged_expense_accounts)
+    shapes = _shape_map(events, known_wallets=provider_map.keys())
+    accounting["expense_accounts"] = merged_expense_accounts(
+        accounting.get("expense_accounts"))
+    rows = enrich(events, agent_map, provider_map, shape_map=shapes)
     if not rows:
         print("No payment events found. If running live: check your API key, "
               "or raise --limit (facilitators batch heavily).")
@@ -105,6 +112,12 @@ def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
         f.write(render(summary, entries, exc, period, entity_label, chain_name, attribution, gexc, date_range))
     print(f"events={len(rows)}  total=${summary['total']:,.2f}  "
           f"period={period}  journal_entries={len(entries)}  exceptions={len(gexc)} grouped ({len(exc)} settlements)")
+    cov = _coverage(events, shapes, known_wallets=provider_map.keys())
+    if cov["shaped_n"] or cov["unknown_n"]:
+        print(f"coverage: {cov['booked_pct']}% of spend booked to a real account "
+              f"(${cov['identified_usd']:,.2f} identified sellers + "
+              f"${cov['shaped_usd']:,.2f} shape-classified across {len(shapes)} "
+              f"wallets); ${cov['unknown_usd']:,.2f} still uncategorized")
     print(f"outputs: out/spend_report{out_suffix}.html, out/journal_entries{out_suffix}.csv, "
           f"out/journal_quickbooks{out_suffix}.csv, out/journal_xero{out_suffix}.csv")
 

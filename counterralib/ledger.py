@@ -16,21 +16,40 @@ DEFAULT_ACCOUNTING = {
 }
 
 
-def enrich(events, agent_map=None, provider_map=None):
+def enrich(events, agent_map=None, provider_map=None, shape_map=None):
+    """
+    Attach agent/provider labels and an expense category to each event.
+
+    `shape_map` (optional) is {wallet_lower: shape_dict} from
+    counterralib.shapes. It applies ONLY to wallets with no registry entry:
+    a real identification always wins. Shape-categorised rows carry
+    shape_confidence/shape_rationale so a reader can see the inference and
+    judge it. Omit shape_map for the previous behaviour exactly.
+    """
     agent_map = agent_map or {}
     provider_map = {k.lower(): v for k, v in (provider_map or {}).items()}
     agent_map = {k.lower(): v for k, v in agent_map.items()}
+    shapes = shape_map or {}
     rows = []
     for e in events:
         agent = agent_map.get(e.payer_wallet.lower(), e.payer_wallet[:10] + "…")
         p = provider_map.get(e.payee_wallet.lower())
+        conf = rationale = ""
         if p is None:
             label, cat = e.payee_wallet[:10] + "…", "Uncategorized"
+            sh = shapes.get(e.payee_wallet.lower())
+            if sh:
+                label = sh["label"] + " " + e.payee_wallet[:8] + "…"
+                cat = sh["category"]
+                conf = sh.get("confidence", "")
+                rationale = sh.get("rationale", "")
         elif isinstance(p, dict):
             label, cat = p.get("label", "?"), p.get("category", "Uncategorized")
         else:
             label, cat = p
-        rows.append({**e.to_dict(), "agent": agent, "provider": label, "category": cat})
+        rows.append({**e.to_dict(), "agent": agent, "provider": label,
+                     "category": cat, "shape_confidence": conf,
+                     "shape_rationale": rationale})
     return rows
 
 
@@ -137,13 +156,31 @@ def journal_entries(rows, period, accounting=None):
     return entries
 
 
+def _unmapped_reason(category, shape_confidence=""):
+    """Reason text for a counterparty with no registry entry.
+
+    Shape-classified rows are still unidentified and must stay reviewable —
+    they are just better described than a bare 'Uncategorized'.
+    """
+    from counterralib.shapes import is_shape_category
+    if is_shape_category(category):
+        kind = str(category).split(" - ", 1)[-1]
+        conf = " ({} confidence)".format(shape_confidence) if shape_confidence else ""
+        return ("Unidentified counterparty - booked by shape as {}{}; "
+                "name still unknown".format(kind, conf))
+    return "Unmapped counterparty - needs classification"
+
+
 def exceptions(rows, accounting=None):
     acc = {**DEFAULT_ACCOUNTING, **(accounting or {})}
     thr = float(acc.get("anomaly_threshold_usd", 40.0))
+    from counterralib.shapes import is_shape_category
     out = []
     for r in rows:
-        if r["category"] == "Uncategorized":
-            out.append({**r, "reason": "Unmapped counterparty - needs classification"})
+        cat = r["category"]
+        if cat == "Uncategorized" or is_shape_category(cat):
+            out.append({**r, "reason": _unmapped_reason(
+                cat, r.get("shape_confidence", ""))})
         elif r["amount_usdc"] >= thr:
             out.append({**r, "reason": f"Amount >= ${thr:.0f} - review"})
     return out
@@ -163,6 +200,7 @@ def grouped_exceptions(rows, accounting=None):
     """
     acc = {**DEFAULT_ACCOUNTING, **(accounting or {})}
     thr = float(acc.get("anomaly_threshold_usd", 40.0))
+    from counterralib.shapes import is_shape_category
     unmapped = {}
     anomalies = []
     for r in rows:
@@ -176,10 +214,11 @@ def grouped_exceptions(rows, accounting=None):
                 "first_ts": r["ts"], "last_ts": r["ts"],
                 "distinct_payers": 1,
             })
-        elif r["category"] == "Uncategorized":
+        elif r["category"] == "Uncategorized" or is_shape_category(r["category"]):
             w = r["payee_wallet"].lower()
             g = unmapped.setdefault(w, {
-                "reason": "Unmapped counterparty - needs classification",
+                "reason": _unmapped_reason(r["category"],
+                                           r.get("shape_confidence", "")),
                 "counterparty": r["payee_wallet"],
                 "provider": r["provider"],
                 "settlements": 0, "amount_usdc": 0.0,
