@@ -76,10 +76,24 @@ def run(events, cfg, entity_label, chain_name="Base", out_suffix=""):
     # nobody can name still books to a meaningful account instead of 6490.
     from counterralib.shapes import (shape_map as _shape_map, coverage as _coverage,
                                      merged_expense_accounts)
+    from counterralib import poison as _poison
     shapes = _shape_map(events, known_wallets=provider_map.keys())
+    # Address-poisoning check: a payment to an impersonation of a real vendor
+    # is a suspected loss, not that vendor's revenue. Outranks everything.
+    poisons = _poison.detect_poisoning(events, registry_wallets=provider_map.keys())
     accounting["expense_accounts"] = merged_expense_accounts(
         accounting.get("expense_accounts"))
-    rows = enrich(events, agent_map, provider_map, shape_map=shapes)
+    accounting["expense_accounts"].setdefault(
+        _poison.CAT_POISONING, _poison.POISONING_ACCOUNT)
+    rows = enrich(events, agent_map, provider_map, shape_map=shapes,
+                  poison_map=poisons)
+    if poisons:
+        tot = sum(f["amount_usd"] for f in poisons.values())
+        print("!! {} suspected address-poisoning payee(s), ${:.2f} HELD from "
+              "expense pending confirmation:".format(len(poisons), tot))
+        for w, f in sorted(poisons.items(), key=lambda kv: -kv[1]["amount_usd"]):
+            print("   {}…  ${:.2f}  [{}] impersonates {}…".format(
+                w[:14], f["amount_usd"], f["confidence"], f["impersonates"][:14]))
     if not rows:
         print("No payment events found. If running live: check your API key, "
               "or raise --limit (facilitators batch heavily).")
