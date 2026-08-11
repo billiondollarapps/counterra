@@ -165,6 +165,46 @@ the journal line to a re-verifiable receipt, so an auditor can confirm the entry
 against the signed source document. A record without a receipt retains at least
 `tx_hash`.
 
+### 6.1 External document binding (OPTIONAL)
+
+A settlement may have a formal document sitting alongside the receipt — a tax
+invoice, a credit note, a purchase order. A journal record MAY retain an
+`external_documents` array binding the entry to such documents:
+
+```json
+"external_documents": [
+  {"kind": "invoice", "hash": "sha256:9f2b…", "hash_alg": "sha256"}
+]
+```
+
+- `hash` MUST be a content hash of the document's canonical bytes as issued.
+  An implementation MUST NOT re-serialize or normalize the document before
+  hashing; the hash binds the bytes an auditor will be handed.
+- `hash_alg` MUST be present when the algorithm is not `sha256`.
+- `kind` is a free-text label describing the document's role, not its format.
+
+This binding is deliberately **format-agnostic and jurisdiction-agnostic**. The
+same field holds a hash of a UBL or CII e-invoice issued under EN 16931, a US
+PDF invoice, an Indian GST e-invoice, or any other instrument. CAAP-1
+standardizes *that* the link exists and how it is expressed, so payment,
+delivery receipt and formal document reconcile over one key — it does not
+define what is on the other end of the link, and a conformant implementation
+is not required to parse, validate, or understand the referenced document.
+
+> **Standards note (per PatrickPi1312, billiondollarapps/counterra#8):** the
+> motivating case is the EU e-invoicing rollout, where a growing share of
+> booked agent payments will carry a formal e-invoice beside the x402 receipt.
+> Validating that invoice against a jurisdiction's business rules (e.g. the
+> EN 16931 Schematron rule set) is **consumer-side**, not spec-side: an
+> implementer subject to those rules validates before booking and, on failure,
+> routes the record to the exception queue under the existing taxonomy —
+> typically `receipt_invalid` (seller must reissue) — carrying the
+> jurisdiction's own finding code in the exception evidence. CAAP-1 does not
+> define jurisdiction-specific validity, because a code that is dead for
+> implementers outside one regulatory area would make the conformance suite
+> partially untestable for them. §4.1's codes route on *who must act*, which
+> is invariant across jurisdictions; what makes a document invalid is not.
+
 ## 7. Disposal date (NORMATIVE)
 
 The booking date is the **settlement date** (on-chain finality), which for tax
@@ -189,3 +229,8 @@ reference implementation.
 ## Changelog
 - **1.0.0-draft** — initial profile: amount normalization, double-entry mapping,
   bookability, exception grouping, audit binding, disposal date.
+- **1.0.1-draft** — §6.1: optional `external_documents` content-hash binding, so
+  a formal invoice or other instrument reconciles with the settlement and
+  receipt over one key. Format- and jurisdiction-agnostic by construction;
+  jurisdiction-specific document validation is consumer-side, routed through the
+  existing §4.1 taxonomy (per billiondollarapps/counterra#8).

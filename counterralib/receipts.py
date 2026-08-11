@@ -100,7 +100,8 @@ def amount_to_usd(atomic_amount, asset="USDC", decimals=None, asset_address=None
 
 def receipt_to_journal(receipt, registry=None, expense_accounts=None,
                        digital_asset_account="1085 - Digital Assets (USDC)",
-                       verified=None, failure_code=None):
+                       verified=None, failure_code=None,
+                       external_documents=None):
     """
     Turn a trusted x402 receipt into an enriched journal entry.
 
@@ -110,6 +111,14 @@ def receipt_to_journal(receipt, registry=None, expense_accounts=None,
     booked: it becomes an 'unverified-receipt' exception. Passing None means
     "caller asserts this receipt is already trusted" (the default, for callers
     that verify upstream before handing receipts to the books).
+
+    `external_documents`: optional CAAP-1 §6.1 binding — a list of
+    {kind, hash, hash_alg} dicts binding this entry to formal documents (a tax
+    invoice, credit note, purchase order) by content hash. Format- and
+    jurisdiction-agnostic: CAAP-1 records that the link exists, and does not
+    parse or validate the referenced document. Validating a document against a
+    jurisdiction's business rules is consumer-side; on failure the caller
+    routes the record through the normal taxonomy via `failure_code`.
 
     Returns a dict with the double-entry lines plus the delivery context a
     settlement alone can't provide (what was bought, whether it was delivered,
@@ -202,11 +211,43 @@ def receipt_to_journal(receipt, registry=None, expense_accounts=None,
         "tx_hash": pay.get("tx_hash"),
         "body_sha256": resp.get("body_sha256"),
         "payment_requirements_sha256": req.get("payment_requirements_sha256"),
+        # CAAP-1 §6.1 — optional binding to formal documents by content hash,
+        # so payment, delivery receipt and invoice reconcile over one key.
+        "external_documents": _normalize_external_documents(external_documents),
         "bookable": bookable,
         "exception_code": exc_code,
         "exception_reason": None if bookable else exc_reason,
         "exception_actor": None if bookable else who_acts,
     }
+
+
+def _normalize_external_documents(docs):
+    """
+    Normalize a CAAP-1 §6.1 external_documents list.
+
+    Deliberately minimal: a `hash` is required (the binding is the hash — an
+    entry without one binds nothing and is rejected rather than silently
+    dropped), `kind` defaults to "document", and `hash_alg` is recorded only
+    when it is not sha256. The document itself is never parsed: CAAP-1 records
+    that the link exists and does not define what is on the other end of it.
+    """
+    if not docs:
+        return []
+    out = []
+    for d in docs:
+        if not isinstance(d, dict):
+            raise ReceiptError("external_documents entries must be objects")
+        h = d.get("hash")
+        if not h or not str(h).strip():
+            raise ReceiptError(
+                "external_documents entry has no hash; the content hash IS the "
+                "audit binding, so an entry without one cannot be booked")
+        entry = {"kind": d.get("kind") or "document", "hash": str(h)}
+        alg = d.get("hash_alg")
+        if alg and str(alg).lower() != "sha256":
+            entry["hash_alg"] = str(alg)
+        out.append(entry)
+    return out
 
 
 def _goods_category(receipt):
