@@ -1,0 +1,53 @@
+name: network-sweep
+
+# Builds the real trailing x402 settlement rate by sampling every 15 minutes
+# and committing docs/network-stats.json (which the homepage ticker reads).
+#
+# Why 15 min, not 10: GitHub Pages soft-limits builds to ~10/hour, and every
+# commit to docs/ triggers a Pages rebuild. 15 min = 4 builds/hour, safe
+# alongside your own pushes and the 6h ledger bot. Scheduled runs are also
+# best-effort and often delayed a few minutes under load — dedup makes that fine.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}   # lets you run it manually from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: network-sweep
+  cancel-in-progress: false
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run sweep
+        env:
+          STATS_PATH: docs/network-stats.json
+          PROVIDERS_PATH: docs/providers.json
+        run: python scripts/network_sweep.py
+
+      - name: Commit stats if changed
+        run: |
+          git config user.name  "counterra-sweep"
+          git config user.email "actions@users.noreply.github.com"
+          # pull anything committed since checkout (your pushes / the ledger bot)
+          git pull --no-rebase --autostash || true
+          if [ -n "$(git status --porcelain docs/network-stats.json)" ]; then
+            git add docs/network-stats.json
+            git commit -m "chore(sweep): update network stats [skip actions]"
+            for i in 1 2 3; do
+              git push && break || { git pull --no-rebase --autostash || true; sleep 3; }
+            done
+          else
+            echo "No change in stats."
+          fi
