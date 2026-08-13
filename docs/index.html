@@ -5,10 +5,10 @@
 <meta name="base:app_id" content="6a59e8eba0fe5cd3aaa831ec" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Counterra — Agent Spend Explorer</title>
-<meta name="description" content="Paste any Base wallet and get its x402 agent-spend books: attribution, journal entries, exceptions. Agents move the money. Counterra makes it count.">
+<meta name="description" content="Paste any Base wallet and get its x402 agent-spend books, or map the whole network. Agents move the money. Counterra makes it count.">
 <style>
   :root{--navy:#15243b;--acc:#2f6fed;--acc-d:#1f4fb0;--ink:#1c1e22;--mut:#5f6672;
-        --line:#e3e6ec;--bg:#f7f8fa;--green:#177245;--warn:#8a5a00}
+        --line:#e3e6ec;--bg:#f7f8fa;--green:#177245;--warn:#8a5a00;--red:#b23b3b}
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--ink);background:#fff}
   .hd{background:var(--navy);color:#fff;padding:34px 24px 30px;text-align:center}
@@ -17,45 +17,67 @@
   .hd .s{color:#c8d4e8;font-size:14px;margin-top:8px;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.5}
   .hd .s b{color:#fff}
   .wrap{max-width:960px;margin:0 auto;padding:26px 20px 60px}
-  .inbar{display:flex;gap:10px;margin-top:-52px;background:#fff;border:1px solid var(--line);
-         border-radius:10px;padding:14px;box-shadow:0 6px 24px rgba(21,36,59,.12)}
+  /* tabs */
+  .tabs{display:flex;gap:6px;margin-top:-52px;background:#fff;border:1px solid var(--line);
+        border-radius:10px;padding:6px;box-shadow:0 6px 24px rgba(21,36,59,.12)}
+  .tab{flex:1;text-align:center;background:#fff;color:var(--mut);border:none;border-radius:7px;
+       padding:12px 10px;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.2px}
+  .tab .sub{display:block;font-size:11px;font-weight:400;color:var(--mut);margin-top:2px}
+  .tab.on{background:var(--navy);color:#fff}
+  .tab.on .sub{color:#a9bce0}
+  .tab:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+  .panel{display:none;margin-top:22px}
+  .panel.on{display:block}
+  .inbar{display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px}
   .inbar input{flex:1;font-size:15px;padding:12px 14px;border:1px solid var(--line);
                border-radius:7px;font-family:ui-monospace,Menlo,monospace}
   .inbar input:focus{outline:2px solid var(--acc)}
   button{background:var(--acc);color:#fff;border:none;border-radius:7px;padding:12px 20px;
          font-size:14px;font-weight:600;cursor:pointer}
   button:hover{background:var(--acc-d)}
+  button:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
   button.ghost{background:#fff;color:var(--acc-d);border:1px solid var(--acc)}
+  button.ghost:hover{background:#eef3fe}
   button.pill{background:#fff;color:var(--mut);border:1px solid var(--line);padding:7px 18px;font-size:13px;border-radius:999px}
   button.pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
   .under{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px}
   .under .hint{font-size:12.5px;color:var(--mut)}
-  #status{margin:26px 0;font-size:14px;color:var(--mut);text-align:center;line-height:1.6}
-  #status .err{color:#b23b3b}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:26px 0}
-  .card{border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:8px;
-        padding:14px 16px;background:var(--bg)}
+  .lead{font-size:13.5px;color:var(--mut);line-height:1.6;margin-bottom:14px}
+  .status{margin:22px 0;font-size:14px;color:var(--mut);text-align:center;line-height:1.6}
+  .status .err{color:var(--red)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:22px 0}
+  .card{border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:8px;padding:14px 16px;background:var(--bg)}
   .card .l{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut)}
   .card .v{font-size:24px;font-weight:700;color:var(--navy);margin-top:4px}
-  h2{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--acc-d);margin:26px 0 10px}
+  .card.warn{border-top-color:var(--warn)} .card.warn .v{color:var(--warn)}
+  h2{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--acc-d);margin:26px 0 10px;
+     display:flex;justify-content:space-between;align-items:center;gap:10px}
+  h2 .act{font-size:11px;letter-spacing:.3px;text-transform:none}
   table{width:100%;border-collapse:collapse;font-size:13px}
   th{text-align:left;font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);
      padding:6px 8px;border-bottom:1.5px solid var(--navy)}
   td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
   td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-  td.bar{width:42%}
-  td.bar div{height:12px;border-radius:3px;background:var(--acc);min-width:2px}
+  td.bar{width:38%} td.bar div{height:12px;border-radius:3px;background:var(--acc);min-width:2px}
+  td.bar.g div{background:var(--green)}
   .named{color:var(--green);font-weight:600}
+  .flag{color:var(--warn);font-weight:600}
   .mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
   .note{font-size:11px;color:var(--mut);font-style:italic;margin-top:8px;line-height:1.6}
-  .foot{border-top:2px solid var(--acc);background:var(--bg);padding:16px 24px;margin-top:50px;
-        display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--mut)}
-  .foot b{color:var(--navy)} .foot a{color:var(--acc-d)}
-  #results{display:none}
+  .results{display:none}
   .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--acc);
         border-top-color:transparent;border-radius:50%;animation:sp .8s linear infinite;
         vertical-align:-2px;margin-right:8px}
   @keyframes sp{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){.spin{animation:none}}
+  /* report snapshot */
+  .snap{background:var(--navy);color:#eaf0fb;border-radius:12px;padding:26px 28px;margin-top:8px;
+        font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.85;white-space:pre-wrap;
+        border:1px solid #0d1626}
+  .snap b{color:#fff} .snap .hl{color:#7fa8f7}
+  .foot{border-top:2px solid var(--acc);background:var(--bg);padding:16px 24px;margin-top:50px;
+        display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--mut)}
+  .foot b{color:var(--navy)} .foot a{color:var(--acc-d)}
 </style>
 </head>
 <body>
@@ -63,50 +85,101 @@
 <div class="hd">
   <div class="k">Counterra &middot; Open Accounting for Agentic Commerce</div>
   <h1>Agent Spend Explorer</h1>
-  <div class="s">AI agents pay for data, tools and compute over x402 &mdash; micropayments with no invoices, no receipts, no books. Paste any Base wallet and watch Counterra close its books, live. <b>Agents move the money. Counterra makes it count.</b></div>
+  <div class="s">AI agents pay for data, tools and compute over x402 &mdash; micropayments with no invoices, no receipts, no books. <b>Agents move the money. Counterra makes it count.</b></div>
 </div>
 
 <div class="wrap">
-  <div class="inbar">
-    <input id="wallet" placeholder="0x… paste an agent wallet on Base" spellcheck="false">
-    <button onclick="run()">Close the books</button>
-  </div>
-  <div class="chains" style="display:flex;gap:10px;margin-top:14px;align-items:center">
-    <span style="font-size:12.5px;color:var(--mut)">Chain:</span>
-    <button id="pill-base" class="pill" onclick="setChain('base')">Base</button>
-    <button id="pill-solana" class="pill" onclick="setChain('solana')">Solana</button>
-  </div>
-  <div class="under">
-    <span class="hint">No wallet in mind? Pull one from live traffic &rarr;</span>
-    <button class="ghost" onclick="randomAgent()">&#127922; Random live agent</button>
+  <div class="tabs" role="tablist">
+    <button class="tab on" id="tab-wallet" role="tab" aria-selected="true" onclick="showTab('wallet')">Wallet<span class="sub">close one agent's books</span></button>
+    <button class="tab" id="tab-network" role="tab" aria-selected="false" onclick="showTab('network')">Network<span class="sub">map all x402 spend</span></button>
+    <button class="tab" id="tab-report" role="tab" aria-selected="false" onclick="showTab('report')">Report<span class="sub">shareable snapshot</span></button>
   </div>
 
-  <div id="status"></div>
-
-  <div id="results">
-    <div class="cards">
-      <div class="card"><div class="l">Total USDC spend</div><div class="v" id="c-total"></div></div>
-      <div class="card"><div class="l">Payments found</div><div class="v" id="c-n"></div></div>
-      <div class="card"><div class="l">Journal entries</div><div class="v" id="c-je"></div></div>
-      <div class="card"><div class="l">Needs classification</div><div class="v" id="c-ex"></div></div>
+  <!-- ============ WALLET ============ -->
+  <section class="panel on" id="panel-wallet" role="tabpanel" aria-labelledby="tab-wallet">
+    <div class="inbar">
+      <input id="wallet" placeholder="0x… paste an agent wallet on Base" spellcheck="false">
+      <button onclick="run()">Close the books</button>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:14px;align-items:center">
+      <span style="font-size:12.5px;color:var(--mut)">Chain:</span>
+      <button id="pill-base" class="pill" onclick="setChain('base')">Base</button>
+      <button id="pill-solana" class="pill" onclick="setChain('solana')">Solana</button>
+    </div>
+    <div class="under">
+      <span class="hint">No wallet in mind? Pull one from live traffic &rarr;</span>
+      <button class="ghost" onclick="randomAgent()">&#127922; Random live agent</button>
     </div>
 
-    <h2>Spend by provider</h2>
-    <table id="t-prov"></table>
+    <div class="status" id="w-status"></div>
 
-    <h2 id="je-title">Aggregated journal entries (Dr expense / Cr Digital Assets USDC)</h2>
-    <table id="t-je"></table>
-    <div class="note">Each settlement is a potential digital-asset disposal for tax purposes; settlement counts retained per entry. Named providers come from Counterra's growing seller-mapping database &mdash; most x402 sellers are not publicly discoverable, which is rather the point of building it.</div>
+    <div class="results" id="w-results">
+      <div class="cards">
+        <div class="card"><div class="l">Total USDC spend</div><div class="v" id="c-total"></div></div>
+        <div class="card"><div class="l">Payments found</div><div class="v" id="c-n"></div></div>
+        <div class="card"><div class="l">Journal entries</div><div class="v" id="c-je"></div></div>
+        <div class="card warn"><div class="l">Needs review</div><div class="v" id="c-ex"></div></div>
+      </div>
 
-    <h2>Latest payments</h2>
-    <table id="t-tx"></table>
-    <div class="note" id="method"></div>
-  </div>
+      <h2>Spend by provider</h2>
+      <table id="t-prov"></table>
+
+      <h2 id="je-title">Aggregated journal entries (Dr expense / Cr Digital Assets USDC)
+        <button class="ghost act" onclick="downloadCSV()">&#8681; Download journal CSV</button></h2>
+      <table id="t-je"></table>
+      <div class="note">Each settlement is a potential digital-asset disposal for tax purposes; settlement counts retained per entry. Named providers come from Counterra's growing seller-mapping registry &mdash; most x402 sellers are not publicly discoverable, which is rather the point of building it.</div>
+
+      <h2>Flagged for review</h2>
+      <table id="t-ex"></table>
+      <div class="note" id="ex-empty" style="display:none">Nothing flagged — every payment mapped to a known seller and sat within normal range.</div>
+
+      <h2>Latest payments</h2>
+      <table id="t-tx"></table>
+      <div class="note" id="method"></div>
+    </div>
+  </section>
+
+  <!-- ============ NETWORK ============ -->
+  <section class="panel" id="panel-network" role="tabpanel" aria-labelledby="tab-network">
+    <p class="lead">A live sample of recent x402 settlements across Coinbase's facilitator wallets on Base — the whole market at a glance, not one agent. This is the map: who's selling, who's spending, and how much of it Counterra can already name.</p>
+    <button onclick="runNetwork()">Map the network</button>
+    <button class="ghost" onclick="runNetwork(true)" style="margin-left:8px">Refresh sample</button>
+
+    <div class="status" id="n-status"></div>
+
+    <div class="results" id="n-results">
+      <div class="cards">
+        <div class="card"><div class="l">Volume (sample)</div><div class="v" id="n-vol"></div></div>
+        <div class="card"><div class="l">Settlements</div><div class="v" id="n-set"></div></div>
+        <div class="card"><div class="l">Active agents</div><div class="v" id="n-agents"></div></div>
+        <div class="card"><div class="l">Active sellers</div><div class="v" id="n-sellers"></div></div>
+        <div class="card"><div class="l">Named by Counterra</div><div class="v" id="n-named"></div></div>
+      </div>
+
+      <h2>Top sellers by spend</h2>
+      <table id="n-top"></table>
+
+      <h2>Spend by category</h2>
+      <table id="n-cat"></table>
+      <div class="note" id="n-method"></div>
+    </div>
+  </section>
+
+  <!-- ============ REPORT ============ -->
+  <section class="panel" id="panel-report" role="tabpanel" aria-labelledby="tab-report">
+    <p class="lead">Turn the network sample into a dated, copy-paste snapshot — a "State of Agent Spend" card you can post to X or Farcaster. The point isn't to ask for design partners; it's to be the one holding the map they come looking for.</p>
+    <button onclick="runReport()">Generate snapshot</button>
+    <button class="ghost" id="copy-snap" onclick="copySnap()" style="margin-left:8px;display:none">&#128203; Copy for posting</button>
+
+    <div class="status" id="r-status"></div>
+    <pre class="snap" id="r-snap" style="display:none"></pre>
+    <div class="note" id="r-method" style="display:none"></div>
+  </section>
 </div>
 
 <div class="foot">
-  <span><b>COUNTERRA</b> &mdash; open source, Apache-2.0 &middot; <a href="https://github.com/billiondollarapps/counterra" target="_blank">github.com/billiondollarapps/counterra</a></span>
-  <span>Reads public Base data via Blockscout &middot; non-custodial &middot; nothing leaves your browser</span>
+  <span><b>COUNTERRA</b> &mdash; open source, Apache-2.0 &middot; <a href="https://github.com/billiondollarapps/counterra" target="_blank" rel="noopener">github.com/billiondollarapps/counterra</a></span>
+  <span>Reads public chain data &middot; non-custodial &middot; nothing leaves your browser</span>
 </div>
 
 <script>
@@ -131,6 +204,16 @@ const SOL_FACS = [
 let CHAIN = "base";
 let solRpcIdx = 0;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// ---------- tabs ----------
+function showTab(name){
+  for(const t of ["wallet","network","report"]){
+    const on = t === name;
+    document.getElementById("tab-" + t).classList.toggle("on", on);
+    document.getElementById("tab-" + t).setAttribute("aria-selected", on ? "true" : "false");
+    document.getElementById("panel-" + t).classList.toggle("on", on);
+  }
+}
 
 function setChain(c){
   CHAIN = c;
@@ -212,28 +295,37 @@ async function fetchSolanaSpend(wallet){
     }catch(e){}
     done++;
     if(done % 5 === 0)
-      status(`<span class="spin"></span>Reading Solana… ${done}/${sigs.length} transactions checked, ${items.length} payments found`);
+      wstatus(`<span class="spin"></span>Reading Solana… ${done}/${sigs.length} transactions checked, ${items.length} payments found`);
   }
   return items;
 }
 
-// ---- Counterra's seller-mapping database (grows with every whois) ----
+// ---- Counterra's seller-mapping registry (grows with every whois) ----
 const PROVIDERS = {
   "0xe9030014f5dae217d0a152f02a043567b16c1abf": {label:"blockrun.ai", category:"Market data"},
   "0x7c655d3d3944bd27994dd81a036c3afb19806c40": {label:"vaaya.ai",   category:"AI inference"},
   "8mTdwZCZDPeDhso3iAk2znuuzWWXrq7Cni67WJ6Tc167": {label:"Solidus", category:"Market data"},
 };
 const prov = a => PROVIDERS[a && a.startsWith("0x") ? a.toLowerCase() : a];
+const isFac = a => FAC_SET.has((a||"").toLowerCase());
+let FAC_SET = new Set(FALLBACK_FACS.map(f=>f.toLowerCase()));
 
-// live registry load: counterra.xyz/providers.json is the open API;
-// the baked map above is the offline fallback
-fetch("providers.json").then(r => r.ok ? r.json() : null).then(reg => {
-  if(!reg || !reg.providers) return;
-  for(const p of reg.providers){
-    const k = p.wallet.startsWith("0x") ? p.wallet.toLowerCase() : p.wallet;
-    PROVIDERS[k] = {label: p.label, category: p.category};
+// live registry load: providers.json (relative when deployed in docs/),
+// falling back to the live domain so the page also works standalone.
+(async () => {
+  for(const url of ["providers.json", "https://counterra.xyz/providers.json"]){
+    try{
+      const r = await fetch(url); if(!r.ok) continue;
+      const reg = await r.json(); if(!reg || !reg.providers) continue;
+      for(const p of reg.providers){
+        const k = p.wallet.startsWith("0x") ? p.wallet.toLowerCase() : p.wallet;
+        PROVIDERS[k] = {label: p.label, category: p.category};
+      }
+      break;
+    }catch(e){}
   }
-}).catch(()=>{});
+})();
+
 const EXPENSE = {
   "Market data":"6410 - Data & Research Services",
   "Risk data":"6410 - Data & Research Services",
@@ -243,9 +335,10 @@ const EXPENSE = {
 
 const $ = id => document.getElementById(id);
 const fmt = v => "$" + v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt0 = v => "$" + Math.round(v).toLocaleString("en-US");
 const short = a => a.slice(0,10) + "…";
-const addrCell = (a, cls) => `<td class="${cls}" title="${a} (click to copy)" style="cursor:copy" onclick="navigator.clipboard&&navigator.clipboard.writeText('${a}');status('Copied: ${a.slice(0,14)}…')">${short(a)}</td>`;
-function status(html){ $("status").innerHTML = html; }
+const addrCell = (a, cls) => `<td class="${cls}" title="${a} (click to copy)" style="cursor:copy" onclick="navigator.clipboard&&navigator.clipboard.writeText('${a}');wstatus('Copied: ${a.slice(0,14)}…')">${short(a)}</td>`;
+function wstatus(html){ $("w-status").innerHTML = html; }
 
 async function bs(path){
   let r;
@@ -278,6 +371,8 @@ async function fetchSpend(wallet){
   return items;
 }
 
+let LAST_BOOKS = null; // for CSV export
+
 function close_books(items){
   const byProv = {}, journal = {}, exceptions = [];
   let total = 0;
@@ -291,13 +386,14 @@ function close_books(items){
     const jk = label + "|" + cat;
     journal[jk] = journal[jk] || {label, cat, wallet:it.to, amount:0, n:0, named:!!p};
     journal[jk].amount += it.amount; journal[jk].n++;
-    if(!p) exceptions.push(it);
-    else if(it.amount >= 40) exceptions.push(it);
+    if(!p) exceptions.push({...it, why:"unmapped seller"});
+    else if(it.amount >= 40) exceptions.push({...it, why:"large payment (≥ $40)", label:p.label});
   }
   return {total, byProv, journal:Object.values(journal).sort((a,b)=>b.amount-a.amount), exceptions};
 }
 
 function render(wallet, items, b){
+  LAST_BOOKS = {wallet, b};
   $("c-total").textContent = fmt(b.total);
   $("c-n").textContent = items.length;
   $("c-je").textContent = b.journal.filter(j=>j.amount>=0.01).length;
@@ -320,6 +416,22 @@ function render(wallet, items, b){
      <td class="${j.named?'named':'mono'}">${j.label}</td>
      <td class="num">${j.n}</td></tr>`).join("");
 
+  // exceptions / flags
+  if(b.exceptions.length){
+    $("ex-empty").style.display = "none";
+    $("t-ex").style.display = "";
+    $("t-ex").innerHTML =
+      `<tr><th>To</th><th style="text-align:right">Amount</th><th>Flag</th></tr>` +
+      b.exceptions.slice(0,20).map(it=>{
+        const p = prov(it.to);
+        return `<tr>${p?`<td class="named" title="${it.to}">${p.label}</td>`:addrCell(it.to,'mono')}
+        <td class="num">${fmt(it.amount)}</td>
+        <td class="flag">${it.why}</td></tr>`;}).join("");
+  } else {
+    $("t-ex").style.display = "none";
+    $("ex-empty").style.display = "block";
+  }
+
   $("t-tx").innerHTML =
     `<tr><th>Time (UTC)</th><th>To</th><th style="text-align:right">Amount</th><th>Status</th></tr>` +
     items.slice(0,12).map(it=>{
@@ -332,32 +444,52 @@ function render(wallet, items, b){
   $("method").textContent = CHAIN === "base"
     ? `Methodology: outgoing USDC transfers on Base for ${wallet}, newest ${items.length} shown (up to ~250). x402 settlements are USDC transfers submitted by facilitator wallets; this view includes all USDC outflows of the wallet.`
     : `Methodology: USDC payments authorized by ${wallet} on Solana, from its ${items.length} most recent transactions (newest ~30 scanned). Payments are decoded from facilitator-submitted SPL-USDC transfers; token accounts resolved to owner wallets.`;
-  $("results").style.display = "block";
+  $("w-results").style.display = "block";
+}
+
+function downloadCSV(){
+  if(!LAST_BOOKS){ return; }
+  const {wallet, b} = LAST_BOOKS;
+  const rows = [["Debit Account","Credit Account","Amount USD","Provider","Seller Wallet","Settlements"]];
+  for(const j of b.journal.filter(j=>j.amount>=0.01)){
+    rows.push([EXPENSE[j.cat]||EXPENSE["Uncategorized"], "1085 - Digital Assets (USDC)",
+      j.amount.toFixed(2), j.label, j.wallet, j.n]);
+  }
+  const csv = rows.map(r => r.map(c => {
+    const s = String(c);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+  }).join(",")).join("\n");
+  const blob = new Blob([csv], {type:"text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "counterra_journal_" + wallet.slice(0,10) + ".csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 async function run(addr){
+  showTab("wallet");
   let wallet = (addr || $("wallet").value).trim();
-  // auto-detect chain from address shape
   if(/^0x[0-9a-fA-F]{40}$/.test(wallet)){ setChain("base"); wallet = wallet.toLowerCase(); }
   else if(/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(wallet)){ setChain("solana"); }
   else{
-    status('<span class="err">That does not look like a wallet address on Base (0x…) or Solana (base58).</span>'); return;
+    wstatus('<span class="err">That does not look like a wallet address on Base (0x…) or Solana (base58).</span>'); return;
   }
   $("wallet").value = wallet;
   location.hash = "chain=" + CHAIN + "&wallet=" + wallet;
-  $("results").style.display = "none";
+  $("w-results").style.display = "none";
   const srcName = CHAIN === "base" ? "Base via Blockscout" : "Solana via public RPC";
-  status(`<span class="spin"></span>Reading ${srcName} & closing the books…`);
+  wstatus(`<span class="spin"></span>Reading ${srcName} & closing the books…`);
   try{
     const items = CHAIN === "base" ? await fetchSpend(wallet) : await fetchSolanaSpend(wallet);
     items.sort((a,c)=> (c.ts||"").localeCompare(a.ts||""));
     if(!items.length){
-      status(`No USDC agent payments found for this wallet on ${CHAIN === "base" ? "Base" : "Solana"}. Try the random live agent instead.`); return;
+      wstatus(`No USDC agent payments found for this wallet on ${CHAIN === "base" ? "Base" : "Solana"}. Try the random live agent instead.`); return;
     }
     render(wallet, items, close_books(items));
-    status("");
+    wstatus("");
   }catch(e){
-    status(`<span class="err">Could not fetch data: ${e.message}. The public endpoint may be rate-limiting — wait a few seconds and retry.</span>`);
+    wstatus(`<span class="err">Could not fetch data: ${e.message}. The public endpoint may be rate-limiting — wait a few seconds and retry.</span>`);
   }
 }
 
@@ -366,13 +498,16 @@ async function getFacilitators(){
     const t = await (await fetch(REGISTRY)).text();
     const pairs = [...t.matchAll(/address:\s*'(0x[0-9a-fA-F]{40})'[\s\S]*?Date\('([\d-]+)'\)/g)]
       .map(m=>[m[1].toLowerCase(), m[2]]).sort((a,b)=>b[1].localeCompare(a[1]));
-    if(pairs.length) return pairs.slice(0,6).map(p=>p[0]);
+    if(pairs.length){
+      const facs = pairs.slice(0,6).map(p=>p[0]);
+      FAC_SET = new Set(facs);
+      return facs;
+    }
   }catch(e){}
   return FALLBACK_FACS;
 }
 
 async function randomAgentSolana(){
-  // gather a pool of distinct payers from a wider sample, then roll the dice
   const pool = new Set();
   const facs = [...SOL_FACS].sort(()=>Math.random()-.5);
   for(const fac of facs){
@@ -388,23 +523,24 @@ async function randomAgentSolana(){
       if(pool.size >= 5) break;
     }
     if(pool.size >= 5) break;
-    status(`<span class="spin"></span>Sampling live Solana traffic… ${pool.size} distinct agents found so far`);
+    wstatus(`<span class="spin"></span>Sampling live Solana traffic… ${pool.size} distinct agents found so far`);
   }
   if(pool.size){
     const arr = [...pool];
     const pick = arr[Math.floor(Math.random() * arr.length)];
-    status("Rolled the dice across " + arr.length + " active agents — picked: " + pick);
+    wstatus("Rolled the dice across " + arr.length + " active agents — picked: " + pick);
     return run(pick);
   }
-  status('<span class="err">Could not find recent Solana traffic just now — paste a wallet instead.</span>');
+  wstatus('<span class="err">Could not find recent Solana traffic just now — paste a wallet instead.</span>');
 }
 
 async function randomAgent(){
-  $("results").style.display = "none";
-  status('<span class="spin"></span>Sampling live x402 traffic for an active agent…');
+  showTab("wallet");
+  $("w-results").style.display = "none";
+  wstatus('<span class="spin"></span>Sampling live x402 traffic for an active agent…');
   if(CHAIN === "solana"){
     try{ return await randomAgentSolana(); }
-    catch(e){ status(`<span class="err">Sampling failed: ${e.message}</span>`); return; }
+    catch(e){ wstatus(`<span class="err">Sampling failed: ${e.message}</span>`); return; }
   }
   try{
     const facs = await getFacilitators();
@@ -419,13 +555,178 @@ async function randomAgent(){
       });
       if(!log) continue;
       const payer = "0x" + log.topics[1].slice(-40);
-      status("Found an active agent in live traffic: " + payer);
+      wstatus("Found an active agent in live traffic: " + payer);
       return run(payer);
     }
-    status('<span class="err">Couldn\'t find recent traffic just now — paste a wallet instead.</span>');
+    wstatus('<span class="err">Couldn\'t find recent traffic just now — paste a wallet instead.</span>');
   }catch(e){
-    status(`<span class="err">Sampling failed: ${e.message}</span>`);
+    wstatus(`<span class="err">Sampling failed: ${e.message}</span>`);
   }
+}
+
+// ============ NETWORK ============
+const TOPIC_ADDR = t => "0x" + t.slice(-40);
+let LAST_NET = null;
+
+async function sweepNetwork(onProgress){
+  const facs = await getFacilitators();
+  const seen = new Set();          // tx hashes
+  const legs = [];                 // {payer, seller, amount}
+  let scanned = 0, target = 90;    // cap on log fetches
+  for(const fac of facs){
+    let d;
+    try{ d = await bs(`/addresses/${fac}/transactions?filter=from`); }catch(e){ continue; }
+    const txs = (d.items||[])
+      .filter(it => (((it.to||{}).hash)||"").toLowerCase() === USDC && (it.status||"ok")==="ok")
+      .map(it => it.hash);
+    for(const h of txs){
+      if(seen.has(h)) continue;
+      seen.add(h);
+      if(scanned >= target) break;
+      let logs;
+      try{ logs = await bs(`/transactions/${h}/logs`); }catch(e){ continue; }
+      scanned++;
+      for(const l of (logs.items||[])){
+        const a = (typeof l.address==="object"? l.address.hash : l.address)||"";
+        if(a.toLowerCase() !== USDC) continue;
+        const tp = l.topics||[];
+        if(!tp[0] || tp[0].toLowerCase() !== TRANSFER_TOPIC || !tp[1] || !tp[2]) continue;
+        const payer = TOPIC_ADDR(tp[1]).toLowerCase();
+        const seller = TOPIC_ADDR(tp[2]).toLowerCase();
+        if(isFac(payer) || isFac(seller)) continue;   // skip fee/rebalance legs
+        let amt = 0;
+        try{ amt = Number(BigInt(l.data)) / 1e6; }catch(e){ amt = parseInt(l.data,16)/1e6 || 0; }
+        if(!amt || amt <= 0) continue;
+        legs.push({payer, seller, amount: amt});
+      }
+      if(scanned % 6 === 0 && onProgress)
+        onProgress(`<span class="spin"></span>Sweeping settlements… ${scanned} transactions decoded, ${legs.length} payments`);
+      if(scanned >= target) break;
+    }
+    if(scanned >= target) break;
+  }
+  return {legs, scanned, facs: facs.length};
+}
+
+function aggregateNetwork(legs){
+  const agents = new Set(), sellers = new Set(), bySeller = {}, byCat = {};
+  let total = 0, namedVol = 0;
+  for(const {payer, seller, amount} of legs){
+    total += amount;
+    agents.add(payer); sellers.add(seller);
+    const p = prov(seller);
+    const label = p ? p.label : short(seller);
+    const cat = p ? p.category : "Uncategorized";
+    if(p) namedVol += amount;
+    bySeller[seller] = bySeller[seller] || {label, amount:0, n:0, named:!!p};
+    bySeller[seller].amount += amount; bySeller[seller].n++;
+    byCat[cat] = (byCat[cat]||0) + amount;
+  }
+  return {
+    total, settlements: legs.length,
+    agents: agents.size, sellers: sellers.size,
+    namedVol, namedPct: total ? namedVol/total*100 : 0,
+    topSellers: Object.values(bySeller).sort((a,b)=>b.amount-a.amount),
+    byCat: Object.entries(byCat).sort((a,b)=>b[1]-a[1])
+  };
+}
+
+function nstatus(html){ $("n-status").innerHTML = html; }
+
+async function runNetwork(force){
+  if(LAST_NET && !force){ renderNetwork(LAST_NET); return; }
+  $("n-results").style.display = "none";
+  nstatus('<span class="spin"></span>Reading Base via Blockscout across facilitator wallets…');
+  try{
+    const {legs, scanned, facs} = await sweepNetwork(nstatus);
+    if(!legs.length){ nstatus('<span class="err">No settlements decoded just now — the public endpoint may be rate-limiting. Wait a few seconds and refresh the sample.</span>'); return; }
+    const agg = aggregateNetwork(legs);
+    agg.scanned = scanned; agg.facs = facs; agg.at = new Date();
+    LAST_NET = agg;
+    renderNetwork(agg);
+    nstatus("");
+  }catch(e){
+    nstatus(`<span class="err">Sweep failed: ${e.message}. Wait a few seconds and retry.</span>`);
+  }
+}
+
+function renderNetwork(a){
+  $("n-vol").textContent = fmt0(a.total);
+  $("n-set").textContent = a.settlements.toLocaleString("en-US");
+  $("n-agents").textContent = a.agents.toLocaleString("en-US");
+  $("n-sellers").textContent = a.sellers.toLocaleString("en-US");
+  $("n-named").textContent = a.namedPct.toFixed(0) + "%";
+
+  const max = a.topSellers.length ? a.topSellers[0].amount : 1;
+  $("n-top").innerHTML =
+    `<tr><th>Seller</th><th></th><th style="text-align:right">Volume</th><th style="text-align:right">Payments</th><th style="text-align:right">Share</th></tr>` +
+    a.topSellers.slice(0,15).map(s=>
+    `<tr>${s.named?`<td class="named">${s.label}</td>`:`<td class="mono">${s.label}</td>`}
+     <td class="bar ${s.named?'g':''}"><div style="width:${Math.max(2,s.amount/max*100)}%"></div></td>
+     <td class="num">${fmt(s.amount)}</td>
+     <td class="num">${s.n}</td>
+     <td class="num">${a.total?(s.amount/a.total*100).toFixed(0):0}%</td></tr>`).join("");
+
+  const cmax = a.byCat.length ? a.byCat[0][1] : 1;
+  $("n-cat").innerHTML =
+    `<tr><th>Category</th><th></th><th style="text-align:right">Volume</th><th style="text-align:right">Share</th></tr>` +
+    a.byCat.map(([cat,v])=>
+    `<tr><td>${cat}</td>
+     <td class="bar"><div style="width:${Math.max(2,v/cmax*100)}%"></div></td>
+     <td class="num">${fmt(v)}</td>
+     <td class="num">${a.total?(v/a.total*100).toFixed(0):0}%</td></tr>`).join("");
+
+  $("n-method").textContent =
+    `Methodology: a live sample of the ${a.scanned} most recent USDC settlement transactions across ${a.facs} Coinbase facilitator wallets on Base, decoded to agent → seller legs (facilitator fee/rebalance legs excluded). This is a recent-window sample, not all-time totals — refresh to resample. Sellers named from Counterra's open registry.`;
+  $("n-results").style.display = "block";
+}
+
+// ============ REPORT ============
+function rstatus(html){ $("r-status").innerHTML = html; }
+
+async function runReport(){
+  rstatus('<span class="spin"></span>Building the snapshot from a fresh network sample…');
+  try{
+    let a = LAST_NET;
+    if(!a){
+      const {legs, scanned, facs} = await sweepNetwork(rstatus);
+      if(!legs.length){ rstatus('<span class="err">No settlements decoded just now — wait a few seconds and retry.</span>'); return; }
+      a = aggregateNetwork(legs); a.scanned = scanned; a.facs = facs; a.at = new Date();
+      LAST_NET = a;
+    }
+    const d = (a.at||new Date()).toISOString().slice(0,10);
+    const top = a.topSellers.slice(0,5).map((s,i)=>
+      `${i+1}. ${s.label} — ${fmt(s.amount)} (${a.total?(s.amount/a.total*100).toFixed(0):0}%)`).join("\n");
+    const snap =
+`STATE OF AGENT SPEND — x402 on Base
+sampled ${d} · ${a.scanned} recent settlements · ${a.facs} facilitators
+
+Volume (sample):  ${fmt0(a.total)}
+Settlements:      ${a.settlements.toLocaleString("en-US")}
+Active agents:    ${a.agents.toLocaleString("en-US")}
+Active sellers:   ${a.sellers.toLocaleString("en-US")}
+Named by name:    ${a.namedPct.toFixed(0)}% of volume
+
+Top sellers
+${top}
+
+Most x402 sellers aren't publicly identifiable — that's the gap.
+Counterra maps them, in the open. counterra.xyz`;
+    $("r-snap").textContent = snap;
+    $("r-snap").style.display = "block";
+    $("copy-snap").style.display = "inline-block";
+    $("r-method").style.display = "block";
+    $("r-method").textContent = "A recent-window sample, not all-time totals. Regenerate any time for a fresh reading. Post it where the x402 builders are — the map is the reason they come to you.";
+    rstatus("");
+  }catch(e){
+    rstatus(`<span class="err">Could not build snapshot: ${e.message}</span>`);
+  }
+}
+
+function copySnap(){
+  const t = $("r-snap").textContent;
+  if(navigator.clipboard) navigator.clipboard.writeText(t);
+  rstatus("Copied — paste it into a post.");
 }
 
 // shareable links: #wallet=0x…
