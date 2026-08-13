@@ -766,11 +766,18 @@ async function loadTicker(){
         $("tk-chains").textContent = "x402 · " + s.chains.map(c=>c.toUpperCase()).join(" + ");
       }
       const v7 = d.volume_7d_usdc, n7 = d.settlements_7d, vpd = d.rate_per_day_usdc, spd = d.rate_per_day_settlements;
+      let split = "";
+      const bc = d.by_chain || {};
+      if(bc.base || bc.solana){
+        const bv = (bc.base||{}).volume_7d_usdc || 0, sv = (bc.solana||{}).volume_7d_usdc || 0;
+        split = `&nbsp;&nbsp;<span style="color:#5f7196">(Base $${bv.toLocaleString("en-US",{maximumFractionDigits:2})} · Solana $${sv.toLocaleString("en-US",{maximumFractionDigits:2})})</span>`;
+      }
       $("tk-body").innerHTML =
         `last 7d: <b style="color:#fff">$${(v7||0).toLocaleString("en-US",{maximumFractionDigits:2})}</b> across `+
         `<b style="color:#fff">${(n7||0).toLocaleString("en-US")}</b> settlements`+
         `&nbsp;·&nbsp;~$${Math.round(vpd||0).toLocaleString("en-US")}/day`+
-        `&nbsp;·&nbsp;${Math.round(spd||0).toLocaleString("en-US")} settlements/day`;
+        `&nbsp;·&nbsp;${Math.round(spd||0).toLocaleString("en-US")} settlements/day`+
+        split;
       if(s.updated_at){
         const mins = Math.max(0, Math.round((Date.now()-Date.parse(s.updated_at))/60000));
         $("tk-age").textContent = mins < 90 ? `updated ${mins}m ago` : `updated ${Math.round(mins/60)}h ago`;
