@@ -88,6 +88,13 @@
   <div class="s">AI agents pay for data, tools and compute over x402 &mdash; micropayments with no invoices, no receipts, no books. <b>Agents move the money. Counterra makes it count.</b></div>
 </div>
 
+<div id="ticker" style="display:none;background:#0f1b30;color:#c8d4e8;font-size:12.5px;
+     text-align:center;padding:9px 16px;border-bottom:1px solid #0a1322">
+  <span style="color:#7fa8f7;letter-spacing:1px;font-weight:600">x402 · BASE</span>
+  &nbsp;<span id="tk-body"></span>
+  &nbsp;<span id="tk-age" style="color:#5f7196"></span>
+</div>
+
 <div class="wrap">
   <div class="tabs" role="tablist">
     <button class="tab on" id="tab-wallet" role="tab" aria-selected="true" onclick="showTab('wallet')">Wallet<span class="sub">close one agent's books</span></button>
@@ -154,6 +161,11 @@
         <div class="card"><div class="l">Active agents</div><div class="v" id="n-agents"></div></div>
         <div class="card"><div class="l">Active sellers</div><div class="v" id="n-sellers"></div></div>
         <div class="card"><div class="l">Named by Counterra</div><div class="v" id="n-named"></div></div>
+      </div>
+      <div class="cards">
+        <div class="card" style="border-top-color:var(--green)"><div class="l">Sample window</div><div class="v" id="n-span" style="font-size:19px"></div></div>
+        <div class="card" style="border-top-color:var(--green)"><div class="l">Implied volume / day</div><div class="v" id="n-vpd" style="color:var(--green)"></div></div>
+        <div class="card" style="border-top-color:var(--green)"><div class="l">Implied settlements / day</div><div class="v" id="n-spd" style="color:var(--green)"></div></div>
       </div>
 
       <h2>Top sellers by spend</h2>
@@ -578,8 +590,8 @@ async function sweepNetwork(onProgress){
     try{ d = await bs(`/addresses/${fac}/transactions?filter=from`); }catch(e){ continue; }
     const txs = (d.items||[])
       .filter(it => (((it.to||{}).hash)||"").toLowerCase() === USDC && (it.status||"ok")==="ok")
-      .map(it => it.hash);
-    for(const h of txs){
+      .map(it => ({hash: it.hash, ts: it.timestamp}));
+    for(const {hash:h, ts} of txs){
       if(seen.has(h)) continue;
       seen.add(h);
       if(scanned >= target) break;
@@ -597,7 +609,7 @@ async function sweepNetwork(onProgress){
         let amt = 0;
         try{ amt = Number(BigInt(l.data)) / 1e6; }catch(e){ amt = parseInt(l.data,16)/1e6 || 0; }
         if(!amt || amt <= 0) continue;
-        legs.push({payer, seller, amount: amt});
+        legs.push({payer, seller, amount: amt, ts});
       }
       if(scanned % 6 === 0 && onProgress)
         onProgress(`<span class="spin"></span>Sweeping settlements… ${scanned} transactions decoded, ${legs.length} payments`);
@@ -610,10 +622,11 @@ async function sweepNetwork(onProgress){
 
 function aggregateNetwork(legs){
   const agents = new Set(), sellers = new Set(), bySeller = {}, byCat = {};
-  let total = 0, namedVol = 0;
-  for(const {payer, seller, amount} of legs){
+  let total = 0, namedVol = 0, tmin = null, tmax = null;
+  for(const {payer, seller, amount, ts} of legs){
     total += amount;
     agents.add(payer); sellers.add(seller);
+    if(ts){ const t = Date.parse(ts); if(!isNaN(t)){ if(tmin===null||t<tmin) tmin=t; if(tmax===null||t>tmax) tmax=t; } }
     const p = prov(seller);
     const label = p ? p.label : short(seller);
     const cat = p ? p.category : "Uncategorized";
@@ -622,13 +635,24 @@ function aggregateNetwork(legs){
     bySeller[seller].amount += amount; bySeller[seller].n++;
     byCat[cat] = (byCat[cat]||0) + amount;
   }
+  const spanHours = (tmin!==null && tmax!==null && tmax>tmin) ? (tmax-tmin)/3.6e6 : 0;
+  const spanDays = spanHours/24;
   return {
     total, settlements: legs.length,
     agents: agents.size, sellers: sellers.size,
     namedVol, namedPct: total ? namedVol/total*100 : 0,
+    spanHours, tmin, tmax,
+    perDayVol: spanDays>0 ? total/spanDays : null,
+    perDaySet: spanDays>0 ? legs.length/spanDays : null,
     topSellers: Object.values(bySeller).sort((a,b)=>b.amount-a.amount),
     byCat: Object.entries(byCat).sort((a,b)=>b[1]-a[1])
   };
+}
+function spanLabel(h){
+  if(!h || h<=0) return "unknown span";
+  if(h < 1) return Math.round(h*60) + " min";
+  if(h < 48) return h.toFixed(1) + " hours";
+  return (h/24).toFixed(1) + " days";
 }
 
 function nstatus(html){ $("n-status").innerHTML = html; }
@@ -656,6 +680,9 @@ function renderNetwork(a){
   $("n-agents").textContent = a.agents.toLocaleString("en-US");
   $("n-sellers").textContent = a.sellers.toLocaleString("en-US");
   $("n-named").textContent = a.namedPct.toFixed(0) + "%";
+  $("n-span").textContent = spanLabel(a.spanHours);
+  $("n-vpd").textContent = a.perDayVol!==null ? fmt0(a.perDayVol) : "—";
+  $("n-spd").textContent = a.perDaySet!==null ? Math.round(a.perDaySet).toLocaleString("en-US") : "—";
 
   const max = a.topSellers.length ? a.topSellers[0].amount : 1;
   $("n-top").innerHTML =
@@ -677,7 +704,7 @@ function renderNetwork(a){
      <td class="num">${a.total?(v/a.total*100).toFixed(0):0}%</td></tr>`).join("");
 
   $("n-method").textContent =
-    `Methodology: a live sample of the ${a.scanned} most recent USDC settlement transactions across ${a.facs} Coinbase facilitator wallets on Base, decoded to agent → seller legs (facilitator fee/rebalance legs excluded). This is a recent-window sample, not all-time totals — refresh to resample. Sellers named from Counterra's open registry.`;
+    `Methodology: a live sample of the ${a.scanned} most recent USDC settlement transactions across ${a.facs} Coinbase facilitator wallets on Base, spanning ${spanLabel(a.spanHours)} of real time (${a.settlements} payment legs, facilitator fee/rebalance legs excluded). "Implied per day" extrapolates this window's rate — a rough proxy, not a measured daily total; the auto-sweep builds the real trailing rate over time. Coinbase facilitators only; excludes other facilitators and Solana, so it is a floor. Sellers named from Counterra's open registry.`;
   $("n-results").style.display = "block";
 }
 
@@ -729,8 +756,32 @@ function copySnap(){
   rstatus("Copied — paste it into a post.");
 }
 
+// live ticker — reads the auto-sweep output (network-stats.json), produced by the GitHub Actions cron.
+async function loadTicker(){
+  for(const url of ["network-stats.json", "https://counterra.xyz/network-stats.json"]){
+    try{
+      const r = await fetch(url, {cache:"no-store"}); if(!r.ok) continue;
+      const s = await r.json(); const d = (s||{}).derived; if(!d) continue;
+      const v7 = d.volume_7d_usdc, n7 = d.settlements_7d, vpd = d.rate_per_day_usdc, spd = d.rate_per_day_settlements;
+      $("tk-body").innerHTML =
+        `last 7d: <b style="color:#fff">$${(v7||0).toLocaleString("en-US",{maximumFractionDigits:2})}</b> across `+
+        `<b style="color:#fff">${(n7||0).toLocaleString("en-US")}</b> settlements`+
+        `&nbsp;·&nbsp;~$${Math.round(vpd||0).toLocaleString("en-US")}/day`+
+        `&nbsp;·&nbsp;${Math.round(spd||0).toLocaleString("en-US")} settlements/day`;
+      if(s.updated_at){
+        const mins = Math.max(0, Math.round((Date.now()-Date.parse(s.updated_at))/60000));
+        $("tk-age").textContent = mins < 90 ? `updated ${mins}m ago` : `updated ${Math.round(mins/60)}h ago`;
+      }
+      $("ticker").style.display = "block";
+      return;
+    }catch(e){}
+  }
+  // no stats file yet (cron hasn't run) — ticker stays hidden, page works normally.
+}
+
 // shareable links: #wallet=0x…
 window.addEventListener("load", ()=>{
+  loadTicker();
   setChain("base");
   const m = location.hash.match(/wallet=([0-9a-zA-Zx]+)/);
   if(m) run(m[1]);
