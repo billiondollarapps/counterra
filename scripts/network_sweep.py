@@ -32,6 +32,19 @@ BUFFER_CAP = int(os.environ.get("BUFFER_CAP", "6000"))
 
 UA = {"User-Agent": "counterra-sweep/1.0"}
 
+# ---- Solana ----
+ENABLE_SOLANA = os.environ.get("ENABLE_SOLANA", "1") != "0"
+SOL_RPCS = ["https://solana-rpc.publicnode.com", "https://api.mainnet-beta.solana.com"]
+SOL_USDC = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+SOL_FACS = [
+    "92QcYJZpkwYyacR3G69QNR2JfjadQxd16cp5d7x5GEzU",
+    "BENrLoUbndxoNMUS5JXApGMtNykLjFXXixMtpDwDR9SP",
+    "CjNFTjvBhbJJd2B5ePPMHRLx1ELZpa8dwQgGL727eKww",
+    "8B5UKhwfAyFW67h58cBkQj1Ur6QXRgwWJJcQp8ZBsDPa",
+]
+SOL_SIGS_PER_FAC = int(os.environ.get("SOL_SIGS_PER_FAC", "15"))
+SOL_TX_CAP = int(os.environ.get("SOL_TX_CAP", "45"))  # getTransaction calls per run (rate-limit budget)
+
 
 def get_json(url, tries=4):
     last = None
@@ -144,11 +157,115 @@ def sweep(facs, fac_set):
                     "payer": payer,
                     "seller": seller,
                     "amount": amt,
+                    "chain": "base",
                 })
             time.sleep(0.2)  # be gentle on the public endpoint
         if scanned >= TX_PER_RUN:
             break
     return legs, scanned
+
+
+def sol_rpc(method, params, tries=4):
+    body = json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode("utf-8")
+    last = None
+    for i in range(tries):
+        url = SOL_RPCS[i % len(SOL_RPCS)]
+        try:
+            hdr = dict(UA); hdr["Content-Type"] = "application/json"
+            req = urllib.request.Request(url, data=body, headers=hdr)
+            with urllib.request.urlopen(req, timeout=30) as r:
+                d = json.loads(r.read().decode("utf-8"))
+                if d.get("error"):
+                    raise RuntimeError((d["error"] or {}).get("message", "rpc error"))
+                return d.get("result")
+        except urllib.error.HTTPError as e:
+            last = e
+            time.sleep((1.2 if e.code == 429 else 0.8) * (i + 1))
+        except Exception as e:
+            last = e
+            time.sleep(0.6 * (i + 1))
+    if last:
+        raise last
+
+
+def decode_sol_tx(tx):
+    """Mirror of the client decoder: extract SPL-USDC transfer legs from a parsed tx."""
+    if not tx or (tx.get("meta") or {}).get("err"):
+        return []
+    meta = tx.get("meta") or {}
+    msg = (tx.get("transaction") or {}).get("message") or {}
+    keys = [k.get("pubkey") if isinstance(k, dict) else k for k in (msg.get("accountKeys") or [])]
+    acct = {}
+    for b in (meta.get("preTokenBalances") or []) + (meta.get("postTokenBalances") or []):
+        idx = b.get("accountIndex")
+        if idx is not None and idx < len(keys):
+            acct[keys[idx]] = {"mint": b.get("mint"), "owner": b.get("owner")}
+    instrs = list(msg.get("instructions") or [])
+    for inner in (meta.get("innerInstructions") or []):
+        instrs += inner.get("instructions") or []
+    sig = ((tx.get("transaction") or {}).get("signatures") or ["?"])[0]
+    bt = tx.get("blockTime")
+    ts = datetime.fromtimestamp(bt, timezone.utc).isoformat() if bt else None
+    out = []
+    i = 0
+    for ins in instrs:
+        if not ins or ins.get("program") != "spl-token":
+            continue
+        p = ins.get("parsed") or {}
+        if p.get("type") not in ("transferChecked", "transfer"):
+            continue
+        info = p.get("info") or {}
+        dest = info.get("destination") or ""
+        mint = info.get("mint") or (acct.get(dest) or {}).get("mint")
+        if mint != SOL_USDC:
+            continue
+        ta = info.get("tokenAmount")
+        if ta:
+            amount = int(ta.get("amount", "0")) / (10 ** int(ta.get("decimals", 6)))
+        else:
+            amount = int(info.get("amount", "0")) / 1e6
+        if amount <= 0:
+            continue
+        seller = (acct.get(dest) or {}).get("owner") or dest
+        payer = info.get("authority") or info.get("multisigAuthority") or ""
+        out.append({"id": sig + "-" + str(i), "ts": ts, "payer": payer,
+                    "seller": seller, "amount": amount, "chain": "solana"})
+        i += 1
+    return out
+
+
+def sweep_solana(fac_set):
+    legs = []
+    scanned = 0
+    for fac in SOL_FACS:
+        try:
+            sigs = sol_rpc("getSignaturesForAddress", [fac, {"limit": SOL_SIGS_PER_FAC}]) or []
+        except Exception:
+            continue
+        sigs = [s for s in sigs if not s.get("err") and s.get("blockTime")]
+        for sg in sigs:
+            if scanned >= SOL_TX_CAP:
+                break
+            try:
+                tx = sol_rpc("getTransaction", [sg["signature"],
+                             {"encoding": "jsonParsed", "maxSupportedTransactionVersion": 0}])
+            except Exception:
+                continue
+            scanned += 1
+            for ev in decode_sol_tx(tx):
+                if ev["payer"] in fac_set or ev["seller"] in fac_set:
+                    continue
+                legs.append(ev)
+            time.sleep(0.25)
+        if scanned >= SOL_TX_CAP:
+            break
+    return legs, scanned
+    if not s:
+        return None
+    try:
+        return datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp()
+    except Exception:
+        return None
 
 
 def parse_ts(s):
@@ -160,7 +277,7 @@ def parse_ts(s):
         return None
 
 
-def derive(buffer, providers, now_ts):
+def derive_for(buffer, providers, now_ts):
     def window(seconds):
         cutoff = now_ts - seconds
         vol = 0.0
@@ -214,6 +331,17 @@ def derive(buffer, providers, now_ts):
     }
 
 
+def derive(buffer, providers, now_ts):
+    d = derive_for(buffer, providers, now_ts)
+    base = [e for e in buffer if e.get("chain", "base") == "base"]
+    sol = [e for e in buffer if e.get("chain") == "solana"]
+    d["by_chain"] = {
+        "base": derive_for(base, providers, now_ts),
+        "solana": derive_for(sol, providers, now_ts),
+    }
+    return d
+
+
 def load_stats():
     try:
         with open(OUT, "r") as f:
@@ -230,6 +358,14 @@ def main():
     providers = load_providers()
 
     legs, scanned = sweep(facs, fac_set)
+
+    sol_legs, sol_scanned = [], 0
+    if ENABLE_SOLANA:
+        try:
+            sol_legs, sol_scanned = sweep_solana(set(SOL_FACS))
+        except Exception as e:
+            print("solana sweep error:", e)
+    legs = legs + sol_legs
 
     stats = load_stats()
     buffer = stats.get("buffer", [])
@@ -262,15 +398,17 @@ def main():
         history.append(row)
     history = history[-90:]
 
+    chains = ["base"] + (["solana"] if ENABLE_SOLANA else [])
     out = {
         "updated_at": now.isoformat(),
-        "chain": "base",
-        "source": "coinbase facilitators via blockscout",
-        "facilitators": len(facs),
-        "note": ("Coinbase facilitators on Base only; excludes other facilitators and Solana. "
-                 "A floor, not a census. Rates are trailing, dedup by settlement id."),
-        "run": {"scanned_tx": scanned, "legs_seen": len(legs), "new_settlements": added,
-                "buffer_size": len(buffer)},
+        "chains": chains,
+        "source": "coinbase facilitators (base via blockscout) + x402 facilitators (solana via rpc)",
+        "facilitators": {"base": len(facs), "solana": len(SOL_FACS) if ENABLE_SOLANA else 0},
+        "note": ("Base = Coinbase facilitators via Blockscout; Solana = known x402 facilitators via public RPC "
+                 "(best-effort, rate-limited, smaller sample). A floor, not a census. "
+                 "Rates are trailing, dedup by settlement id."),
+        "run": {"scanned_tx_base": scanned, "scanned_tx_solana": sol_scanned,
+                "legs_seen": len(legs), "new_settlements": added, "buffer_size": len(buffer)},
         "derived": d,
         "history": history,
         "buffer": buffer,
@@ -280,9 +418,12 @@ def main():
     with open(OUT, "w") as f:
         json.dump(out, f, indent=2)
 
-    print("swept {} tx, {} legs, +{} new, buffer {} | 7d ${} / {} settlements | ~${}/day".format(
-        scanned, len(legs), added, len(buffer),
-        d["volume_7d_usdc"], d["settlements_7d"], d["rate_per_day_usdc"]))
+    bc = d.get("by_chain", {})
+    sol_d = bc.get("solana", {})
+    print("base: {} tx | solana: {} tx | +{} new | buffer {} | 7d ${} ({} settlements) | ~${}/day | solana 7d ${}".format(
+        scanned, sol_scanned, added, len(buffer),
+        d["volume_7d_usdc"], d["settlements_7d"], d["rate_per_day_usdc"],
+        sol_d.get("volume_7d_usdc", 0)))
 
 
 if __name__ == "__main__":

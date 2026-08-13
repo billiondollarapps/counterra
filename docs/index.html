@@ -90,7 +90,7 @@
 
 <div id="ticker" style="display:none;background:#0f1b30;color:#c8d4e8;font-size:12.5px;
      text-align:center;padding:9px 16px;border-bottom:1px solid #0a1322">
-  <span style="color:#7fa8f7;letter-spacing:1px;font-weight:600">x402 · BASE</span>
+  <span id="tk-chains" style="color:#7fa8f7;letter-spacing:1px;font-weight:600">x402 · BASE</span>
   &nbsp;<span id="tk-body"></span>
   &nbsp;<span id="tk-age" style="color:#5f7196"></span>
 </div>
@@ -762,6 +762,9 @@ async function loadTicker(){
     try{
       const r = await fetch(url, {cache:"no-store"}); if(!r.ok) continue;
       const s = await r.json(); const d = (s||{}).derived; if(!d) continue;
+      if(Array.isArray(s.chains) && s.chains.length){
+        $("tk-chains").textContent = "x402 · " + s.chains.map(c=>c.toUpperCase()).join(" + ");
+      }
       const v7 = d.volume_7d_usdc, n7 = d.settlements_7d, vpd = d.rate_per_day_usdc, spd = d.rate_per_day_settlements;
       $("tk-body").innerHTML =
         `last 7d: <b style="color:#fff">$${(v7||0).toLocaleString("en-US",{maximumFractionDigits:2})}</b> across `+
