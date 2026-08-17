@@ -51,11 +51,22 @@ jobs:
           python3 counterra.py live --continuous --chain solana --limit 30
 
       - name: Sweep Base and accumulate into the running ledger
-        timeout-minutes: 8
+        timeout-minutes: 12
+        continue-on-error: true
+        env:
+          # Soft wall-clock budget INSIDE the sweep (seconds). The adapter stops
+          # gracefully at this point and returns what it decoded, so the commit
+          # step below still runs. Must stay comfortably under timeout-minutes.
+          COUNTERRA_SWEEP_BUDGET: "420"
         run: |
           # Limit kept modest: the free Blockscout public API is throttled,
           # and a large sweep from GitHub's network can stall. 40 is a safe
           # steady cadence; the ledger accumulates across runs anyway.
+          #
+          # continue-on-error: a throttled Blockscout used to kill this step and
+          # SKIP the commit below — discarding the run's work including an
+          # already-successful Solana sweep. Ingestion is idempotent and
+          # accumulating, so a partial run must still commit.
           python3 counterra.py live --continuous --chain base --limit 40
           echo "--- status after run ---"
           python3 counterra.py status

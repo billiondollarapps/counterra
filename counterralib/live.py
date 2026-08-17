@@ -49,23 +49,46 @@ class BaseChainAdapter:
             print(msg, flush=True)
 
     # ---------------- HTTP helpers ----------------
+    # Public Blockscout throttles intermittently. A single 30s hang used to be
+    # enough to push a sweep past the CI step timeout, killing the run and
+    # discarding everything (including a successful Solana sweep). So: short
+    # per-request timeout, bounded retries with backoff, and 429 handled
+    # explicitly. Failing fast and retrying beats hanging.
+    REQ_TIMEOUT = 12
+    MAX_TRIES = 3
+
+    def _request(self, url, params=None):
+        last = None
+        for attempt in range(self.MAX_TRIES):
+            try:
+                r = self.session.get(url, params=params, timeout=self.REQ_TIMEOUT)
+                if r.status_code == 429:
+                    time.sleep(1.5 * (attempt + 1))
+                    last = RuntimeError("429 rate limited")
+                    continue
+                if 500 <= r.status_code < 600:
+                    time.sleep(1.0 * (attempt + 1))
+                    last = RuntimeError("HTTP %d" % r.status_code)
+                    continue
+                r.raise_for_status()
+                data = r.json()
+                time.sleep(self.throttle)
+                return data
+            except Exception as e:
+                last = e
+                if attempt < self.MAX_TRIES - 1:
+                    time.sleep(0.8 * (attempt + 1))
+        raise last if last else RuntimeError("request failed")
+
     def _get(self, params):
         p = dict(params)
         if self.is_etherscan:
             p["chainid"] = self.cfg["chain_id"]
             p["apikey"] = self.api_key
-        r = self.session.get(self.cfg["api_base"], params=p, timeout=30)
-        r.raise_for_status()
-        data = r.json()
-        time.sleep(self.throttle)
-        return data
+        return self._request(self.cfg["api_base"], params=p)
 
     def _get_v2(self, path):
-        r = self.session.get(self.v2_base + path, timeout=30)
-        r.raise_for_status()
-        data = r.json()
-        time.sleep(self.throttle)
-        return data
+        return self._request(self.v2_base + path)
 
     # ---------------- transaction listing ----------------
     def _list_txs(self, fac, want):
@@ -108,10 +131,32 @@ class BaseChainAdapter:
         return out
 
     # ---------------- mode 1: facilitator sweep ----------------
-    def fetch(self, limit=150):
+    def fetch(self, limit=150, budget_seconds=None):
+        """Sweep facilitators for settlements.
+
+        budget_seconds: soft wall-clock budget. When exceeded, the sweep stops
+        early and returns what it has instead of running until CI kills the
+        step. Because ingestion is a persistent accumulating ledger, a partial
+        sweep that COMMITS is far more valuable than a complete sweep that gets
+        killed and commits nothing. Defaults to COUNTERRA_SWEEP_BUDGET or 300s.
+        """
+        if budget_seconds is None:
+            try:
+                budget_seconds = float(os.environ.get("COUNTERRA_SWEEP_BUDGET", "300"))
+            except ValueError:
+                budget_seconds = 300.0
+        started = time.time()
+
+        def over_budget():
+            return budget_seconds and (time.time() - started) > budget_seconds
+
         events, skipped = [], 0
+        stopped_early = False
         per_fac = max(10, limit // max(1, len(self.facilitators)))
         for fac in self.facilitators:
+            if over_budget():
+                stopped_early = True
+                break
             try:
                 txs = self._list_txs(fac, per_fac)
             except Exception as e:
@@ -119,14 +164,22 @@ class BaseChainAdapter:
                 continue
             self._say(f"  {fac[:12]}...: {len(txs)} settlements listed; decoding...")
             for i, tx in enumerate(txs, 1):
+                if over_budget():
+                    stopped_early = True
+                    break
                 try:
                     events.extend(self._decode_tx_logs(tx["hash"], int(tx["timeStamp"])))
                 except Exception:
                     skipped += 1
                 if i % 20 == 0:
                     self._say(f"    ...{i}/{len(txs)} checked, {len(events)} payments decoded")
+            if stopped_early:
+                break
         if skipped:
             self._say(f"  (skipped {skipped} settlements whose logs failed to fetch)")
+        if stopped_early:
+            self._say(f"  (stopped early at {int(time.time() - started)}s time budget — "
+                      f"returning {len(events)} payments; the ledger accumulates across runs)")
         events.sort(key=lambda e: e.ts)
         return events
 
