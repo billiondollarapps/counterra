@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "updated_at": "2026-08-20T23:41:22.044986+00:00",
+=======
+  "updated_at": "2026-08-21T00:02:00.721708+00:00",
+>>>>>>> Stashed changes
   "chains": [
     "base",
     "solana"
@@ -11,6 +15,7 @@
   },
   "note": "Base = Coinbase facilitators via Blockscout; Solana = known x402 facilitators via public RPC (best-effort, rate-limited, smaller sample). A floor, not a census. Rates are trailing, dedup by settlement id.",
   "run": {
+<<<<<<< Updated upstream
     "scanned_tx_base": 17,
     "scanned_tx_solana": 30,
     "legs_seen": 47,
@@ -58,15 +63,76 @@
         "observed_span_days": 0.881,
         "rate_per_day_usdc": 62.0868,
         "rate_per_day_settlements": 221.28
+=======
+    "scanned_tx_base": 11,
+    "scanned_tx_solana": 30,
+    "legs_seen": 40,
+    "new_settlements": 25,
+    "buffer_size": 1873
+  },
+  "derived": {
+    "volume_24h_usdc": 101.3194,
+    "settlements_24h": 1873,
+    "unique_agents_24h": 92,
+    "unique_sellers_24h": 48,
+    "volume_7d_usdc": 101.3194,
+    "settlements_7d": 1873,
+    "unique_agents_7d": 92,
+    "unique_sellers_7d": 48,
+    "named_pct_7d": 24.0,
+    "observed_span_days": 0.901,
+    "rate_per_day_usdc": 112.4167,
+    "rate_per_day_settlements": 2078.14,
+    "by_chain": {
+      "base": {
+        "volume_24h_usdc": 46.7662,
+        "settlements_24h": 1678,
+        "unique_agents_24h": 59,
+        "unique_sellers_24h": 25,
+        "volume_7d_usdc": 46.7662,
+        "settlements_7d": 1678,
+        "unique_agents_7d": 59,
+        "unique_sellers_7d": 25,
+        "named_pct_7d": 45.4,
+        "observed_span_days": 0.716,
+        "rate_per_day_usdc": 65.3564,
+        "rate_per_day_settlements": 2345.03
+      },
+      "solana": {
+        "volume_24h_usdc": 54.5532,
+        "settlements_24h": 195,
+        "unique_agents_24h": 33,
+        "unique_sellers_24h": 23,
+        "volume_7d_usdc": 54.5532,
+        "settlements_7d": 195,
+        "unique_agents_7d": 33,
+        "unique_sellers_7d": 23,
+        "named_pct_7d": 5.8,
+        "observed_span_days": 0.901,
+        "rate_per_day_usdc": 60.5283,
+        "rate_per_day_settlements": 216.36
+>>>>>>> Stashed changes
       }
     }
   },
   "history": [
     {
       "date": "2026-08-20",
+<<<<<<< Updated upstream
       "volume_24h_usdc": 101.55,
       "settlements_24h": 1880,
       "rate_per_day_usdc": 115.2355
+=======
+      "volume_24h_usdc": 100.2818,
+      "settlements_24h": 1848,
+      "rate_per_day_usdc": 116.7953
+    },
+    {
+      "date": "2026-08-21",
+      "volume_24h_usdc": 101.3194,
+      "settlements_24h": 1873,
+      "rate_per_day_usdc": 112.4167
+>>>>>>> Stashed changes
     }
   ],
   "buffer": [
@@ -14855,6 +14921,7 @@
       "chain": "solana"
     },
     {
+<<<<<<< Updated upstream
       "id": "24PU47r75PmEXAeJjTgsAePardbYoJH7sYpAPzAxaK58FqFMEmjnmQKY4cJ1Pivqn2JgUtYyEjZASB3zhEwHA6XR-0",
       "ts": "2026-08-20T23:26:32+00:00",
       "payer": "4j1rDoGi3oL4R9Tc5s99WufB61YWHjhAx3122Z8A9r9i",
@@ -14867,26 +14934,133 @@
       "ts": "2026-08-20T23:32:32+00:00",
       "payer": "4j1rDoGi3oL4R9Tc5s99WufB61YWHjhAx3122Z8A9r9i",
       "seller": "6SU6NvUNPcXRMktx2ADyoYFPkBHDCf6vmvbEF5tNtZxE",
+=======
+      "id": "0x56592bf4c0bc2adab7304992d88a907115e48cdc0e3ea17fa2902f9601bd47a3-220",
+      "ts": "2026-08-20T23:59:13.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.007255,
+      "chain": "base"
+    },
+    {
+      "id": "0xb3cff5124091b6a6a239004b73d3f85a4c1c136d98f6ee6badcb473bea537b52-417",
+      "ts": "2026-08-20T23:59:17.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.007215,
+      "chain": "base"
+    },
+    {
+      "id": "0x867183168376fd5a7a63bf537de01384ae585be7982c9d1bfd7634335db4ad05-603",
+      "ts": "2026-08-20T23:59:39.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.008923,
+      "chain": "base"
+    },
+    {
+      "id": "0x4f29e05010d81f0a8395c7faefcc109cb9225f2d5b0f4a61c6e9249c3691bef8-198",
+      "ts": "2026-08-20T23:59:53.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.005243,
+      "chain": "base"
+    },
+    {
+      "id": "0xc8da8094f14c6062d20582bd3825ca0603abc083dfca000f6a22ccc4803c64b0-122",
+      "ts": "2026-08-20T23:59:57.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.005476,
+      "chain": "base"
+    },
+    {
+      "id": "0xb3cf645e54bf2a4ce6e52d9cc4e653537d57b96d0eb5386ba191dfbb556b1e21-464",
+      "ts": "2026-08-21T00:01:09.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.019222,
+      "chain": "base"
+    },
+    {
+      "id": "0x6026e793313f70a9531041e93e494f747b5ff7508fdc3bca053b018990f5f095-330",
+      "ts": "2026-08-21T00:01:19.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.005037,
+      "chain": "base"
+    },
+    {
+      "id": "0xf1999d5528d66e77213477e1ac7ce91992c09ea5bf46b8570f2c7b3d9d8c3eb0-201",
+      "ts": "2026-08-21T00:01:59.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.005716,
+      "chain": "base"
+    },
+    {
+      "id": "0x5c71791bfe49fb255528b5ec268138f2084565817e29e1e4df59c26e4b526d03-658",
+      "ts": "2026-08-21T00:02:11.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.006258,
+      "chain": "base"
+    },
+    {
+      "id": "0x597495a60d364a12c8f4513e39cd1877847352af6006a2d81b287403b7501e7c-384",
+      "ts": "2026-08-21T00:02:31.000000Z",
+      "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
+      "seller": "0xe9030014f5dae217d0a152f02a043567b16c1abf",
+      "amount": 0.007312,
+      "chain": "base"
+    },
+    {
+      "id": "4NEqmqaiXfCFUrSaC9ohct2JgTG34beLph7AHwWx1CNFEVMyciH5o6MVMEPdw6fyKTXKumpJEq3v2AgsnuHyRStt-0",
+      "ts": "2026-08-21T00:03:05+00:00",
+      "payer": "7ZkBSRof6cVo7ddTQGNoPtxT2jMTF7w73Lvi66buMiF",
+      "seller": "5jfkfmZqHSf8vsXp7My3nCgVQCd685AwWjojgPGFhFi1",
+>>>>>>> Stashed changes
       "amount": 0.07,
       "chain": "solana"
     },
     {
+<<<<<<< Updated upstream
       "id": "4biYUt61McvqM2t6Pkd3jmbaRotQHXztYGaNcSknt5zkuz87rib8oXLXCmoWV2AkzHtsQYu4wNmo4vB8o9ZNDBwo-0",
       "ts": "2026-08-20T23:32:33+00:00",
+=======
+      "id": "3bHi3BcvRdrjGsKAxBm4cG8KGBbVm2vfU9LrdyyTdwcnX3V7SfRtKgxsZmDknFFP34Uhrfz4wix7bDvLZDfJG5L3-0",
+      "ts": "2026-08-21T00:05:26+00:00",
+      "payer": "9G84xTziiHCz6YE8QuovaLvvZaDacA5RVyVPBMZu2NVM",
+      "seller": "4j1rDoGi3oL4R9Tc5s99WufB61YWHjhAx3122Z8A9r9i",
+      "amount": 0.05,
+      "chain": "solana"
+    },
+    {
+      "id": "66T1HPwZBhV2MpX5A89wRmvu56edFvnL99mHHANuSk6UhTa3WEGwD2uExmn8WYNhSrY9LHyYmw8SiofM7BnoV9zW-0",
+      "ts": "2026-08-21T00:08:09+00:00",
+>>>>>>> Stashed changes
       "payer": "9G84xTziiHCz6YE8QuovaLvvZaDacA5RVyVPBMZu2NVM",
       "seller": "2Evk5PPEfGe5DCuAVcXuzC4bGdqVU9Vxeh6TXA6pWD3d",
       "amount": 0.06,
       "chain": "solana"
     },
     {
+<<<<<<< Updated upstream
       "id": "3PgwhoaDfS2MfJLetYyDQ4m2eaM8zN4T25FcikZi4mKBCsactZkM1dPkCha6oGUoknJBGaFb8695uUXy7XC6deef-0",
       "ts": "2026-08-20T23:32:37+00:00",
       "payer": "7ZkBSRof6cVo7ddTQGNoPtxT2jMTF7w73Lvi66buMiF",
       "seller": "EVmGpcYzUmrGbTwST5GsGPkwq1QdCq6YdXN2mASn69L1",
+=======
+      "id": "3yX17JR5hpgfa9Vrmq9Jje55B5KFxdncF1vHoFD5hxSxW7sgEy9pGFpSYM7uZrx8n93MR7T7Agwexr38UWDmSKaY-0",
+      "ts": "2026-08-21T00:10:14+00:00",
+      "payer": "2Evk5PPEfGe5DCuAVcXuzC4bGdqVU9Vxeh6TXA6pWD3d",
+      "seller": "BV6CrmLhMeop3ec8PnYWJmfeGTK7GmAPGnM9HeVFegUd",
+>>>>>>> Stashed changes
       "amount": 0.08,
       "chain": "solana"
     },
     {
+<<<<<<< Updated upstream
       "id": "5GA6N7FRgR1r3epuvbhd7gFj3k4rXyNDyvkzQbqkMtnAPvd65EZRVtyJZ1UVpNarQVPLs7BgDmTbHmCweG9dusBW-0",
       "ts": "2026-08-20T23:32:54+00:00",
       "payer": "EVmGpcYzUmrGbTwST5GsGPkwq1QdCq6YdXN2mASn69L1",
@@ -14914,11 +15088,33 @@
       "id": "3GdR7gqpD2FU9zq5PfH9ST3naxgEEME5BKGkPXM6dFJHQC7zzFB6e19EoATrZicC9BBPR7GGPeuHDpgEiUG2iUYb-0",
       "ts": "2026-08-20T23:35:29+00:00",
       "payer": "7ZkBSRof6cVo7ddTQGNoPtxT2jMTF7w73Lvi66buMiF",
+=======
+      "id": "35fdksnbEecgpTCNShMA98rS6YnVcPX9YDPGjLNFNadjoNTCgL7V1pphriZbjvYYqL8nebitrFUhzzRFwtExnCmf-0",
+      "ts": "2026-08-21T00:11:36+00:00",
+      "payer": "4j1rDoGi3oL4R9Tc5s99WufB61YWHjhAx3122Z8A9r9i",
+      "seller": "7ZkBSRof6cVo7ddTQGNoPtxT2jMTF7w73Lvi66buMiF",
+      "amount": 0.05,
+      "chain": "solana"
+    },
+    {
+      "id": "5rak3KTbe1bNS3G7JcrqAiTdST6YuTUGgLobkAc8PGVnnY4AmFLhtPfjdDUDVF8EroYBUrEeB4c7WA414vvvYS32-0",
+      "ts": "2026-08-21T00:13:24+00:00",
+      "payer": "5jfkfmZqHSf8vsXp7My3nCgVQCd685AwWjojgPGFhFi1",
+      "seller": "6SU6NvUNPcXRMktx2ADyoYFPkBHDCf6vmvbEF5tNtZxE",
+      "amount": 0.05,
+      "chain": "solana"
+    },
+    {
+      "id": "4UmMCn1Gm8Zkx2UZ4k5GYmk5aexAEoQ4z1fhpPA23YUMG1TRd1bYVMsaa5niPJEtGApftabiYZW5CJKttS7yioEt-0",
+      "ts": "2026-08-21T00:13:58+00:00",
+      "payer": "EVmGpcYzUmrGbTwST5GsGPkwq1QdCq6YdXN2mASn69L1",
+>>>>>>> Stashed changes
       "seller": "9G84xTziiHCz6YE8QuovaLvvZaDacA5RVyVPBMZu2NVM",
       "amount": 0.07,
       "chain": "solana"
     },
     {
+<<<<<<< Updated upstream
       "id": "5Rf72BNDh7jUiZjiyPyujz1yP9d4mf3tKfd78VYjbsYkQ1f4UeDxEx8tW52c4UK6fxHcbb7LFtCfV1Zrf9Jrqyz8-0",
       "ts": "2026-08-20T23:36:05+00:00",
       "payer": "9G84xTziiHCz6YE8QuovaLvvZaDacA5RVyVPBMZu2NVM",
@@ -14947,10 +15143,17 @@
       "ts": "2026-08-20T23:36:34+00:00",
       "payer": "EVmGpcYzUmrGbTwST5GsGPkwq1QdCq6YdXN2mASn69L1",
       "seller": "7ZkBSRof6cVo7ddTQGNoPtxT2jMTF7w73Lvi66buMiF",
+=======
+      "id": "5sF3gt78wDRkXUx7b3CWcuZd5giyPd5FVR1P1gGtds6bvBqHJxbadEvpMYna3WRWkeKwGjGp7M75Nsn4cKLxFRUH-0",
+      "ts": "2026-08-21T00:14:16+00:00",
+      "payer": "7ZkBSRof6cVo7ddTQGNoPtxT2jMTF7w73Lvi66buMiF",
+      "seller": "9G84xTziiHCz6YE8QuovaLvvZaDacA5RVyVPBMZu2NVM",
+>>>>>>> Stashed changes
       "amount": 0.1,
       "chain": "solana"
     },
     {
+<<<<<<< Updated upstream
       "id": "0x4f63180728f0e37dc5ae8a69910aa30e18035df4f404cfe219f090ff8241d090-157",
       "ts": "2026-08-20T23:37:09.000000Z",
       "payer": "0x2b4ee3387008e5ff1a9996fc8b48d2fd61389037",
@@ -15075,18 +15278,64 @@
       "ts": "2026-08-20T23:42:18+00:00",
       "payer": "2Evk5PPEfGe5DCuAVcXuzC4bGdqVU9Vxeh6TXA6pWD3d",
       "seller": "EVmGpcYzUmrGbTwST5GsGPkwq1QdCq6YdXN2mASn69L1",
+=======
+      "id": "3xjJrzv6SAJKf7W18vHWBKnyarxTbK6nCvsoYjVVME8N1ZmeCLDA2trEEF9FdDQ67HG5GSkX4e3XWJ7Wj5b2vVir-0",
+      "ts": "2026-08-21T00:16:07+00:00",
+      "payer": "2Evk5PPEfGe5DCuAVcXuzC4bGdqVU9Vxeh6TXA6pWD3d",
+      "seller": "7ZkBSRof6cVo7ddTQGNoPtxT2jMTF7w73Lvi66buMiF",
+>>>>>>> Stashed changes
       "amount": 0.08,
       "chain": "solana"
     },
     {
+<<<<<<< Updated upstream
       "id": "4it74BndG4LSZNKmPsat97VELNN2ZfoNbd54AXbqXzp8xV59sNhmC3DNZw6MQfprjTYuw5zcRia4AWsNBn1KLMXQ-0",
       "ts": "2026-08-20T23:44:16+00:00",
       "payer": "4j1rDoGi3oL4R9Tc5s99WufB61YWHjhAx3122Z8A9r9i",
       "seller": "2Evk5PPEfGe5DCuAVcXuzC4bGdqVU9Vxeh6TXA6pWD3d",
+=======
+      "id": "5VzaY2sNhe5APqTxBRbmCWL37wfMzFM9aWGudSJk81JFWK3Bch8zkTovvQdqURP8fZFRvA3Tf8G1aty7YTjUbfsT-0",
+      "ts": "2026-08-21T00:18:04+00:00",
+      "payer": "HikDknb4HgVk1nv7jgvst28fgNUUoQKoRckj8DTHQcRT",
+      "seller": "2AsjudTyDuVtNLWttP1tJEkUwXLfpTzTHZH8JAGeNfJh",
+      "amount": 0.05,
+      "chain": "solana"
+    },
+    {
+      "id": "3FdGyTo1eiyf9X7kXD5M7mfE7HQFgLCHwu8AW6rr96Xsko6QrngU3VZoqbRNCsZc4XjnBmYiQKJXiHPTucUAYufM-0",
+      "ts": "2026-08-21T00:18:45+00:00",
+      "payer": "CbL1Uw68g6pCbcwxANH1cybJ1N4wX51Mi5iqWx9XdMtE",
+      "seller": "2AsjudTyDuVtNLWttP1tJEkUwXLfpTzTHZH8JAGeNfJh",
+      "amount": 0.05,
+      "chain": "solana"
+    },
+    {
+      "id": "2knneRhaCnMqby5PR8VyHTgKwN2eEFsNNG5sjSqnwqsh1v4cjX4KAYaJZLWWEurwfzgcJAQfD6K7hoMvGNEJeWn9-0",
+      "ts": "2026-08-21T00:18:52+00:00",
+      "payer": "AUzgAqgqBwzRnuvzq4zSeKZXQzHoYQHntxrkSqF9kxRr",
+      "seller": "2AsjudTyDuVtNLWttP1tJEkUwXLfpTzTHZH8JAGeNfJh",
+      "amount": 0.05,
+      "chain": "solana"
+    },
+    {
+      "id": "2c7DHh8qAgGZxRL86LPAaREJLqvYUzDDc8CUvFGgYKfiqUQbNLtdwdN4WhiPp7pfL9W7t3q5dFFvoumDDmXHaQbs-0",
+      "ts": "2026-08-21T00:19:01+00:00",
+      "payer": "6ZjV3dwKDuvXTmMQjX681uUdy5UDgyFti25rHLhkDpDE",
+      "seller": "2AsjudTyDuVtNLWttP1tJEkUwXLfpTzTHZH8JAGeNfJh",
+      "amount": 0.05,
+      "chain": "solana"
+    },
+    {
+      "id": "2tSsLdNoVTk6wLFWTp9hPP2eHUEcqkMtZ8rt5uEbAjhPnAxHBjthRns3WZWx3Vp8dNVe5jpCKeydbHpuuzkAaw8A-0",
+      "ts": "2026-08-21T00:21:41+00:00",
+      "payer": "2Evk5PPEfGe5DCuAVcXuzC4bGdqVU9Vxeh6TXA6pWD3d",
+      "seller": "5jfkfmZqHSf8vsXp7My3nCgVQCd685AwWjojgPGFhFi1",
+>>>>>>> Stashed changes
       "amount": 0.07,
       "chain": "solana"
     },
     {
+<<<<<<< Updated upstream
       "id": "4nrD8FsGLuN4EVnXL55vUFxL9jAksmkLnq6Ujpqs7E8NMbgHbigUPbPWZCgJVAoBnD5XkXf1HKGcvbXv8g71Snfs-0",
       "ts": "2026-08-20T23:45:34+00:00",
       "payer": "CjHkmudkLnkLH6u6CDiCxMZzjFwhDTHBipMH1MeB3vNk",
@@ -15107,6 +15356,12 @@
       "ts": "2026-08-20T23:54:15+00:00",
       "payer": "2Evk5PPEfGe5DCuAVcXuzC4bGdqVU9Vxeh6TXA6pWD3d",
       "seller": "5jfkfmZqHSf8vsXp7My3nCgVQCd685AwWjojgPGFhFi1",
+=======
+      "id": "3HU77EFFoEmGj3iLXyjtajNo1xx5s8RXSWv5WFiEb3VLsHMrhdhhgxDJjKckNQXz7HgY7DKtSYWANuUghcN6YFzc-0",
+      "ts": "2026-08-21T00:23:07+00:00",
+      "payer": "CjHkmudkLnkLH6u6CDiCxMZzjFwhDTHBipMH1MeB3vNk",
+      "seller": "7ZkBSRof6cVo7ddTQGNoPtxT2jMTF7w73Lvi66buMiF",
+>>>>>>> Stashed changes
       "amount": 0.08,
       "chain": "solana"
     }
