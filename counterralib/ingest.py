@@ -25,6 +25,7 @@ class PaymentEvent:
     facilitator_code: str = ""       # ERC-8021 'w': facilitator that settled
     service_codes: str = ""          # ERC-8021 's': client-side code(s), comma-joined
     attribution_evidence: str = ""   # raw ERC-8021 suffix hex, for evidence trail
+    facilitator: str = ""            # facilitator that submitted it (census name), if known
 
     def to_dict(self):
         d = asdict(self)

@@ -9,6 +9,11 @@ Takes canonical PaymentEvents plus mapping config and produces:
 from collections import defaultdict
 import csv
 
+ESCROW_DEPOSIT = "Escrow - x402 batch channel deposit"
+ESCROW_PAYOUT = "Escrow - x402 batch channel payout"
+ESCROW_ACCOUNT = "1086 - x402 Channel Escrow (USDC)"
+ESCROW_CATEGORIES = (ESCROW_DEPOSIT, ESCROW_PAYOUT)
+
 DEFAULT_ACCOUNTING = {
     "asset_account": "1085 - Digital Assets (USDC)",
     "anomaly_threshold_usd": 40.0,
@@ -43,7 +48,14 @@ def enrich(events, agent_map=None, provider_map=None, shape_map=None,
         p = provider_map.get(e.payee_wallet.lower())
         conf = rationale = ""
         po = poisons.get(e.payee_wallet.lower())
-        if po:
+        memo = str(getattr(e, "memo", "") or "")
+        if memo == "x402:batch-deposit":
+            # Money into an x402 batch-settlement channel is PREPAID ESCROW:
+            # an asset until the seller claims it, never an expense on deposit.
+            label, cat = "x402 batch channel escrow", ESCROW_DEPOSIT
+        elif memo == "x402:batch-payout":
+            label, cat = "x402 batch channel payout", ESCROW_PAYOUT
+        elif po:
             # Hard stop: never book a suspected misdirected payment as spend.
             label, cat = po["label"], po["category"]
             conf = po.get("confidence", "")
@@ -157,7 +169,8 @@ def journal_entries(rows, period, accounting=None):
             continue
         entries.append({
             "period": period,
-            "debit_account": exp.get(cat, exp.get("Uncategorized", "6490")),
+            "debit_account": (ESCROW_ACCOUNT if cat in ESCROW_CATEGORIES
+                              else exp.get(cat, exp.get("Uncategorized", "6490"))),
             "credit_account": acc["asset_account"],
             "amount_usd": amt,
             "provider": provider,

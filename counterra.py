@@ -154,6 +154,22 @@ def main():
     lv.add_argument("--wallet", type=str, default=None, help="track one payer wallet")
     lv.add_argument("--continuous", action="store_true",
                     help="persist this run and accumulate: books carry over between runs")
+    lv.add_argument("--facilitators", choices=["census", "config"], default="census",
+                    help="which facilitator wallets to sweep: the full census (docs/facilitators.json, "
+                         "default) or the short list in config.yaml")
+    lv.add_argument("--wallets", type=int, default=None,
+                    help="census mode: facilitator wallets to visit this run (default 12 Base / 6 Solana)")
+    cs = sub.add_parser("census", help="facilitator census: every x402 facilitator wallet from the x402scan registry")
+    cs.add_argument("--write", action="store_true", help="write docs/facilitators.json")
+    lb = sub.add_parser("label", help="label every wallet and categorise every payment in the ledger (+ coverage)")
+    lb.add_argument("--chain", choices=["base", "solana"], default=None)
+    lb.add_argument("--write", action="store_true",
+                    help="persist labels to the ledger db and publish docs/labels.json + docs/coverage.json")
+    lb.add_argument("--top", type=int, default=15, help="rows to show in the identification work queue")
+    lb.add_argument("--payments", action="store_true",
+                    help="with --write: also store the per-payment table (large; derivable on demand)")
+    lb.add_argument("--csv", default=None,
+                    help="also export every categorised payment to this CSV path")
     sub.add_parser("status", help="show continuous-ingestion progress per chain/source")
     sub.add_parser("codes", help="ERC-8021 builder-code findings: registry candidates + conflicts")
     tb = sub.add_parser("trialbalance", help="trial balance from the accumulated agent-spend sub-ledger (proves debits == credits)")
@@ -619,6 +635,42 @@ def main():
         whois(address)
         return
 
+    if args.mode == "census":
+        from counterralib import facilitators as _fac
+        print("Pulling the x402scan facilitator registry ...")
+        census = _fac.fetch_census(verbose=True)
+        for chain, c in sorted(census["summary"].items()):
+            print(f"  {chain:<8} {c['live']:>3} live wallets ({c['deprecated']} deprecated) "
+                  f"across {len(c['facilitators'])} facilitators")
+        if census["failed_modules"]:
+            print("  ! could not fetch: " + ", ".join(census["failed_modules"]))
+        prev = _fac.load_census()
+        if prev:
+            old_live = {(w["chain"], w["address"]) for w in prev["wallets"] if not w["deprecated"]}
+            new_live = {(w["chain"], w["address"]) for w in census["wallets"] if not w["deprecated"]}
+            print(f"  change vs current file: +{len(new_live - old_live)} live, "
+                  f"-{len(old_live - new_live)} retired")
+        if args.write:
+            _fac.save_census(census)
+            print("wrote docs/facilitators.json")
+        else:
+            print("(dry run - add --write to save docs/facilitators.json)")
+        return
+
+    if args.mode == "label":
+        from counterralib import labels as _labels
+        res = _labels.run_labels(chain=args.chain, write=args.write, payments=args.payments)
+        print(_labels.render_summary(res, top=args.top))
+        if args.csv:
+            n = _labels.write_payments_csv(res["payments"], args.csv)
+            print(f"wrote {n:,} categorised payments to {args.csv}")
+        if args.write:
+            print("wrote: wallet_labels{} table in out/counterra.db, docs/labels.json, "
+                  "docs/coverage.json".format(" + payment_labels" if args.payments else ""))
+        else:
+            print("(dry run - add --write to persist labels and publish coverage)")
+        return
+
     if args.mode == "refresh":
         from counterralib.live import refresh_facilitators
         refresh_facilitators(os.path.join(HERE, "config.yaml"))
@@ -652,7 +704,23 @@ def main():
             label = f"Wallet {args.wallet[:10]}… (live {chain_name} data)"
             source = f"wallet:{args.wallet.lower()}"
         else:
+            schedule = None
+            if args.facilitators == "census":
+                from counterralib import facilitators as _fac
+                census = _fac.load_census()
+                schedule = _fac.load_schedule()
+                per_run = args.wallets or (12 if args.chain == "base" else 6)
+                if adapter.use_census(census, schedule=schedule, per_run=per_run):
+                    n_live = len(_fac.live_wallets(census, args.chain))
+                    print(f"census: visiting {len(adapter.facilitators)} of {n_live} live "
+                          f"{chain_name} facilitator wallets this run (highest expected yield first)")
+                else:
+                    schedule = None
+                    print("census: docs/facilitators.json missing - falling back to config.yaml "
+                          "facilitators (run: counterra.py census --write)")
             events = adapter.fetch(limit=args.limit)
+            if schedule is not None:
+                _fac.save_schedule(schedule)
             label = f"x402 facilitator sweep (live {chain_name} data)"
             source = "sweep"
 

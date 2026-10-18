@@ -27,7 +27,10 @@ import re
 from typing import Optional
 from urllib.parse import urljoin, urlparse
 
-EVM_RE = re.compile(r"0x[a-fA-F0-9]{40}")
+# Hex boundaries on both sides: without them a 64-hex TRANSACTION hash in a
+# page's text matches as its own first 40 characters - a wallet that does not
+# exist (this put a tx-hash prefix into the pending queue).
+EVM_RE = re.compile(r"(?<![0-9a-fA-F])0x[a-fA-F0-9]{40}(?![0-9a-fA-F])")
 
 WELL_KNOWN_PATHS = [
     "/.well-known/x402",

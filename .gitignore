@@ -14,3 +14,7 @@ counterra-positioning-and-roadmap.md
 out/*
 !out/counterra.db
 !out/spend_report_base.html
+# State the scheduled worker must carry between runs (crawl cooldowns and the
+# facilitator sweep schedule) - without these every run starts from zero.
+!out/crawl_state.json
+!out/sweep_schedule.json

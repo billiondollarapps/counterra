@@ -25,10 +25,13 @@ class SolanaChainAdapter:
     def __init__(self, cfg, session=None, throttle=0.5, quiet=False):
         import requests
         sc = cfg["solana"]
-        self.rpc = os.environ.get("SOLANA_RPC_URL", sc["rpc"])
+        # `or`: an unset GitHub secret arrives as an EMPTY env var, not a missing one
+        self.rpc = os.environ.get("SOLANA_RPC_URL") or sc["rpc"]
         self.mint = sc["usdc_mint"]
         self.decimals = int(sc.get("usdc_decimals", 6))
         self.facilitators = list(sc.get("facilitators", []))
+        self.facilitator_names = {f: "" for f in self.facilitators}
+        self.schedule = None
         self.session = session or requests.Session()
         self.throttle = throttle
         self.quiet = quiet
@@ -61,7 +64,21 @@ class SolanaChainAdapter:
             "maxSupportedTransactionVersion": 0}])
 
     # ---------------- decoding ----------------
-    def _decode_tx(self, tx, ts_unix):
+    def use_census(self, census, schedule=None, per_run=None):
+        """Sweep every live census wallet on Solana (scheduled, budget-capped)."""
+        from counterralib.facilitators import live_wallets, pick_wallets
+        live = live_wallets(census, "solana")
+        if not live:
+            return False
+        self.facilitator_names = {w["address"]: w["name"] for w in live}
+        order = [w["address"] for w in live]
+        self.schedule = schedule if schedule is not None else {}
+        if per_run:
+            order = pick_wallets(order, self.schedule, per_run)
+        self.facilitators = order
+        return True
+
+    def _decode_tx(self, tx, ts_unix, facilitator=""):
         """Extract USDC transfers as PaymentEvents from a parsed tx."""
         if not tx or (tx.get("meta") or {}).get("err") is not None:
             return []
@@ -109,8 +126,12 @@ class SolanaChainAdapter:
                 payee_wallet=payee,
                 amount_usdc=amount,
                 protocol="x402",
-                memo="facilitator-settled",
+                memo="x402:exact",
+                facilitator=self.facilitator_names.get(facilitator, "") if facilitator else "",
             ))
+        if facilitator:
+            # the facilitator's own transfers (fee/sweep) are not payments
+            out = [e for e in out if e.payer_wallet != facilitator]
         return out
 
     # ---------------- mode 1: facilitator sweep ----------------
@@ -122,13 +143,24 @@ class SolanaChainAdapter:
                 sigs = self._signatures(fac, per_fac)
             except Exception as e:
                 self._say(f"  ! signature listing failed for {fac[:8]}...: {e}")
+                if self.schedule is not None:
+                    from counterralib.facilitators import record_error
+                    record_error(self.schedule, fac, e)
                 continue
             sigs = [s for s in sigs if s.get("err") is None and s.get("blockTime")]
-            self._say(f"  {fac[:8]}...: {len(sigs)} settlements listed; decoding...")
+            if self.schedule is not None:
+                from counterralib.facilitators import record_visit
+                stamps = [datetime.fromtimestamp(int(s["blockTime"]), tz=timezone.utc).isoformat()
+                          for s in sigs]
+                record_visit(self.schedule, fac, len(sigs),
+                             max(stamps) if stamps else None,
+                             min(stamps) if stamps else None)
+            name = self.facilitator_names.get(fac, "")
+            self._say(f"  {fac[:8]}... {name}: {len(sigs)} settlements listed; decoding...")
             for i, s in enumerate(sigs, 1):
                 try:
                     tx = self._transaction(s["signature"])
-                    events.extend(self._decode_tx(tx, int(s["blockTime"])))
+                    events.extend(self._decode_tx(tx, int(s["blockTime"]), facilitator=fac))
                 except Exception:
                     skipped += 1
                 if i % 10 == 0:

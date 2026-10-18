@@ -15,6 +15,8 @@ PAYEE = "a11ce00000000000000000000000000000000001"
 
 
 class FakeResp:
+    status_code = 200
+
     def __init__(self, payload, text=""):
         self.payload, self.text = payload, text
     def raise_for_status(self): pass
@@ -93,10 +95,74 @@ def main():
     assert new.get("accounting"), "rest of config must survive the rewrite"
     os.unlink(tmp.name)
 
+    # --- Permit2 / batch-settlement paths (the October 2026 Base stall) ---
+    permit2_and_batch(cfg)
+
     print("ALL TESTS PASSED")
     print(f"  v2 sweep: {len(events)} events decoded, period {e.ts.strftime('%Y-%m')}")
     print("  wallet mode: outgoing-only filter ok")
     print("  refresh: newest-first rewrite ok, config intact")
+
+
+PROXY = "0x402085c248eea27d92e8b30b2c58ed07f9e20001"     # x402ExactPermit2Proxy
+ESCROW = "0x4020074e9df2ce1dee5a9c1b5c3f541d02a10003"    # x402BatchSettlement
+COLLECTOR = "0x4020806089470a89826cb9fb1f4059150b550004"
+SELLER2 = "b0b0000000000000000000000000000000000002"
+FAC = "0x2a89407a98a0732b7fd578c4e156b7166540eb5a"
+
+
+def _t(a):
+    return "0x" + a.replace("0x", "").rjust(64, "0")
+
+
+def _log(frm, to, units):
+    return {"address": {"hash": USDC}, "topics": [TRANSFER_TOPIC, _t(frm), _t(to)],
+            "data": hex(units)}
+
+
+class FakeMixedBlockscout:
+    """One facilitator whose txs settle four different ways."""
+    LOGS = {
+        "0xp1": [_log(PAYER, PAYEE, 20000)],                          # via Permit2 proxy
+        "0xd1": [_log(PAYER, COLLECTOR, 5000000),                     # deposit -> collector
+                 _log(COLLECTOR, ESCROW, 5000000)],                   # collector -> escrow hop
+        "0xs1": [_log(ESCROW, SELLER2, 1250000)],                     # escrow settles to seller
+        "0xf1": [_log(FAC, PAYEE, 1)],                                # facilitator's own money
+    }
+
+    def get(self, url, params=None, timeout=None):
+        if "/addresses/" in url and "/transactions" in url:
+            return FakeResp({"items": [
+                {"hash": "0xp1", "timestamp": "2026-10-10T10:00:00Z", "to": {"hash": PROXY}, "status": "ok"},
+                {"hash": "0xd1", "timestamp": "2026-10-10T10:01:00Z", "to": {"hash": ESCROW}, "status": "ok"},
+                {"hash": "0xs1", "timestamp": "2026-10-10T10:02:00Z", "to": {"hash": ESCROW}, "status": "ok"},
+                {"hash": "0xf1", "timestamp": "2026-10-10T10:03:00Z", "to": {"hash": USDC}, "status": "ok"},
+                {"hash": "0xx1", "timestamp": "2026-10-10T10:04:00Z",
+                 "to": {"hash": "0x00000000000000000000000000000000000000ff"}, "status": "ok"},
+            ], "next_page_params": None})
+        if "/logs" in url:
+            h = url.split("/transactions/")[1].split("/")[0]
+            return FakeResp({"items": self.LOGS[h]})
+        raise AssertionError(f"unexpected url {url}")
+
+
+def permit2_and_batch(cfg):
+    ad = BaseChainAdapter(cfg, session=FakeMixedBlockscout(), throttle=0, quiet=True)
+    census = {"wallets": [{"chain": "base", "address": FAC, "name": "Coinbase",
+                           "facilitator": "coinbase", "deprecated": False,
+                           "first_tx": "2026-06-15"}]}
+    sched = {}
+    assert ad.use_census(census, schedule=sched, per_run=5)
+    evs = ad.fetch(limit=10)
+    legs = sorted((e.memo, e.payee_wallet[-4:], round(e.amount_usdc, 4)) for e in evs)
+    assert legs == [("x402:batch-deposit", COLLECTOR[-4:], 5.0),
+                    ("x402:batch-payout", SELLER2[-4:], 1.25),
+                    ("x402:permit2", PAYEE[-4:], 0.02)], legs
+    assert all(e.facilitator == "Coinbase" for e in evs)
+    assert ad.diag["listed"] == 5 and ad.diag["other_targets"], ad.diag
+    assert sched[FAC]["last_listed"] == 4 and sched[FAC]["rate_per_hour"] > 0, sched
+    print("  permit2 + batch-settlement legs typed; facilitator self-transfer skipped; "
+          "census schedule recorded")
 
 
 if __name__ == "__main__":

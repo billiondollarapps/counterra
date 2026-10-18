@@ -39,9 +39,26 @@ jobs:
       - name: Install dependencies
         run: pip install requests pyyaml
 
+      - name: Refresh the facilitator census (non-fatal)
+        timeout-minutes: 3
+        continue-on-error: true
+        run: |
+          # Every x402 facilitator wallet from the x402scan community registry
+          # (30+ facilitators, ~90 live wallets). Sweeps below visit the census,
+          # not a hand-copied list - hardcoded facilitator lists go stale.
+          # If the registry is unreachable the previous docs/facilitators.json
+          # is kept and used.
+          python3 counterra.py census --write
+
       - name: Sweep Solana and accumulate (non-fatal)
         timeout-minutes: 6
         continue-on-error: true
+        env:
+          # Optional: add a free Helius (or any) RPC URL as the repository
+          # secret SOLANA_RPC_URL. Unset = public RPC (heavily rate-limited
+          # from GitHub runners - Solana is ~70% of x402 volume, so this
+          # secret is the single biggest coverage upgrade available).
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
         run: |
           # Solana runs FIRST and is allowed to fail: the public RPC
           # (api.mainnet-beta.solana.com) rate-limits datacenter IPs like GitHub
@@ -67,7 +84,10 @@ jobs:
           # SKIP the commit below — discarding the run's work including an
           # already-successful Solana sweep. Ingestion is idempotent and
           # accumulating, so a partial run must still commit.
-          python3 counterra.py live --continuous --chain base --limit 40
+          # Census mode (default): visits the 12 facilitator wallets with the
+          # best expected yield this run; the schedule (out/sweep_schedule.json)
+          # rotates through all live Base wallets across runs.
+          python3 counterra.py live --continuous --chain base --limit 40 --wallets 12
           echo "--- status after run ---"
           python3 counterra.py status
 
@@ -86,6 +106,15 @@ jobs:
           # human review - nothing unverified is ever published.
           python3 counterra.py autogrow --write --limit 15 --crawl-limit 20
 
+      - name: Label every wallet and categorise every payment (non-fatal)
+        timeout-minutes: 4
+        continue-on-error: true
+        run: |
+          # Rebuilds the network label book from the whole ledger: evidence
+          # tier per wallet, category + account per payment, wash/test flags,
+          # coverage, and the identification work queue (printed below).
+          python3 counterra.py label --write --top 15
+
       - name: Commit updated ledger and reports
         run: |
           git config user.name  "counterra-bot"
@@ -96,6 +125,8 @@ jobs:
           git add out/counterra.db out/spend_report_base.html
           # Registry growth from autogrow (safe if unchanged this run):
           git add docs/providers.json docs/pending-providers.json out/crawl_state.json 2>/dev/null || true
+          # Census, label book, coverage, and the sweep schedule:
+          git add docs/facilitators.json docs/labels.json docs/coverage.json out/sweep_schedule.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No new data this run — nothing to commit."
           else

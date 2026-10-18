@@ -59,7 +59,36 @@ python3 counterra.py profile <wallet>           # fingerprint an unknown seller
 python3 counterra.py codes                       # ERC-8021 builder-code findings
 python3 counterra.py receipt <receipt.json>      # consume an x402 receipt into a journal entry
 python3 counterra.py whois --url <seller-url>    # resolve a seller's payTo and identify it
+python3 counterra.py census --write              # every x402 facilitator wallet (x402scan registry)
+python3 counterra.py label --write               # label every wallet, categorise every payment, coverage
+python3 counterra.py label --csv out/payments.csv  # ...and export every categorised payment
 ```
+
+## The network label book
+
+Counterra sweeps **every** x402 facilitator in the community registry — 30+
+facilitators, ~90 live settlement wallets across Base and Solana — not a
+hand-picked few, and decodes settlements whether they call USDC directly or go
+through the x402 Permit2 proxies, batch-settlement escrow, or Multicall3.
+
+`label` then gives every wallet in the ledger an evidence tier and every
+payment a category and account:
+
+| tier | meaning |
+|---|---|
+| `hard-stop` | suspected address-poisoning clone — a loss, never spend |
+| `verified` | mechanical evidence: registry entry or facilitator census |
+| `protocol` | a canonical x402 contract |
+| `probable` | circumstantial, awaiting human review |
+| `behavioral` | unnamed, but the pattern says what *kind* of spend (metered API, tiered, recurring, bulk) |
+| `unknown` | the identification work queue, ranked by dollars |
+| `role-only` | a buyer — agents are never named |
+
+Payments are screened for wash/test patterns (self-payment, dust, round-trip;
+closed-loop flagged for review). Deposits into an x402 batch channel book to
+escrow (`1086`), not expense. Published: `docs/labels.json` (sellers,
+facilitators, contracts — no buyers), `docs/coverage.json`,
+`docs/facilitators.json`.
 
 Live data uses Blockscout's free public API for Base and Solana's public
 mainnet RPC — no keys required. For faster Solana sweeps, put a free Helius
@@ -117,6 +146,9 @@ neutral layer across rails. Counterra is that layer, built in the open.
 - [x] CAAP-1 spec + golden conformance vectors — the accounting standard
 - [x] Observed-demand scoring + seller fingerprinting
 - [x] One-command design-partner handoff — `books --wallet`
+- [x] Facilitator census — every x402scan facilitator wallet, yield-scheduled sweeps
+- [x] Permit2-proxy + batch-settlement decoding (escrow deposits booked as assets)
+- [x] Network label book — evidence tier per wallet, category per payment, wash/test screening, coverage
 - [ ] Receipt/evidence alignment via x402 Foundation process (issue #2833)
 - [ ] Public "agent spend explorer" (paste a wallet, get books, in-browser)
 - [ ] VAT/GST & disposal tax module
@@ -141,10 +173,12 @@ counterralib/buildercodes.py  builder-code registry evidence
 counterralib/resolve.py   URL -> payTo resolver
 counterralib/books.py     one-command design-partner handoff
 counterralib/whois.py     seller identification
+counterralib/facilitators.py  facilitator census + sweep scheduler + x402 contracts
+counterralib/labels.py    network label book: wallet tiers, payment categories, coverage
 report.py                 HTML report
 spec/CAAP-1.md            the accounting standard + spec/caap1_vectors.json
 config.yaml               chains, facilitators, maps, chart of accounts
-tests/                    offline test suite (14 suites)
+tests/                    offline test suite (27 suites)
 ```
 
 ## License

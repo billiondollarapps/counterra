@@ -24,6 +24,21 @@ FALLBACK_FACS = [
 ]
 TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 
+# Facilitators settle through these as well as calling USDC directly (mirror of
+# counterralib/facilitators.py X402_CONTRACTS). Filtering on to == USDC alone
+# is what dropped Base to zero in October 2026.
+X402_PROXIES = {
+    "0x402085c248eea27d92e8b30b2c58ed07f9e20001",   # x402ExactPermit2Proxy
+    "0x4020a4f3b7b90cca423b9fabcc0ce57c6c240002",   # x402UptoPermit2Proxy
+    "0xca11bde05977b3631167028862be2a173976ca11",   # Multicall3
+}
+BATCH_ESCROW = {"0x4020074e9df2ce1dee5a9c1b5c3f541d02a10003"}
+BATCH_COLLECTORS = {"0x4020806089470a89826cb9fb1f4059150b550004",
+                    "0x4020425faf3b746c082c2f942b4e5159887b0005"}
+SETTLEMENT_TARGETS = {USDC} | X402_PROXIES | BATCH_ESCROW | BATCH_COLLECTORS
+CENSUS_PATH = os.environ.get("CENSUS_PATH", "docs/facilitators.json")
+FACS_PER_RUN = int(os.environ.get("FACS_PER_RUN", "12"))
+
 OUT = os.environ.get("STATS_PATH", "docs/network-stats.json")
 PROVIDERS_PATH = os.environ.get("PROVIDERS_PATH", "docs/providers.json")
 TX_PER_RUN = int(os.environ.get("TX_PER_RUN", "80"))   # log fetches per run (rate-limit budget)
@@ -75,7 +90,29 @@ def get_text(url):
         return r.read().decode("utf-8")
 
 
+def census_wallets(chain):
+    try:
+        with open(CENSUS_PATH, "r") as f:
+            c = json.load(f)
+        return [w["address"] for w in c.get("wallets", [])
+                if w.get("chain") == chain and not w.get("deprecated")]
+    except Exception:
+        return []
+
+
+def rotate(wallets, k):
+    """A different slice of the census each 15-minute run (wraps around)."""
+    if len(wallets) <= k:
+        return list(wallets)
+    slices = (len(wallets) + k - 1) // k
+    i = int(time.time() // 900) % slices
+    return wallets[i * k:(i + 1) * k]
+
+
 def facilitators():
+    cw = census_wallets("base")
+    if cw:
+        return rotate([w.lower() for w in cw], FACS_PER_RUN)
     try:
         t = get_text(REGISTRY)
         pairs = re.findall(r"address:\s*'(0x[0-9a-fA-F]{40})'[\s\S]*?Date\('([\d-]+)'\)", t)
@@ -118,7 +155,7 @@ def sweep(facs, fac_set):
             continue
         for it in (d.get("items") or []):
             to = ((it.get("to") or {}).get("hash") or "").lower()
-            if to != USDC or (it.get("status", "ok") != "ok"):
+            if to not in SETTLEMENT_TARGETS or (it.get("status", "ok") != "ok"):
                 continue
             h = it.get("hash")
             if not h or h in seen_tx:
@@ -144,6 +181,8 @@ def sweep(facs, fac_set):
                 seller = topic_addr(tp[2])
                 if payer in fac_set or seller in fac_set:
                     continue
+                if seller in BATCH_ESCROW or seller in BATCH_COLLECTORS:
+                    continue      # deposit into a batch channel: prepaid, not a payment yet
                 try:
                     amt = int(l.get("data"), 16) / 1e6
                 except Exception:
@@ -237,7 +276,8 @@ def decode_sol_tx(tx):
 def sweep_solana(fac_set):
     legs = []
     scanned = 0
-    for fac in SOL_FACS:
+    sol_facs = rotate(census_wallets("solana"), 6) or SOL_FACS
+    for fac in sol_facs:
         try:
             sigs = sol_rpc("getSignaturesForAddress", [fac, {"limit": SOL_SIGS_PER_FAC}]) or []
         except Exception:
@@ -260,12 +300,6 @@ def sweep_solana(fac_set):
         if scanned >= SOL_TX_CAP:
             break
     return legs, scanned
-    if not s:
-        return None
-    try:
-        return datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp()
-    except Exception:
-        return None
 
 
 def parse_ts(s):
@@ -354,7 +388,7 @@ def main():
     now = datetime.now(timezone.utc)
     now_ts = now.timestamp()
     facs = facilitators()
-    fac_set = set(facs)
+    fac_set = set(facs) | set(w.lower() for w in census_wallets("base"))
     providers = load_providers()
 
     legs, scanned = sweep(facs, fac_set)
@@ -362,7 +396,7 @@ def main():
     sol_legs, sol_scanned = [], 0
     if ENABLE_SOLANA:
         try:
-            sol_legs, sol_scanned = sweep_solana(set(SOL_FACS))
+            sol_legs, sol_scanned = sweep_solana(set(SOL_FACS) | set(census_wallets("solana")))
         except Exception as e:
             print("solana sweep error:", e)
     legs = legs + sol_legs

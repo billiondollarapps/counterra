@@ -52,6 +52,7 @@ def _event_from_row(d: dict) -> PaymentEvent:
         facilitator_code=d.get("facilitator_code", ""),
         service_codes=d.get("service_codes", ""),
         attribution_evidence=d.get("attribution_evidence", ""),
+        facilitator=d.get("facilitator", "") or "",
     )
 
 
@@ -108,12 +109,24 @@ class EventStore:
         )
         self.conn.commit()
 
+    def _ensure_facilitator_column(self):
+        """Additive migration, run lazily on first WRITE: older ledgers predate
+        the facilitator column. Doing it on open would modify the committed db
+        on every read-only local command and collide with the scheduled bot."""
+        cols = {r[1] for r in self.conn.execute("PRAGMA table_info(events)")}
+        if "facilitator" not in cols:
+            self.conn.execute("ALTER TABLE events ADD COLUMN facilitator TEXT")
+            self.conn.commit()
+
     # ---------------- event ingestion ----------------
     def add_events(self, events: Iterable[PaymentEvent]) -> int:
         """
         Insert events idempotently. Returns the number of genuinely-new rows
         (duplicates from overlapping windows are silently ignored).
         """
+        events = list(events)
+        if events:
+            self._ensure_facilitator_column()
         now = datetime.now(timezone.utc).isoformat()
         new_count = 0
         cur = self.conn.cursor()
@@ -127,15 +140,15 @@ class EventStore:
                 """INSERT INTO events
                    (event_key, chain, tx_hash, ts, payer_wallet, payee_wallet,
                     amount_usdc, protocol, memo, app_code, facilitator_code,
-                    service_codes, attribution_evidence, first_seen)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                    service_codes, attribution_evidence, first_seen, facilitator)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     key, d["chain"], d["tx_hash"], d["ts"],
                     d["payer_wallet"], d["payee_wallet"], d["amount_usdc"],
                     d.get("protocol", ""), d.get("memo", ""),
                     d.get("app_code", ""), d.get("facilitator_code", ""),
                     d.get("service_codes", ""), d.get("attribution_evidence", ""),
-                    now,
+                    now, d.get("facilitator", ""),
                 ),
             )
             new_count += 1

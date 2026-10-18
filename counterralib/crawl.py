@@ -76,6 +76,11 @@ SKIP_HOSTS = (
 )
 
 
+EXPLORER_HOST_RE = re.compile(
+    r"(scan\.|explorer|blockscout|etherscan|basescan|solscan|oklink|arkham|"
+    r"debank|dexscreener)", re.I)
+
+
 def _host(url: str) -> str:
     try:
         return url.split("//", 1)[1].split("/", 1)[0].lower()
@@ -269,6 +274,12 @@ def crawl(candidate_urls: List[str], known: Set[str], session=None,
             continue
         src = str(hit.get("source") or "")
         detail = str(hit.get("detail") or "")
+        if src == "address-in-text" and EXPLORER_HOST_RE.search(h):
+            # A block explorer mentions every address; that proves nothing
+            # about who owns it. Never queue explorer pages.
+            if verbose:
+                print("  explorer    {} (address-in-text ignored)".format(h))
+            continue
         mechanical = (src.startswith(MECHANICAL_SOURCES)
                       or " 402 " in detail)
         chain = "base" if w.startswith("0x") else "solana"
