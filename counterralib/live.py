@@ -313,8 +313,6 @@ class BaseChainAdapter:
           x402:batch-payout   escrow -> seller (settle) or payer (refund)
         Transfers sent BY the facilitator itself (gas/fee sweeps) are skipped.
         """
-        from counterralib.facilitators import (X402_CONTRACTS, BATCH_ESCROW,
-                                               BATCH_COLLECTORS)
         if self.is_etherscan:
             rec = self._get({"module": "proxy",
                              "action": "eth_getTransactionReceipt",
@@ -322,50 +320,12 @@ class BaseChainAdapter:
             logs = rec.get("logs", [])
         else:
             logs = self._get_v2(f"/transactions/{tx_hash}/logs").get("items", [])
-        via = (via or "").lower()
         fac = (facilitator or "").lower()
-        fac_name = self.facilitator_names.get(fac, "") if fac else ""
-        escrow_side = BATCH_ESCROW | BATCH_COLLECTORS
-        out = []
-        for log in logs:
-            addr = log.get("address")
-            if isinstance(addr, dict):            # Blockscout v2 shape
-                addr = addr.get("hash", "")
-            if (addr or "").lower() != self.usdc:
-                continue
-            topics = [t for t in (log.get("topics") or []) if t]
-            if len(topics) < 3 or topics[0].lower() != TRANSFER_TOPIC:
-                continue
-            payer = ("0x" + topics[1][-40:]).lower()
-            payee = ("0x" + topics[2][-40:]).lower()
-            if fac and payer == fac:
-                continue                          # facilitator's own money
-            if payee in BATCH_COLLECTORS and payer not in escrow_side:
-                leg = "batch-deposit"
-            elif payee in BATCH_ESCROW and payer in BATCH_COLLECTORS:
-                continue                          # collector -> escrow hop
-            elif payee in BATCH_ESCROW:
-                leg = "batch-deposit"
-            elif payer in escrow_side:
-                leg = "batch-payout"
-            elif via == self.usdc or not via:
-                leg = "exact"
-            else:
-                kind = (X402_CONTRACTS.get(via) or ("", ""))[1]
-                leg = "permit2" if kind == "permit2-proxy" else (
-                      "multicall" if kind == "multicall" else "routed")
-            amount = int(log.get("data") or "0x0", 16) / 10 ** self.cfg["usdc_decimals"]
-            out.append(PaymentEvent(
-                tx_hash=tx_hash,
-                ts=datetime.fromtimestamp(ts_unix, tz=timezone.utc),
-                chain=self.cfg["name"],
-                payer_wallet=payer,
-                payee_wallet=payee,
-                amount_usdc=amount,
-                protocol="x402",
-                memo="x402:" + leg,
-                facilitator=fac_name,
-            ))
+        out = decode_usdc_logs(
+            logs, tx_hash, ts_unix, usdc=self.usdc,
+            decimals=self.cfg["usdc_decimals"], chain=self.cfg["name"],
+            via=via, facilitator=fac,
+            facilitator_name=self.facilitator_names.get(fac, "") if fac else "")
         if out:
             attr = parse_attribution(self._get_tx_input(tx_hash))
             if attr:
@@ -375,6 +335,64 @@ class BaseChainAdapter:
                     ev.service_codes = ",".join(attr.service_codes)
                     ev.attribution_evidence = attr.raw_suffix_hex
         return out
+
+
+def decode_usdc_logs(logs, tx_hash, ts_unix, usdc, decimals, chain="base",
+                     via="", facilitator="", facilitator_name=""):
+    """USDC Transfers in one settlement tx -> typed PaymentEvents.
+
+    Shared by the Blockscout adapter and the RPC adapter (base_rpc.py), so
+    both book identically. Accepts Blockscout-v2 logs (address is a dict) and
+    raw JSON-RPC receipt logs (address is a string). Leg types: see
+    BaseChainAdapter._decode_tx_logs.
+    """
+    from counterralib.facilitators import (X402_CONTRACTS, BATCH_ESCROW,
+                                           BATCH_COLLECTORS)
+    usdc = (usdc or "").lower()
+    via = (via or "").lower()
+    fac = (facilitator or "").lower()
+    escrow_side = BATCH_ESCROW | BATCH_COLLECTORS
+    out = []
+    for log in logs or []:
+        addr = log.get("address")
+        if isinstance(addr, dict):            # Blockscout v2 shape
+            addr = addr.get("hash", "")
+        if (addr or "").lower() != usdc:
+            continue
+        topics = [t for t in (log.get("topics") or []) if t]
+        if len(topics) < 3 or topics[0].lower() != TRANSFER_TOPIC:
+            continue
+        payer = ("0x" + topics[1][-40:]).lower()
+        payee = ("0x" + topics[2][-40:]).lower()
+        if fac and payer == fac:
+            continue                          # facilitator's own money
+        if payee in BATCH_COLLECTORS and payer not in escrow_side:
+            leg = "batch-deposit"
+        elif payee in BATCH_ESCROW and payer in BATCH_COLLECTORS:
+            continue                          # collector -> escrow hop
+        elif payee in BATCH_ESCROW:
+            leg = "batch-deposit"
+        elif payer in escrow_side:
+            leg = "batch-payout"
+        elif via == usdc or not via:
+            leg = "exact"
+        else:
+            kind = (X402_CONTRACTS.get(via) or ("", ""))[1]
+            leg = "permit2" if kind == "permit2-proxy" else (
+                  "multicall" if kind == "multicall" else "routed")
+        amount = int(log.get("data") or "0x0", 16) / 10 ** int(decimals)
+        out.append(PaymentEvent(
+            tx_hash=tx_hash,
+            ts=datetime.fromtimestamp(ts_unix, tz=timezone.utc),
+            chain=chain,
+            payer_wallet=payer,
+            payee_wallet=payee,
+            amount_usdc=amount,
+            protocol="x402",
+            memo="x402:" + leg,
+            facilitator=facilitator_name,
+        ))
+    return out
 
 
 # ---------------- facilitator registry refresh ----------------

@@ -157,6 +157,10 @@ def main():
     lv.add_argument("--facilitators", choices=["census", "config"], default="census",
                     help="which facilitator wallets to sweep: the full census (docs/facilitators.json, "
                          "default) or the short list in config.yaml")
+    lv.add_argument("--base-source", choices=["auto", "rpc", "blockscout"], default="auto",
+                    help="Base data source: rpc (any Base RPC node; BASE_RPC_URL or the public one) "
+                         "or blockscout (needs a paid BLOCKSCOUT_API_KEY since 2026-10-01). "
+                         "auto = blockscout if a key is set, else rpc")
     lv.add_argument("--wallets", type=int, default=None,
                     help="census mode: facilitator wallets to visit this run (default 12 Base / 6 Solana)")
     cs = sub.add_parser("census", help="facilitator census: every x402 facilitator wallet from the x402scan registry")
@@ -696,9 +700,19 @@ def main():
             adapter = SolanaChainAdapter(cfg)
             chain_name = "Solana"
         else:
-            from counterralib.live import BaseChainAdapter
-            adapter = BaseChainAdapter(cfg)
             chain_name = "Base"
+            src = args.base_source
+            if src == "auto":
+                src = "blockscout" if os.environ.get("BLOCKSCOUT_API_KEY") else "rpc"
+            if src == "rpc" and not args.wallet:
+                # Blockscout dropped Base from its free tier on 2026-10-01;
+                # read settlements straight from a Base RPC node instead.
+                from counterralib.base_rpc import BaseRpcAdapter
+                adapter = BaseRpcAdapter(cfg)
+                print("base source: rpc ({})".format(adapter.rpc.split("/")[2]))
+            else:
+                from counterralib.live import BaseChainAdapter
+                adapter = BaseChainAdapter(cfg)
         if args.wallet:
             events = adapter.fetch_wallet(args.wallet)
             label = f"Wallet {args.wallet[:10]}… (live {chain_name} data)"
@@ -712,8 +726,12 @@ def main():
                 per_run = args.wallets or (12 if args.chain == "base" else 6)
                 if adapter.use_census(census, schedule=schedule, per_run=per_run):
                     n_live = len(_fac.live_wallets(census, args.chain))
-                    print(f"census: visiting {len(adapter.facilitators)} of {n_live} live "
-                          f"{chain_name} facilitator wallets this run (highest expected yield first)")
+                    if hasattr(adapter, "chunk"):
+                        print(f"census: {len(adapter.facilitators)} {chain_name} facilitator "
+                              f"wallets ({n_live} live) recognised as x402 submitters")
+                    else:
+                        print(f"census: visiting {len(adapter.facilitators)} of {n_live} live "
+                              f"{chain_name} facilitator wallets this run (highest expected yield first)")
                 else:
                     schedule = None
                     print("census: docs/facilitators.json missing - falling back to config.yaml "

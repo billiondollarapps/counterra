@@ -74,7 +74,11 @@ jobs:
           # Free key from dev.blockscout.com, saved as repository secret
           # BLOCKSCOUT_API_KEY. Blockscout's keyless per-instance API no
           # longer answers GitHub runners (Base read 0 from 2026-10-06).
-          BLOCKSCOUT_API_KEY: ${{ secrets.BLOCKSCOUT_API_KEY }}
+          # Base is read straight from a Base RPC node (Blockscout removed Base
+          # from its free tier on 2026-10-01). Optional repository secret
+          # BASE_RPC_URL: a free Alchemy/QuickNode/Ankr Base mainnet URL.
+          # Unset = public https://mainnet.base.org (works, but rate-limited).
+          BASE_RPC_URL: ${{ secrets.BASE_RPC_URL }}
           # Soft wall-clock budget INSIDE the sweep (seconds). The adapter stops
           # gracefully at this point and returns what it decoded, so the commit
           # step below still runs. Must stay comfortably under timeout-minutes.
@@ -88,10 +92,9 @@ jobs:
           # SKIP the commit below — discarding the run's work including an
           # already-successful Solana sweep. Ingestion is idempotent and
           # accumulating, so a partial run must still commit.
-          # Census mode (default): visits the 12 facilitator wallets with the
-          # best expected yield this run; the schedule (out/sweep_schedule.json)
-          # rotates through all live Base wallets across runs.
-          python3 counterra.py live --continuous --chain base --limit 40 --wallets 12
+          # rpc mode reads every block since the last run (block watermark in
+          # out/sweep_schedule.json); --limit caps settlement receipts per run.
+          python3 counterra.py live --continuous --chain base --limit 3000
           echo "--- status after run ---"
           python3 counterra.py status
 
