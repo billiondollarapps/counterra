@@ -71,6 +71,10 @@ jobs:
         timeout-minutes: 12
         continue-on-error: true
         env:
+          # Free key from dev.blockscout.com, saved as repository secret
+          # BLOCKSCOUT_API_KEY. Blockscout's keyless per-instance API no
+          # longer answers GitHub runners (Base read 0 from 2026-10-06).
+          BLOCKSCOUT_API_KEY: ${{ secrets.BLOCKSCOUT_API_KEY }}
           # Soft wall-clock budget INSIDE the sweep (seconds). The adapter stops
           # gracefully at this point and returns what it decoded, so the commit
           # step below still runs. Must stay comfortably under timeout-minutes.

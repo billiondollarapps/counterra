@@ -33,6 +33,7 @@ jobs:
       - name: Run sweep
         env:
           STATS_PATH: docs/network-stats.json
+          BLOCKSCOUT_API_KEY: ${{ secrets.BLOCKSCOUT_API_KEY }}
           PROVIDERS_PATH: docs/providers.json
         run: python scripts/network_sweep.py
 

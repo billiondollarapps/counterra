@@ -54,6 +54,13 @@ class BaseChainAdapter:
         self.quiet = quiet
         self.is_etherscan = "etherscan" in self.cfg["api_base"]
         self.v2_base = self.cfg["api_base"].rstrip("/").rsplit("/api", 1)[0] + "/api/v2"
+        # Blockscout moved public API access to its multichain PRO API (free
+        # key, dev.blockscout.com). With BLOCKSCOUT_API_KEY set we go through
+        # it; BLOCKSCOUT_V2_BASE overrides the URL if Blockscout changes it.
+        self.bs_key = os.environ.get("BLOCKSCOUT_API_KEY") or ""
+        if self.bs_key or os.environ.get("BLOCKSCOUT_V2_BASE"):
+            self.v2_base = (os.environ.get("BLOCKSCOUT_V2_BASE")
+                            or "https://api.blockscout.com/%d/api/v2" % int(self.cfg["chain_id"])).rstrip("/")
 
     def _say(self, msg):
         if not self.quiet:
@@ -81,7 +88,11 @@ class BaseChainAdapter:
                     time.sleep(1.0 * (attempt + 1))
                     last = RuntimeError("HTTP %d" % r.status_code)
                     continue
-                r.raise_for_status()
+                if r.status_code >= 400:
+                    # keep the reason visible in the Actions log
+                    body = (getattr(r, "text", "") or "")[:160].replace("\n", " ")
+                    raise RuntimeError("HTTP %d from %s: %s" % (
+                        r.status_code, url.split("?")[0][:80], body))
                 data = r.json()
                 time.sleep(self.throttle)
                 return data
@@ -99,7 +110,10 @@ class BaseChainAdapter:
         return self._request(self.cfg["api_base"], params=p)
 
     def _get_v2(self, path):
-        return self._request(self.v2_base + path)
+        url = self.v2_base + path
+        if self.bs_key:
+            url += ("&" if "?" in url else "?") + "apikey=" + self.bs_key
+        return self._request(url)
 
     # ---------------- transaction listing ----------------
     def _list_txs(self, fac, want):

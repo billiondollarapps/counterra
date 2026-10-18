@@ -13,7 +13,15 @@ import json, os, re, time, urllib.request, urllib.error
 from datetime import datetime, timezone
 
 USDC = "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"
-BS = "https://base.blockscout.com/api/v2"
+BS_KEY = os.environ.get("BLOCKSCOUT_API_KEY") or ""
+BS = (os.environ.get("BLOCKSCOUT_V2_BASE")
+      or ("https://api.blockscout.com/8453/api/v2" if BS_KEY
+          else "https://base.blockscout.com/api/v2")).rstrip("/")
+
+
+def bs_url(path):
+    u = BS + path
+    return u + (("&" if "?" in u else "?") + "apikey=" + BS_KEY if BS_KEY else "")
 REGISTRY = ("https://raw.githubusercontent.com/Merit-Systems/x402scan/"
             "main/packages/external/facilitators/src/facilitators/coinbase.ts")
 FALLBACK_FACS = [
@@ -150,8 +158,9 @@ def sweep(facs, fac_set):
     scanned = 0
     for fac in facs:
         try:
-            d = get_json(BS + "/addresses/" + fac + "/transactions?filter=from")
-        except Exception:
+            d = get_json(bs_url("/addresses/" + fac + "/transactions?filter=from"))
+        except Exception as e:
+            print("base listing failed for", fac[:12], "-", str(e)[:160])
             continue
         for it in (d.get("items") or []):
             to = ((it.get("to") or {}).get("hash") or "").lower()
@@ -165,7 +174,7 @@ def sweep(facs, fac_set):
                 break
             ts = it.get("timestamp")
             try:
-                logs = get_json(BS + "/transactions/" + h + "/logs")
+                logs = get_json(bs_url("/transactions/" + h + "/logs"))
             except Exception:
                 continue
             scanned += 1
