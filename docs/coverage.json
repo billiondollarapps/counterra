@@ -1,49 +1,49 @@
 {
  "overall": {
   "payments": {
-   "settlements": 15611,
-   "usd": 48758.65
+   "settlements": 15633,
+   "usd": 48960.81
   },
   "adjusted": {
-   "settlements": 15588,
-   "usd": 48758.34
+   "settlements": 15610,
+   "usd": 48960.49
   },
   "flagged": {
    "settlements": 23,
    "usd": 0.32
   },
   "labelled_pct": {
-   "settlements": 91.7,
-   "usd": 86.0
+   "settlements": 91.6,
+   "usd": 85.6
   },
   "named_pct": {
-   "settlements": 71.7,
-   "usd": 84.1
+   "settlements": 71.6,
+   "usd": 83.7
   },
   "adjusted_labelled_pct": {
-   "settlements": 91.8,
-   "usd": 86.0
+   "settlements": 91.7,
+   "usd": 85.6
   },
   "adjusted_named_pct": {
-   "settlements": 71.8,
-   "usd": 84.1
+   "settlements": 71.7,
+   "usd": 83.7
   },
   "by_tier": {
    "verified": {
-    "settlements": 11179,
-    "usd": 40990.64
+    "settlements": 11182,
+    "usd": 40990.7
    },
    "probable": {
     "settlements": 16,
     "usd": 1.91
    },
    "behavioral": {
-    "settlements": 3121,
-    "usd": 920.3
+    "settlements": 3124,
+    "usd": 920.34
    },
    "unknown": {
-    "settlements": 1295,
-    "usd": 6845.8
+    "settlements": 1311,
+    "usd": 7047.86
    }
   }
  },
@@ -97,45 +97,45 @@
  },
  "solana": {
   "payments": {
-   "settlements": 2762,
-   "usd": 47448.15
+   "settlements": 2784,
+   "usd": 47650.3
   },
   "adjusted": {
-   "settlements": 2754,
-   "usd": 47447.87
+   "settlements": 2776,
+   "usd": 47650.02
   },
   "flagged": {
    "settlements": 8,
    "usd": 0.28
   },
   "labelled_pct": {
-   "settlements": 89.1,
-   "usd": 86.0
+   "settlements": 88.6,
+   "usd": 85.6
   },
   "named_pct": {
-   "settlements": 46.4,
-   "usd": 85.7
+   "settlements": 46.1,
+   "usd": 85.3
   },
   "adjusted_labelled_pct": {
-   "settlements": 89.4,
-   "usd": 86.0
+   "settlements": 88.9,
+   "usd": 85.6
   },
   "adjusted_named_pct": {
-   "settlements": 46.5,
-   "usd": 85.7
+   "settlements": 46.3,
+   "usd": 85.3
   },
   "by_tier": {
    "verified": {
-    "settlements": 1281,
-    "usd": 40641.74
+    "settlements": 1284,
+    "usd": 40641.8
    },
    "behavioral": {
-    "settlements": 1180,
-    "usd": 154.08
+    "settlements": 1183,
+    "usd": 154.12
    },
    "unknown": {
-    "settlements": 301,
-    "usd": 6652.33
+    "settlements": 317,
+    "usd": 6854.38
    }
   }
  },
@@ -150,7 +150,7 @@
    "unknown": 9,
    "behavioral": 6,
    "verified": 1,
-   "role-only": 2120
+   "role-only": 2127
   },
   "facilitator": {
    "verified": 152
@@ -165,9 +165,9 @@
    "chain": "solana",
    "tier": "unknown",
    "guess": "",
-   "usd": 5533.0,
-   "settlements": 22,
-   "buyers": 14,
+   "usd": 5735.0,
+   "settlements": 28,
+   "buyers": 17,
    "flags": []
   },
   {
@@ -441,13 +441,13 @@
    "flags": []
   },
   {
-   "wallet": "3Wuj6VjJXuCmQZjGRhW56xbEk6TzCyMEUVRZgLBYNE2Z",
+   "wallet": "66Qvhr1xnwqbCT36KfHfZF1JpoWdmCQ3uFYTN335CGXe",
    "chain": "solana",
    "tier": "behavioral",
-   "guess": "Unidentified metered API",
-   "usd": 1.2,
-   "settlements": 401,
-   "buyers": 9,
+   "guess": "Unidentified tiered service",
+   "usd": 1.21,
+   "settlements": 80,
+   "buyers": 7,
    "flags": []
   },
   {
@@ -455,19 +455,19 @@
    "chain": "solana",
    "tier": "behavioral",
    "guess": "Unidentified tiered service",
-   "usd": 1.2,
-   "settlements": 244,
+   "usd": 1.21,
+   "settlements": 246,
    "buyers": 11,
    "flags": []
   },
   {
-   "wallet": "66Qvhr1xnwqbCT36KfHfZF1JpoWdmCQ3uFYTN335CGXe",
+   "wallet": "3Wuj6VjJXuCmQZjGRhW56xbEk6TzCyMEUVRZgLBYNE2Z",
    "chain": "solana",
    "tier": "behavioral",
-   "guess": "Unidentified tiered service",
-   "usd": 1.18,
-   "settlements": 79,
-   "buyers": 7,
+   "guess": "Unidentified metered API",
+   "usd": 1.2,
+   "settlements": 401,
+   "buyers": 9,
    "flags": []
   },
   {
@@ -663,6 +663,6 @@
    "flags": []
   }
  ],
- "generated_at": "2026-10-19T17:55:37+00:00",
+ "generated_at": "2026-10-19T21:55:27+00:00",
  "$schema_note": "Counterra label coverage. 'labelled' = any evidence tier; 'named' = verified or probable identity. 'adjusted' excludes payments flagged as possible wash/test (self-payment, dust, round-trip); closed-loop is flagged for review but not excluded."
 }
