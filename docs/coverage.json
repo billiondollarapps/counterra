@@ -1,28 +1,28 @@
 {
  "overall": {
   "payments": {
-   "settlements": 15689,
-   "usd": 49086.54
+   "settlements": 15693,
+   "usd": 49089.55
   },
   "adjusted": {
-   "settlements": 15658,
-   "usd": 49085.52
+   "settlements": 15662,
+   "usd": 49088.53
   },
   "flagged": {
    "settlements": 31,
    "usd": 1.02
   },
   "labelled_pct": {
-   "settlements": 91.4,
-   "usd": 85.4
+   "settlements": 91.7,
+   "usd": 97.3
   },
   "named_pct": {
    "settlements": 71.5,
    "usd": 83.5
   },
   "adjusted_labelled_pct": {
-   "settlements": 91.6,
-   "usd": 85.4
+   "settlements": 91.8,
+   "usd": 97.3
   },
   "adjusted_named_pct": {
    "settlements": 71.6,
@@ -38,12 +38,12 @@
     "usd": 1.96
    },
    "behavioral": {
-    "settlements": 3133,
-    "usd": 920.5
+    "settlements": 3172,
+    "usd": 6782.51
    },
    "unknown": {
-    "settlements": 1342,
-    "usd": 7173.08
+    "settlements": 1307,
+    "usd": 1314.08
    }
   }
  },
@@ -97,31 +97,31 @@
  },
  "solana": {
   "payments": {
-   "settlements": 2840,
-   "usd": 47776.04
+   "settlements": 2844,
+   "usd": 47779.05
   },
   "adjusted": {
-   "settlements": 2824,
-   "usd": 47775.05
+   "settlements": 2828,
+   "usd": 47778.06
   },
   "flagged": {
    "settlements": 16,
    "usd": 0.98
   },
   "labelled_pct": {
-   "settlements": 87.7,
-   "usd": 85.4
+   "settlements": 89.0,
+   "usd": 97.7
   },
   "named_pct": {
    "settlements": 45.7,
    "usd": 85.1
   },
   "adjusted_labelled_pct": {
-   "settlements": 88.2,
-   "usd": 85.4
+   "settlements": 89.5,
+   "usd": 97.7
   },
   "adjusted_named_pct": {
-   "settlements": 46.0,
+   "settlements": 45.9,
    "usd": 85.1
   },
   "by_tier": {
@@ -130,20 +130,20 @@
     "usd": 40642.1
    },
    "behavioral": {
-    "settlements": 1192,
-    "usd": 154.28
+    "settlements": 1231,
+    "usd": 6016.29
    },
    "unknown": {
-    "settlements": 349,
-    "usd": 6979.66
+    "settlements": 314,
+    "usd": 1120.66
    }
   }
  },
  "wallets": {
   "seller": {
-   "unknown": 468,
+   "unknown": 467,
    "verified": 49,
-   "behavioral": 105,
+   "behavioral": 106,
    "probable": 3
   },
   "buyer": {
@@ -163,10 +163,10 @@
   {
    "wallet": "7xvuVbuyzfoE8jLRAbdqwjNYgqLs9pVNx9FpkXPwVDVP",
    "chain": "solana",
-   "tier": "unknown",
-   "guess": "",
-   "usd": 5859.0,
-   "settlements": 35,
+   "tier": "behavioral",
+   "guess": "Unidentified tiered service",
+   "usd": 5862.0,
+   "settlements": 38,
    "buyers": 18,
    "flags": []
   },
@@ -663,6 +663,6 @@
    "flags": []
   }
  ],
- "generated_at": "2026-10-20T21:01:04+00:00",
+ "generated_at": "2026-10-21T02:21:31+00:00",
  "$schema_note": "Counterra label coverage. 'labelled' = any evidence tier; 'named' = verified or probable identity. 'adjusted' excludes payments flagged as possible wash/test (self-payment, dust, round-trip); closed-loop is flagged for review but not excluded."
 }
