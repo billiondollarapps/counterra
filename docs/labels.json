@@ -1,7 +1,7 @@
 {
  "$schema_note": "Counterra network label book: every seller, facilitator and x402 contract seen in the ledger, with an evidence tier. Tiers: hard-stop > verified > protocol > probable > behavioral > unknown. 'behavioral' is a spend TYPE inferred from settlement pattern, never an identity. Buyers are not published. Regenerate: counterra.py label --write",
  "version": 1,
- "generated_at": "2026-10-22T10:49:15+00:00",
+ "generated_at": "2026-10-22T16:15:27+00:00",
  "wallets": [
   {
    "wallet": "3MZVk97x9SeRxbYpc3jhzRfU2fyA3emYutnqfn9kNfYX",
@@ -144,11 +144,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 931,
-    "usd": 18.572,
+    "settlements": 936,
+    "usd": 18.672,
     "buyers": 28,
     "first_seen": "2026-01-03T20:01:49+00:00",
-    "last_seen": "2026-10-22T10:45:52+00:00",
+    "last_seen": "2026-10-22T16:12:27+00:00",
     "price_points": 3
    }
   },
@@ -3197,19 +3197,19 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "21 distinct price points ($1-$4985) each recurring across 46 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "24 distinct price points ($1-$4985) each recurring across 51 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 46,
-    "usd": 6259.0,
+    "settlements": 51,
+    "usd": 6377.0,
     "buyers": 24,
     "first_seen": "2026-09-27T02:10:31+00:00",
-    "last_seen": "2026-10-22T10:37:26+00:00",
-    "price_points": 21
+    "last_seen": "2026-10-22T15:52:00+00:00",
+    "price_points": 24
    }
   },
   {
@@ -4256,6 +4256,27 @@
    }
   },
   {
+   "wallet": "GgS891nMiEETjBEFw1QQxVcAqsRV34mDYpxh24TrpCiD",
+   "chain": "solana",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "6 settlements at 2 price point(s), all under $1 (median $0.02) - per-call API metering",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 6,
+    "usd": 0.15,
+    "buyers": 2,
+    "first_seen": "2026-09-08T08:30:26+00:00",
+    "last_seen": "2026-10-22T15:33:37+00:00",
+    "price_points": 2
+   }
+  },
+  {
    "wallet": "0xc327d0aeb5f65b514b193b5e5a95cc6f4060815f",
    "chain": "base",
    "name": "Unidentified metered API",
@@ -4295,27 +4316,6 @@
     "first_seen": "2026-09-15T10:30:33+00:00",
     "last_seen": "2026-09-28T22:37:09+00:00",
     "price_points": 1
-   }
-  },
-  {
-   "wallet": "GgS891nMiEETjBEFw1QQxVcAqsRV34mDYpxh24TrpCiD",
-   "chain": "solana",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "5 settlements at 2 price point(s), all under $1 (median $0.02) - per-call API metering",
-   "confidence": "low",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 5,
-    "usd": 0.13,
-    "buyers": 2,
-    "first_seen": "2026-09-08T08:30:26+00:00",
-    "last_seen": "2026-10-15T08:31:11+00:00",
-    "price_points": 2
    }
   },
   {
@@ -9244,6 +9244,27 @@
    }
   },
   {
+   "wallet": "HpZ7TcKzX5GQ1jbFFYB3Npq321g8UrmsnaTKVNicu1Dv",
+   "chain": "solana",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.02,
+    "buyers": 1,
+    "first_seen": "2026-10-20T15:30:56+00:00",
+    "last_seen": "2026-10-22T15:34:02+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "FSnwAPTNNSxqnR8MtuNrtwLkyYusZ4hncp684HxYpdLb",
    "chain": "solana",
    "name": "",
@@ -12879,27 +12900,6 @@
    }
   },
   {
-   "wallet": "HpZ7TcKzX5GQ1jbFFYB3Npq321g8UrmsnaTKVNicu1Dv",
-   "chain": "solana",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.01,
-    "buyers": 1,
-    "first_seen": "2026-10-20T15:30:56+00:00",
-    "last_seen": "2026-10-20T15:30:56+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "7uorZL9aoq6SU4jGR5mkfHhwW1J7TDqNpE8D6KkwukPa",
    "chain": "solana",
    "name": "",
@@ -13612,6 +13612,27 @@
     "buyers": 1,
     "first_seen": "2026-09-23T18:00:28+00:00",
     "last_seen": "2026-09-29T21:30:36+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "GYyTRmt317JafPHXPnM54Fsvsma5GnS9wm6qGMqaykdS",
+   "chain": "solana",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.004,
+    "buyers": 1,
+    "first_seen": "2026-10-20T15:30:26+00:00",
+    "last_seen": "2026-10-22T15:33:34+00:00",
     "price_points": 1
    }
   },
@@ -14479,27 +14500,6 @@
    }
   },
   {
-   "wallet": "GYyTRmt317JafPHXPnM54Fsvsma5GnS9wm6qGMqaykdS",
-   "chain": "solana",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.002,
-    "buyers": 1,
-    "first_seen": "2026-10-20T15:30:26+00:00",
-    "last_seen": "2026-10-20T15:30:26+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0xbbba34e9e10130ce852aa9f1d651cd73c36206d4",
    "chain": "base",
    "name": "",
@@ -15294,6 +15294,27 @@
     "buyers": 1,
     "first_seen": "2026-10-22T01:38:17+00:00",
     "last_seen": "2026-10-22T01:38:17+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "FdQ2FmAydXBe87Nm7w4MjksRqTUjahPaqjj7mVshKvNa",
+   "chain": "solana",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.001,
+    "buyers": 1,
+    "first_seen": "2026-10-22T15:33:15+00:00",
+    "last_seen": "2026-10-22T15:33:15+00:00",
     "price_points": 1
    }
   }
