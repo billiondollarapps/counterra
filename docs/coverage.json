@@ -1,11 +1,11 @@
 {
  "overall": {
   "payments": {
-   "settlements": 15756,
+   "settlements": 15761,
    "usd": 49605.14
   },
   "adjusted": {
-   "settlements": 15725,
+   "settlements": 15730,
    "usd": 49604.12
   },
   "flagged": {
@@ -42,7 +42,7 @@
     "usd": 7297.71
    },
    "unknown": {
-    "settlements": 1318,
+    "settlements": 1323,
     "usd": 1313.15
    }
   }
@@ -97,11 +97,11 @@
  },
  "solana": {
   "payments": {
-   "settlements": 2907,
-   "usd": 48294.63
+   "settlements": 2912,
+   "usd": 48294.64
   },
   "adjusted": {
-   "settlements": 2891,
+   "settlements": 2896,
    "usd": 48293.65
   },
   "flagged": {
@@ -109,19 +109,19 @@
    "usd": 0.98
   },
   "labelled_pct": {
-   "settlements": 88.8,
+   "settlements": 88.6,
    "usd": 97.7
   },
   "named_pct": {
-   "settlements": 45.3,
+   "settlements": 45.2,
    "usd": 84.2
   },
   "adjusted_labelled_pct": {
-   "settlements": 89.3,
+   "settlements": 89.1,
    "usd": 97.7
   },
   "adjusted_named_pct": {
-   "settlements": 45.6,
+   "settlements": 45.5,
    "usd": 84.2
   },
   "by_tier": {
@@ -134,8 +134,8 @@
     "usd": 6531.49
    },
    "unknown": {
-    "settlements": 326,
-    "usd": 1120.72
+    "settlements": 331,
+    "usd": 1120.73
    }
   }
  },
@@ -631,6 +631,16 @@
    "flags": []
   },
   {
+   "wallet": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
+   "chain": "solana",
+   "tier": "unknown",
+   "guess": "",
+   "usd": 0.71,
+   "settlements": 104,
+   "buyers": 18,
+   "flags": []
+  },
+  {
    "wallet": "FJqAJ4dXkFbrp3EEo8E9x98iaBGUQwaU8Srz5ePfUXLH",
    "chain": "solana",
    "tier": "behavioral",
@@ -643,16 +653,6 @@
    ]
   },
   {
-   "wallet": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-   "chain": "solana",
-   "tier": "unknown",
-   "guess": "",
-   "usd": 0.7,
-   "settlements": 99,
-   "buyers": 18,
-   "flags": []
-  },
-  {
    "wallet": "0x75ddd3c42eace13c59ea0cd1141b886a1c70d2a5",
    "chain": "base",
    "tier": "unknown",
@@ -663,6 +663,6 @@
    "flags": []
   }
  ],
- "generated_at": "2026-10-22T16:15:27+00:00",
+ "generated_at": "2026-10-22T20:59:10+00:00",
  "$schema_note": "Counterra label coverage. 'labelled' = any evidence tier; 'named' = verified or probable identity. 'adjusted' excludes payments flagged as possible wash/test (self-payment, dust, round-trip); closed-loop is flagged for review but not excluded."
 }
