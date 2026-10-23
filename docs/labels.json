@@ -1,7 +1,7 @@
 {
  "$schema_note": "Counterra network label book: every seller, facilitator and x402 contract seen in the ledger, with an evidence tier. Tiers: hard-stop > verified > protocol > probable > behavioral > unknown. 'behavioral' is a spend TYPE inferred from settlement pattern, never an identity. Buyers are not published. Regenerate: counterra.py label --write",
  "version": 1,
- "generated_at": "2026-10-22T20:59:10+00:00",
+ "generated_at": "2026-10-23T02:22:25+00:00",
  "wallets": [
   {
    "wallet": "3MZVk97x9SeRxbYpc3jhzRfU2fyA3emYutnqfn9kNfYX",
@@ -3197,19 +3197,19 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "24 distinct price points ($1-$4985) each recurring across 51 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "26 distinct price points ($1-$4985) each recurring across 58 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 51,
-    "usd": 6377.0,
-    "buyers": 24,
+    "settlements": 58,
+    "usd": 6435.0,
+    "buyers": 26,
     "first_seen": "2026-09-27T02:10:31+00:00",
-    "last_seen": "2026-10-22T15:52:00+00:00",
-    "price_points": 24
+    "last_seen": "2026-10-23T02:17:31+00:00",
+    "price_points": 26
    }
   },
   {
@@ -14076,6 +14076,27 @@
     "buyers": 1,
     "first_seen": "2026-10-07T21:06:47+00:00",
     "last_seen": "2026-10-07T21:06:47+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "FH73WbbUe2UyNzfy72MJs5nT3NxyDf9GrqE7kzjL2Jte",
+   "chain": "solana",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.003,
+    "buyers": 1,
+    "first_seen": "2026-10-23T01:22:09+00:00",
+    "last_seen": "2026-10-23T01:22:09+00:00",
     "price_points": 1
    }
   },
