@@ -1,12 +1,12 @@
 {
  "overall": {
   "payments": {
-   "settlements": 15783,
-   "usd": 49730.6
+   "settlements": 15786,
+   "usd": 49730.64
   },
   "adjusted": {
-   "settlements": 15747,
-   "usd": 49729.32
+   "settlements": 15750,
+   "usd": 49729.36
   },
   "flagged": {
    "settlements": 36,
@@ -30,20 +30,20 @@
   },
   "by_tier": {
    "verified": {
-    "settlements": 11216,
-    "usd": 40992.32
+    "settlements": 11218,
+    "usd": 40994.07
    },
    "probable": {
     "settlements": 17,
     "usd": 1.96
    },
    "behavioral": {
-    "settlements": 3223,
-    "usd": 7422.86
+    "settlements": 3226,
+    "usd": 7422.89
    },
    "unknown": {
-    "settlements": 1327,
-    "usd": 1313.46
+    "settlements": 1325,
+    "usd": 1311.72
    }
   }
  },
@@ -62,24 +62,24 @@
   },
   "labelled_pct": {
    "settlements": 92.3,
-   "usd": 85.3
+   "usd": 85.5
   },
   "named_pct": {
    "settlements": 77.2,
-   "usd": 26.8
+   "usd": 27.0
   },
   "adjusted_labelled_pct": {
    "settlements": 92.3,
-   "usd": 85.3
+   "usd": 85.5
   },
   "adjusted_named_pct": {
    "settlements": 77.3,
-   "usd": 26.8
+   "usd": 27.0
   },
   "by_tier": {
    "verified": {
-    "settlements": 9899,
-    "usd": 349.9
+    "settlements": 9901,
+    "usd": 351.65
    },
    "probable": {
     "settlements": 17,
@@ -90,19 +90,19 @@
     "usd": 766.22
    },
    "unknown": {
-    "settlements": 992,
-    "usd": 192.43
+    "settlements": 990,
+    "usd": 190.68
    }
   }
  },
  "solana": {
   "payments": {
-   "settlements": 2934,
-   "usd": 48420.09
+   "settlements": 2937,
+   "usd": 48420.13
   },
   "adjusted": {
-   "settlements": 2913,
-   "usd": 48418.85
+   "settlements": 2916,
+   "usd": 48418.89
   },
   "flagged": {
    "settlements": 21,
@@ -113,7 +113,7 @@
    "usd": 97.7
   },
   "named_pct": {
-   "settlements": 44.9,
+   "settlements": 44.8,
    "usd": 83.9
   },
   "adjusted_labelled_pct": {
@@ -130,8 +130,8 @@
     "usd": 40642.42
    },
    "behavioral": {
-    "settlements": 1282,
-    "usd": 6656.63
+    "settlements": 1285,
+    "usd": 6656.67
    },
    "unknown": {
     "settlements": 335,
@@ -141,8 +141,8 @@
  },
  "wallets": {
   "seller": {
-   "unknown": 470,
-   "verified": 50,
+   "unknown": 469,
+   "verified": 51,
    "behavioral": 107,
    "probable": 3
   },
@@ -411,16 +411,6 @@
    "flags": []
   },
   {
-   "wallet": "0x7662e00f8ab4c362166e1ff649ff6c2a638c80ad",
-   "chain": "base",
-   "tier": "unknown",
-   "guess": "",
-   "usd": 1.75,
-   "settlements": 2,
-   "buyers": 2,
-   "flags": []
-  },
-  {
    "wallet": "0x7d2ceb7a0e0c39a3d0f7b5b491659fde4bb7bcfe",
    "chain": "base",
    "tier": "behavioral",
@@ -631,6 +621,18 @@
    "flags": []
   },
   {
+   "wallet": "FJqAJ4dXkFbrp3EEo8E9x98iaBGUQwaU8Srz5ePfUXLH",
+   "chain": "solana",
+   "tier": "behavioral",
+   "guess": "Unidentified tiered service",
+   "usd": 0.74,
+   "settlements": 50,
+   "buyers": 4,
+   "flags": [
+    "closed-loop"
+   ]
+  },
+  {
    "wallet": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
    "chain": "solana",
    "tier": "unknown",
@@ -641,18 +643,6 @@
    "flags": []
   },
   {
-   "wallet": "FJqAJ4dXkFbrp3EEo8E9x98iaBGUQwaU8Srz5ePfUXLH",
-   "chain": "solana",
-   "tier": "behavioral",
-   "guess": "Unidentified tiered service",
-   "usd": 0.7,
-   "settlements": 47,
-   "buyers": 4,
-   "flags": [
-    "closed-loop"
-   ]
-  },
-  {
    "wallet": "0x75ddd3c42eace13c59ea0cd1141b886a1c70d2a5",
    "chain": "base",
    "tier": "unknown",
@@ -661,8 +651,18 @@
    "settlements": 2,
    "buyers": 2,
    "flags": []
+  },
+  {
+   "wallet": "0x942bd3e3073543c674efc0c378d5bce20f9120c1",
+   "chain": "base",
+   "tier": "unknown",
+   "guess": "",
+   "usd": 0.6,
+   "settlements": 2,
+   "buyers": 2,
+   "flags": []
   }
  ],
- "generated_at": "2026-10-23T16:04:17+00:00",
+ "generated_at": "2026-10-23T20:47:08+00:00",
  "$schema_note": "Counterra label coverage. 'labelled' = any evidence tier; 'named' = verified or probable identity. 'adjusted' excludes payments flagged as possible wash/test (self-payment, dust, round-trip); closed-loop is flagged for review but not excluded."
 }
