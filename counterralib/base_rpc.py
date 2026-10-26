@@ -106,10 +106,10 @@ class BaseRpcAdapter:
         self.diag["rpc_errors"] += 1
         raise last if last else RuntimeError("rpc failed")
 
-    BATCH = 40
+    BATCH = 10      # Alchemy free counts each call in a batch against its rate limit
 
     def _receipts(self, hashes):
-        """Receipts for many txs: JSON-RPC batches of 40, falling back to one
+        """Receipts for many txs: JSON-RPC batches of 10, falling back to one
         call per tx if the endpoint does not accept batches."""
         out = {}
         if self.batch_ok is not False:
@@ -167,7 +167,8 @@ class BaseRpcAdapter:
     def _logs(self, frm, to, address, topics=None):
         """eth_getLogs over [frm, to], halving the span if the node refuses."""
         out, start = [], frm
-        span = to - frm + 1
+        # remember the widest span this node accepted (Alchemy free = 10)
+        span = min(to - frm + 1, getattr(self, "learned_span", None) or (to - frm + 1))
         while start <= to:
             end = min(to, start + span - 1)
             flt = {"fromBlock": hex(start), "toBlock": hex(end), "address": address}
@@ -182,6 +183,7 @@ class BaseRpcAdapter:
                 if span <= 10 or "429" in str(e) or "rate" in str(e).lower():
                     raise
                 span = max(10, span // 2)
+                self.learned_span = span
                 self._say("    (node refused {} blocks: {} - retrying with {})".format(
                     end - start + 1, str(e)[:80], span))
         return out
@@ -210,6 +212,8 @@ class BaseRpcAdapter:
         head_block = self._call("eth_getBlockByNumber", [hex(head), False]) or {}
         head_ts = int(head_block.get("timestamp", "0x0"), 16) or int(time.time())
         st = self.state.setdefault(STATE_KEY, {})
+        if st.get("logs_span") and not os.environ.get("BASE_LOGS_CHUNK"):
+            self.learned_span = int(st["logs_span"])
         start = int(st.get("next_block") or 0)
         if not start:
             # first run: look back one worker cycle rather than all of history
@@ -287,6 +291,8 @@ class BaseRpcAdapter:
         else:
             st["next_block"] = reached + 1
         st["head_seen"] = head
+        if getattr(self, "learned_span", None):
+            st["logs_span"] = self.learned_span
         st["last_run_unix"] = int(time.time())
         self.diag["decoded"] = len(events)
         if stopped:
