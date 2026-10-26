@@ -1,7 +1,7 @@
 {
  "$schema_note": "Counterra network label book: every seller, facilitator and x402 contract seen in the ledger, with an evidence tier. Tiers: hard-stop > verified > protocol > probable > behavioral > unknown. 'behavioral' is a spend TYPE inferred from settlement pattern, never an identity. Buyers are not published. Regenerate: counterra.py label --write",
  "version": 1,
- "generated_at": "2026-10-26T02:11:35+00:00",
+ "generated_at": "2026-10-26T11:46:56+00:00",
  "wallets": [
   {
    "wallet": "3MZVk97x9SeRxbYpc3jhzRfU2fyA3emYutnqfn9kNfYX",
@@ -3213,6 +3213,29 @@
    }
   },
   {
+   "wallet": "0x44dc2dceaa22c7ef6b2e2cf2362fd3fb476b7c2c",
+   "chain": "base",
+   "name": "smartflowproai.com",
+   "category": "AI inference",
+   "tier": "probable",
+   "evidence": "payTo resolved from seller's own endpoint: https://smartflowproai.com/.well-known/x402 [address-in-text]",
+   "confidence": "probable",
+   "flags": [
+    "closed-loop"
+   ],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 18,
+    "usd": 0.39,
+    "buyers": 1,
+    "first_seen": "2026-07-28T19:06:17+00:00",
+    "last_seen": "2026-10-04T20:33:35+00:00",
+    "price_points": 2
+   }
+  },
+  {
    "wallet": "0x515e7bce44baa5f6e42d16d4b5f27768e7f2f8cc",
    "chain": "base",
    "name": "api.xona-agent.com",
@@ -3512,18 +3535,18 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "5 distinct price points ($0.001-$0.01) each recurring across 248 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "5 distinct price points ($0.001-$0.01) each recurring across 250 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 248,
-    "usd": 1.216,
+    "settlements": 250,
+    "usd": 1.226,
     "buyers": 11,
     "first_seen": "2026-07-24T12:47:30+00:00",
-    "last_seen": "2026-10-24T19:42:21+00:00",
+    "last_seen": "2026-10-26T11:42:25+00:00",
     "price_points": 5
    }
   },
@@ -3844,29 +3867,6 @@
     "first_seen": "2026-08-04T08:15:39+00:00",
     "last_seen": "2026-09-20T02:04:55+00:00",
     "price_points": 3
-   }
-  },
-  {
-   "wallet": "0x44dc2dceaa22c7ef6b2e2cf2362fd3fb476b7c2c",
-   "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "18 settlements at 2 price point(s), all under $1 (median $0.02) - per-call API metering",
-   "confidence": "medium",
-   "flags": [
-    "closed-loop"
-   ],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 18,
-    "usd": 0.39,
-    "buyers": 1,
-    "first_seen": "2026-07-28T19:06:17+00:00",
-    "last_seen": "2026-10-04T20:33:35+00:00",
-    "price_points": 2
    }
   },
   {
@@ -15418,6 +15418,27 @@
     "buyers": 1,
     "first_seen": "2026-10-24T14:41:08+00:00",
     "last_seen": "2026-10-24T14:41:08+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "B98Momu7zVpid3xBkHv5uhAVDZkHbYjrPZJA2PF73RVu",
+   "chain": "solana",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.001,
+    "buyers": 1,
+    "first_seen": "2026-10-26T11:31:37+00:00",
+    "last_seen": "2026-10-26T11:31:37+00:00",
     "price_points": 1
    }
   }
