@@ -1,0 +1,14 @@
+# Counterra x402 revenue ledger
+# seller,0x1f81da453901d15296c1710af83e0bc0371d39f1,base,unidentified
+# scope,"Observed x402 settlements only. Base is sampled from the chain (free RPC tier: a fraction of all blocks); Solana is swept from known facilitators. Every figure is a floor, not a census."
+# generated,2026-10-26T17:49:11+00:00
+
+section,period,debit_account,credit_account,amount_usd,settlements,buyers,memo
+journal,2026-08,1085 - Digital Assets (USDC),4100 - x402 Revenue,0.050000,1,1,x402 revenue 2026-08 (1 settlements aggregated)
+journal,2026-09,1085 - Digital Assets (USDC),4100 - x402 Revenue,0.050000,1,1,x402 revenue 2026-09 (1 settlements aggregated)
+journal,2026-10,1085 - Digital Assets (USDC),4100 - x402 Revenue,0.050000,1,1,x402 revenue 2026-10 (1 settlements aggregated)
+
+section,timestamp_utc,tx_hash,buyer_wallet,amount_usdc,settlement_path,facilitator,chain
+payment,2026-08-08T00:45:19+00:00,0x52e37b0c59d589779eaa048f0ab45c2867093a279d9d3a72960b6de810f67f59,0x5748c4d7348b719e63ae3a5a1e6caed595c50c1c,0.050000,exact,,base
+payment,2026-09-05T01:47:23+00:00,0xcd0b2978ef738e66468a0e61b256d4dc3b68c23abd2e72fed1988e09ec65a2b2,0x27abcddd44c4959ac729d080703e677f13a3248c,0.050000,exact,,base
+payment,2026-10-26T11:33:25+00:00,0x9e966449fd1ed6dbfcd94c1d21f774dbc4f374e948cdcee9795fecba7e6cc36b,0xc10cece505a8bda290d27ff82740be2b7d26c1fc,0.050000,exact,Coinbase,base

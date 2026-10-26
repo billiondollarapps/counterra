@@ -122,6 +122,14 @@ jobs:
           # coverage, and the identification work queue (printed below).
           python3 counterra.py label --write --top 15
 
+      - name: Rebuild the public network explorer (non-fatal)
+        timeout-minutes: 3
+        continue-on-error: true
+        run: |
+          # docs/data/ -> counterra.xyz/explorer.html: every seller's observed
+          # revenue, buyers, pricing, and a downloadable revenue ledger.
+          python3 counterra.py explorer --write
+
       - name: Commit updated ledger and reports
         run: |
           git config user.name  "counterra-bot"
@@ -134,6 +142,7 @@ jobs:
           git add docs/providers.json docs/pending-providers.json out/crawl_state.json 2>/dev/null || true
           # Census, label book, coverage, and the sweep schedule:
           git add docs/facilitators.json docs/labels.json docs/coverage.json out/sweep_schedule.json 2>/dev/null || true
+          git add -A docs/data 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No new data this run — nothing to commit."
           else

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counterra — x402 Network Explorer</title>
+<meta name="description" content="Every x402 seller Counterra has observed on Base and Solana: revenue, buyers, pricing, and a downloadable revenue ledger for each.">
+<style>
+  :root{--navy:#15243b;--acc:#2f6fed;--acc-d:#1f4fb0;--ink:#1c1e22;--mut:#5f6672;
+        --line:#e3e6ec;--bg:#f7f8fa;--green:#177245;--warn:#8a5a00;--red:#b23b3b;
+        --base:#2f6fed;--sol:#8a4fd1}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--ink);background:#fff}
+  a{color:var(--acc-d)}
+  .hd{background:var(--navy);color:#fff;padding:30px 20px 26px;text-align:center}
+  .hd .k{font-size:11px;letter-spacing:4px;color:#8fb3f5;text-transform:uppercase}
+  .hd h1{font-size:28px;margin-top:6px}
+  .hd .s{color:#c8d4e8;font-size:14px;margin:8px auto 0;max-width:680px;line-height:1.5}
+  .hd nav{margin-top:14px;font-size:13px}
+  .hd nav a{color:#c8d4e8;margin:0 8px;text-decoration:none;border-bottom:1px solid #4a5d80}
+  .hd nav a:hover{color:#fff}
+  .wrap{max-width:1040px;margin:0 auto;padding:22px 16px 60px}
+  .scope{font-size:12.5px;color:var(--warn);background:#fdf6e7;border:1px solid #f0dfb5;
+         border-radius:8px;padding:10px 14px;line-height:1.5}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}
+  .card{border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:8px;padding:12px 14px;background:var(--bg)}
+  .card .l{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut)}
+  .card .v{font-size:22px;font-weight:700;color:var(--navy);margin-top:4px;font-variant-numeric:tabular-nums}
+  .card .n{font-size:11.5px;color:var(--mut);margin-top:3px}
+  h2{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--acc-d);margin:28px 0 10px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media (max-width:760px){.grid2{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut);
+     padding:6px 8px;border-bottom:1.5px solid var(--navy);white-space:nowrap}
+  th.sort{cursor:pointer} th.sort:hover{color:var(--navy)} th.on{color:var(--navy)}
+  td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr.click{cursor:pointer} tr.click:hover td{background:#f3f6fd}
+  .mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+  .tw table td:first-child,.tw table th:first-child{padding-left:12px}
+  .badge{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:999px;
+         border:1px solid var(--line);color:var(--mut);white-space:nowrap}
+  .b-verified{background:#e8f5ee;color:var(--green);border-color:#bfe3cf}
+  .b-probable{background:#eef3fe;color:var(--acc-d);border-color:#c9d8fb}
+  .b-behavioral{background:#f5f0fc;color:#6b3fb0;border-color:#ddd0f3}
+  .b-hard-stop{background:#fbeaea;color:var(--red);border-color:#f0c4c4}
+  .chain{font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .chain.base{color:var(--base)} .chain.solana{color:var(--sol)}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 10px}
+  .bar input{flex:1;min-width:200px;font-size:14px;padding:10px 12px;border:1px solid var(--line);border-radius:7px}
+  .bar input:focus{outline:2px solid var(--acc)}
+  .pill{background:#fff;color:var(--mut);border:1px solid var(--line);padding:7px 14px;font-size:12.5px;
+        border-radius:999px;cursor:pointer}
+  .pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .btn{display:inline-block;background:var(--acc);color:#fff;border:none;border-radius:7px;padding:10px 16px;
+       font-size:13.5px;font-weight:600;cursor:pointer;text-decoration:none}
+  .btn:hover{background:var(--acc-d)}
+  .btn.ghost{background:#fff;color:var(--acc-d);border:1px solid var(--acc)}
+  .muted{color:var(--mut);font-size:12.5px;line-height:1.55}
+  .chart{border:1px solid var(--line);border-radius:8px;padding:10px 10px 4px;background:#fff}
+  .chart svg{display:block;width:100%;height:auto}
+  .legend{font-size:11.5px;color:var(--mut);margin:6px 2px 4px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px -1px 10px}
+  .back{font-size:13px;text-decoration:none;display:inline-block;margin-bottom:10px}
+  .shd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+  .shd h3{font-size:22px;color:var(--navy)}
+  .cta{border:1px solid #c9d8fb;background:#f3f6fd;border-radius:10px;padding:16px 18px;margin-top:24px}
+  .cta b{color:var(--navy)}
+  .ft{margin-top:40px;font-size:12px;color:var(--mut);text-align:center;line-height:1.7}
+  .more{text-align:center;margin:10px 0}
+  #status{text-align:center;color:var(--mut);margin:30px 0;font-size:14px}
+</style>
+</head>
+<body>
+<div class="hd">
+  <div class="k">Counterra &middot; Open Accounting for Agentic Commerce</div>
+  <h1>x402 Network Explorer</h1>
+  <div class="s">Every x402 seller Counterra has observed on Base and Solana &mdash; revenue, buyers, pricing &mdash; with a downloadable revenue ledger for each.</div>
+  <nav><a href="index.html">Agent spend books</a><a href="#">Explorer</a><a href="https://github.com/billiondollarapps/counterra" target="_blank" rel="noopener">GitHub</a></nav>
+</div>
+
+<div class="wrap">
+  <div id="status">Loading the network&hellip;</div>
+  <div id="net" hidden></div>
+  <div id="seller" hidden></div>
+  <div class="ft">Counterra &mdash; open source, Apache-2.0. Data refreshes every 6 hours from public chain data.<br>
+    Buyers are shown only as public wallet addresses; Counterra never names buyers.<br>
+    <span id="gen"></span></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var D = "data/";
+var NET = null, SELLERS = [], state = {q:"", chain:"all", sort:"usd", shown:50};
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function usd(x,d){x=+x||0;if(d==null)d=x>=100?0:2;
+  return "$"+x.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
+function price(x){x=+x||0;return x>=1?usd(x,2):"$"+x.toFixed(6).replace(/0+$/,"").replace(/\.$/,"");}
+function int(x){return (+x||0).toLocaleString("en-US");}
+function short(w){w=String(w);return w.length>14?w.slice(0,8)+"…"+w.slice(-4):w;}
+function day(t){return String(t||"").slice(0,10);}
+function txUrl(chain,tx){return chain==="solana"?"https://solscan.io/tx/"+tx:"https://basescan.org/tx/"+tx;}
+function addrUrl(chain,a){return chain==="solana"?"https://solscan.io/account/"+a:"https://basescan.org/address/"+a;}
+function tierBadge(t){
+  var lab={"verified":"verified","probable":"probable","behavioral":"pattern only","hard-stop":"suspected clone","unknown":"unidentified"}[t]||t;
+  return '<span class="badge b-'+esc(t)+'">'+esc(lab)+'</span>';}
+function chainTag(c){return '<span class="chain '+esc(c)+'">'+esc(c)+'</span>';}
+function sellerName(s){return s.name?esc(s.name):'<span class="muted">unidentified</span>';}
+function get(u){return fetch(D+u,{cache:"no-cache"}).then(function(r){
+  if(!r.ok)throw new Error(u+": HTTP "+r.status);return r.json();});}
+
+// ---------- tiny SVG bar chart (stacked by series) ----------
+function bars(rows, series, colors, opts){
+  opts=opts||{}; var W=960,H=opts.h||180,P={l:46,r:8,t:10,b:22};
+  if(!rows.length) return '<div class="muted" style="padding:20px">No data yet.</div>';
+  var max=0; rows.forEach(function(r){var s=0;series.forEach(function(k){s+=r[k]||0;});if(s>max)max=s;});
+  max=max||1; var n=rows.length, bw=(W-P.l-P.r)/n, g=[];
+  for(var i=0;i<=3;i++){var v=max*i/3,y=H-P.b-(H-P.t-P.b)*i/3;
+    g.push('<line x1="'+P.l+'" x2="'+(W-P.r)+'" y1="'+y+'" y2="'+y+'" stroke="#e3e6ec"/>');
+    g.push('<text x="'+(P.l-6)+'" y="'+(y+4)+'" font-size="11" fill="#5f6672" text-anchor="end">'+
+      (opts.fmt?opts.fmt(v):int(Math.round(v)))+'</text>');}
+  rows.forEach(function(r,i){var y0=H-P.b,x=P.l+i*bw+bw*0.12,w=Math.max(1,bw*0.76);
+    series.forEach(function(k,j){var v=r[k]||0,h=(H-P.t-P.b)*v/max;
+      if(h>0){g.push('<rect x="'+x.toFixed(1)+'" y="'+(y0-h).toFixed(1)+'" width="'+w.toFixed(1)+
+        '" height="'+h.toFixed(1)+'" fill="'+colors[j]+'"><title>'+esc(r.label)+" "+esc(k)+": "+
+        (opts.fmt?opts.fmt(v):int(v))+'</title></rect>');y0-=h;}});});
+  var step=Math.max(1,Math.ceil(n/8));
+  rows.forEach(function(r,i){if(i%step===0||i===n-1)g.push('<text x="'+(P.l+i*bw+bw/2).toFixed(1)+
+    '" y="'+(H-6)+'" font-size="11" fill="#5f6672" text-anchor="middle">'+esc(r.label.slice(5))+'</text>');});
+  return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(opts.aria||"chart")+'">'+g.join("")+'</svg>';}
+
+function dailyRows(daily, days){
+  var m={}; daily.forEach(function(d){var r=m[d.date]||(m[d.date]={label:d.date,base:0,solana:0});
+    r[d.chain]=(r[d.chain]||0)+d.usd;});
+  var keys=Object.keys(m).sort(); keys=keys.slice(-days); return keys.map(function(k){return m[k];});}
+
+// ---------- network view ----------
+function renderNet(){
+  var n=NET, t=n.totals, cov=n.coverage||{}, ch=n.chains||{};
+  var h=[];
+  h.push('<div class="scope">'+esc(n.scope_note)+'</div>');
+  h.push('<div class="cards">'+
+    card("Observed volume",usd(t.usd),"all time, both chains")+
+    card("Payments",int(t.settlements),"x402 settlements decoded")+
+    card("Sellers",int(t.sellers),"wallets receiving x402 payments")+
+    card("Buyers",int(t.buyers),"agent wallets paying")+
+    card("Labelled",(cov.labelled_pct_usd==null?"–":cov.labelled_pct_usd+"%"),"of $ with an evidence tier")+
+    '</div>');
+  h.push('<h2>Daily observed volume (last 60 days)</h2><div class="chart">'+
+    bars(dailyRows(n.daily,60),["base","solana"],["#2f6fed","#8a4fd1"],{fmt:function(v){return usd(v,0);},aria:"Daily x402 volume"})+
+    '<div class="legend"><i style="background:#2f6fed"></i>Base <i style="background:#8a4fd1"></i>Solana</div></div>');
+  h.push('<div class="grid2"><div><h2>Spend by category</h2><div class="tw"><table><tr><th>Category</th><th class="num">Volume</th><th class="num">Payments</th></tr>'+
+    n.categories.slice(0,10).map(function(c){return '<tr><td>'+esc(c.category)+'</td><td class="num">'+usd(c.usd)+'</td><td class="num">'+int(c.settlements)+'</td></tr>';}).join("")+
+    '</table></div></div><div><h2>Settled by facilitator</h2><div class="tw"><table><tr><th>Facilitator</th><th>Chain</th><th class="num">Payments</th></tr>'+
+    n.facilitators.slice().sort(function(a,b){return b.settlements-a.settlements;}).slice(0,10).map(function(f){
+      return '<tr><td>'+esc(f.facilitator)+'</td><td>'+chainTag(f.chain)+'</td><td class="num">'+int(f.settlements)+'</td></tr>';}).join("")+
+    '</table></div></div></div>');
+  h.push('<h2>Sellers</h2><div class="bar"><input id="q" placeholder="Search a seller name or wallet address" value="'+esc(state.q)+'">'+
+    ["all","base","solana"].map(function(c){return '<button class="pill'+(state.chain===c?" on":"")+'" data-chain="'+c+'">'+(c==="all"?"All chains":c[0].toUpperCase()+c.slice(1))+'</button>';}).join("")+
+    '</div><div class="tw"><table id="st"></table></div><div class="more" id="more"></div>');
+  var el=document.getElementById("net"); el.innerHTML=h.join(""); el.hidden=false;
+  document.getElementById("q").addEventListener("input",function(e){state.q=e.target.value;state.shown=50;renderTable();});
+  Array.prototype.forEach.call(el.querySelectorAll("[data-chain]"),function(b){b.addEventListener("click",function(){
+    state.chain=b.getAttribute("data-chain");state.shown=50;
+    Array.prototype.forEach.call(el.querySelectorAll("[data-chain]"),function(x){x.classList.toggle("on",x===b);});renderTable();});});
+  renderTable();}
+
+function card(l,v,n){return '<div class="card"><div class="l">'+esc(l)+'</div><div class="v">'+v+'</div><div class="n">'+esc(n)+'</div></div>';}
+
+function renderTable(){
+  var q=state.q.trim().toLowerCase();
+  var rows=SELLERS.filter(function(s){return (state.chain==="all"||s.chain===state.chain)&&
+    (!q||s.wallet.toLowerCase().indexOf(q)>=0||(s.name||"").toLowerCase().indexOf(q)>=0||(s.category||"").toLowerCase().indexOf(q)>=0);});
+  var k=state.sort; rows.sort(function(a,b){return (b[k]||0)-(a[k]||0);});
+  var cols=[["usd","Revenue"],["usd_30d","30 days"],["buyers","Buyers"],["settlements","Payments"]];
+  var h='<tr><th>Seller</th><th>Evidence</th><th>Category</th>'+cols.map(function(c){
+    return '<th class="num sort'+(k===c[0]?" on":"")+'" data-sort="'+c[0]+'">'+c[1]+(k===c[0]?" ↓":"")+'</th>';}).join("")+'<th class="num">Last seen</th></tr>';
+  h+=rows.slice(0,state.shown).map(function(s){
+    return '<tr class="'+(s.has_detail?"click":"")+'" data-slug="'+esc(s.has_detail?s.slug:"")+'"><td>'+chainTag(s.chain)+' '+sellerName(s)+
+      '<div class="mono muted">'+esc(short(s.wallet))+'</div></td><td>'+tierBadge(s.tier)+'</td><td>'+esc(s.category)+
+      '</td><td class="num">'+usd(s.usd)+'</td><td class="num">'+usd(s.usd_30d)+'</td><td class="num">'+int(s.buyers)+
+      '</td><td class="num">'+int(s.settlements)+'</td><td class="num">'+esc(day(s.last_seen))+'</td></tr>';}).join("");
+  if(!rows.length)h+='<tr><td colspan="8" class="muted" style="padding:16px">No seller matches that search.</td></tr>';
+  var t=document.getElementById("st"); t.innerHTML=h;
+  Array.prototype.forEach.call(t.querySelectorAll("[data-sort]"),function(th){th.addEventListener("click",function(){state.sort=th.getAttribute("data-sort");renderTable();});});
+  Array.prototype.forEach.call(t.querySelectorAll("tr[data-slug]"),function(tr){var s=tr.getAttribute("data-slug");
+    if(s)tr.addEventListener("click",function(){location.hash="seller/"+s;});});
+  var m=document.getElementById("more");
+  m.innerHTML=rows.length>state.shown?'<button class="pill">Show more ('+int(rows.length-state.shown)+' left)</button>':
+    '<span class="muted">'+int(rows.length)+' sellers</span>';
+  var b=m.querySelector("button"); if(b)b.addEventListener("click",function(){state.shown+=100;renderTable();});}
+
+// ---------- seller view ----------
+function renderSeller(sl){
+  var el=document.getElementById("seller"); el.hidden=false; document.getElementById("net").hidden=true;
+  el.innerHTML='<div id="status">Loading seller&hellip;</div>'; window.scrollTo(0,0);
+  get("sellers/"+encodeURIComponent(sl)+".json").then(function(d){
+    var s=d.seller, h=[];
+    h.push('<a class="back" href="#">← All sellers</a>');
+    h.push('<div class="shd"><div><h3>'+(s.name?esc(s.name):"Unidentified seller")+'</h3><div style="margin-top:6px">'+
+      chainTag(s.chain)+' &nbsp;'+tierBadge(s.tier)+' &nbsp;<span class="muted">'+esc(s.category)+'</span></div>'+
+      '<div class="mono muted" style="margin-top:6px"><a href="'+addrUrl(s.chain,s.wallet)+'" target="_blank" rel="noopener">'+esc(s.wallet)+'</a></div></div>'+
+      (s.has_revenue_csv?'<a class="btn" href="'+D+'revenue/'+encodeURIComponent(sl)+'.csv" download>Download revenue ledger (CSV)</a>':'')+'</div>');
+    if(d.evidence)h.push('<p class="muted" style="margin-top:10px"><b>Evidence:</b> '+esc(d.evidence)+'</p>');
+    h.push('<div class="cards">'+card("Observed revenue",usd(s.usd),"all time")+card("Last 30 days",usd(s.usd_30d),"")+
+      card("Buyers",int(s.buyers),"distinct paying wallets")+card("Payments",int(s.settlements),"median "+price(s.median_price))+
+      card("Top buyer share",d.buyer_concentration_pct+"%","of revenue from one wallet")+'</div>');
+    var dr=d.daily.slice(-60).map(function(x){return {label:x.date,usd:x.usd};});
+    h.push('<h2>Daily observed revenue</h2><div class="chart">'+bars(dr,["usd"],[s.chain==="solana"?"#8a4fd1":"#2f6fed"],{h:160,fmt:function(v){return usd(v,v<10?2:0);},aria:"Daily revenue"})+'</div>');
+    h.push('<div class="grid2"><div><h2>Price points</h2><div class="tw"><table><tr><th>Price</th><th class="num">Payments</th></tr>'+
+      d.price_ladder.map(function(p){return '<tr><td class="mono">'+price(p.price)+'</td><td class="num">'+int(p.settlements)+'</td></tr>';}).join("")+
+      '</table></div></div><div><h2>Settled via</h2><div class="tw"><table><tr><th>Facilitator</th><th class="num">Payments</th></tr>'+
+      d.facilitators.map(function(f){return '<tr><td>'+esc(f.facilitator)+'</td><td class="num">'+int(f.settlements)+'</td></tr>';}).join("")+
+      '</table></div></div></div>');
+    h.push('<h2>Top buyers</h2><div class="tw"><table><tr><th>Buyer wallet</th><th class="num">Paid</th><th class="num">Payments</th><th class="num">Last seen</th></tr>'+
+      d.top_buyers.map(function(b){return '<tr><td class="mono"><a href="'+addrUrl(s.chain,b.wallet)+'" target="_blank" rel="noopener">'+esc(short(b.wallet))+'</a></td><td class="num">'+
+        usd(b.usd,2)+'</td><td class="num">'+int(b.settlements)+'</td><td class="num">'+esc(day(b.last_seen))+'</td></tr>';}).join("")+'</table></div>');
+    h.push('<h2>Recent payments</h2><div class="tw"><table><tr><th>Time (UTC)</th><th>Buyer</th><th class="num">Amount</th><th>Path</th><th>Tx</th></tr>'+
+      d.recent.slice(0,40).map(function(p){return '<tr><td class="num">'+esc(String(p.ts).slice(0,16).replace("T"," "))+'</td><td class="mono">'+esc(short(p.buyer))+
+        '</td><td class="num">'+price(p.usd)+'</td><td>'+esc(p.path)+'</td><td class="mono"><a href="'+txUrl(s.chain,p.tx)+'" target="_blank" rel="noopener">'+esc(short(p.tx))+'</a></td></tr>';}).join("")+'</table></div>');
+    h.push('<div class="cta"><b>Is this your service?</b> <span class="muted">Counterra can produce your complete x402 books — revenue by customer and by month, reconciled to the chain, exportable to QuickBooks or Xero — free while we onboard our first design partners.</span>'+
+      '<div style="margin-top:12px"><a class="btn ghost" href="https://github.com/billiondollarapps/counterra/issues/new?title='+encodeURIComponent("Books for "+(s.name||s.wallet))+'" target="_blank" rel="noopener">Request your books</a></div></div>');
+    h.push('<p class="muted" style="margin-top:16px">'+esc(d.scope_note)+'</p>');
+    el.innerHTML=h.join("");
+  }).catch(function(e){el.innerHTML='<a class="back" href="#">← All sellers</a><div id="status">Could not load this seller ('+esc(e.message)+').</div>';});}
+
+function route(){
+  var m=/^#seller\/(.+)$/.exec(location.hash||"");
+  if(m)renderSeller(decodeURIComponent(m[1]));
+  else{document.getElementById("seller").hidden=true;document.getElementById("net").hidden=false;}}
+
+Promise.all([get("network.json"),get("sellers.json")]).then(function(r){
+  NET=r[0]; SELLERS=r[1].sellers||[];
+  document.getElementById("status").remove();
+  document.getElementById("gen").textContent="Data generated "+String(NET.generated_at).replace("T"," ").slice(0,16)+" UTC";
+  renderNet(); route(); window.addEventListener("hashchange",route);
+}).catch(function(e){document.getElementById("status").textContent="Could not load explorer data ("+e.message+").";});
+})();
+</script>
+</body>
+</html>

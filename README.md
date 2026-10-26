@@ -31,6 +31,15 @@ has no token. Nothing leaves your machine.
 **Running paying agents and want your books closed?** I'm onboarding 2–3 design
 partners free, in exchange for feedback — open an issue or reach out.
 
+## The x402 network explorer
+
+**[counterra.xyz/explorer.html](https://counterra.xyz/explorer.html)** — every
+x402 seller Counterra has observed on Base and Solana: observed revenue,
+buyers, price points, facilitators, and a downloadable **revenue ledger** per
+seller (monthly journal entries + every payment, reconciled to the chain).
+Rebuilt every 6 hours by `python3 counterra.py explorer --write` into
+`docs/data/`. Base is sampled from the chain; every figure is a floor.
+
 ## Try it live — no install
 
 **[counterra.xyz](https://counterra.xyz)** — paste any Base wallet and watch
@@ -175,6 +184,8 @@ counterralib/books.py     one-command design-partner handoff
 counterralib/whois.py     seller identification
 counterralib/facilitators.py  facilitator census + sweep scheduler + x402 contracts
 counterralib/labels.py    network label book: wallet tiers, payment categories, coverage
+counterralib/explorer.py  public explorer data: network, sellers, revenue ledgers (docs/data/)
+counterralib/base_rpc.py  Base collector reading settlements straight from an RPC node
 report.py                 HTML report
 spec/CAAP-1.md            the accounting standard + spec/caap1_vectors.json
 config.yaml               chains, facilitators, maps, chart of accounts

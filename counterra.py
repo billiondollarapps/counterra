@@ -165,6 +165,8 @@ def main():
                     help="census mode: facilitator wallets to visit this run (default 12 Base / 6 Solana)")
     cs = sub.add_parser("census", help="facilitator census: every x402 facilitator wallet from the x402scan registry")
     cs.add_argument("--write", action="store_true", help="write docs/facilitators.json")
+    ex = sub.add_parser("explorer", help="build the public network explorer data (docs/data/) from the ledger")
+    ex.add_argument("--write", action="store_true", help="write docs/data/ (network, sellers, seller pages, revenue ledgers)")
     lb = sub.add_parser("label", help="label every wallet and categorise every payment in the ledger (+ coverage)")
     lb.add_argument("--chain", choices=["base", "solana"], default=None)
     lb.add_argument("--write", action="store_true",
@@ -659,6 +661,14 @@ def main():
             print("wrote docs/facilitators.json")
         else:
             print("(dry run - add --write to save docs/facilitators.json)")
+        return
+
+    if args.mode == "explorer":
+        from counterralib import explorer as _ex
+        res = _ex.run(write_files=args.write)
+        print(_ex.render_summary(res))
+        print("wrote docs/data/ - served at counterra.xyz/explorer.html" if args.write
+              else "(dry run - add --write to publish docs/data/)")
         return
 
     if args.mode == "label":
