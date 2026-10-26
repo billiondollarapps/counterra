@@ -85,8 +85,9 @@ class BaseRpcAdapter:
                                       timeout=20)
                 code = getattr(r, "status_code", 200)
                 if code == 429 or 500 <= code < 600:
-                    last = RuntimeError("HTTP %d" % code)
-                    time.sleep(1.5 * (attempt + 1))
+                    last = RuntimeError("HTTP %d%s" % (code, " rate limited" if code == 429 else ""))
+                    # 429 = this endpoint is throttling us: back off hard
+                    time.sleep((3.0 * 2 ** attempt) if code == 429 else 1.5 * (attempt + 1))
                     continue
                 if code >= 400:
                     raise RuntimeError("HTTP %d: %s" % (code, (getattr(r, "text", "") or "")[:160]))
@@ -176,7 +177,9 @@ class BaseRpcAdapter:
                 out.extend(self._call("eth_getLogs", [flt]) or [])
                 start = end + 1
             except Exception as e:
-                if span <= 10:
+                # Halve only when the node says the RANGE is the problem. A 429
+                # is throttling: shrinking the span just sends MORE requests.
+                if span <= 10 or "429" in str(e) or "rate" in str(e).lower():
                     raise
                 span = max(10, span // 2)
                 self._say("    (node refused {} blocks: {} - retrying with {})".format(
@@ -211,6 +214,7 @@ class BaseRpcAdapter:
         if not start:
             # first run: look back one worker cycle rather than all of history
             start = head - min(max_blocks, 1800) + 1
+        prior_state = dict(st)
         if head - start + 1 > max_blocks:
             gap_from, start_new = start, head - max_blocks + 1
             st["skipped_ranges"] = (st.get("skipped_ranges") or [])[-20:] + [
@@ -273,7 +277,15 @@ class BaseRpcAdapter:
             reached = e
             self.diag["blocks"] += e - b + 1
             b = e + 1
-        st["next_block"] = reached + 1
+        if reached < start:
+            # Scanned nothing (e.g. the endpoint refused us). Leave the
+            # watermark and skip log exactly as they were - otherwise every
+            # failing run would record another "skipped" range.
+            st.clear()
+            st.update(prior_state)
+            st["last_error_unix"] = int(time.time())
+        else:
+            st["next_block"] = reached + 1
         st["head_seen"] = head
         st["last_run_unix"] = int(time.time())
         self.diag["decoded"] = len(events)

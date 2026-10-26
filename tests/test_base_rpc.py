@@ -121,6 +121,26 @@ def main():
     ad4, _ = run(FakeRPC(), st)
     assert st[BR.STATE_KEY]["skipped_ranges"] == [[100, HEAD - 200]], st
 
+    # throttled endpoint: no span-halving storm, and no phantom skipped range
+    class Throttled(FakeRPC):
+        def post(self, url, json=None, timeout=None):
+            if not isinstance(json, list) and json["method"] == "eth_getLogs":
+                self.calls.append("getLogs")
+                r = Resp({}); r.status_code = 429
+                return r
+            return FakeRPC.post(self, url, json, timeout)
+    import counterralib.base_rpc as mod
+    real_sleep = mod.time.sleep
+    mod.time.sleep = lambda s: None
+    try:
+        st5 = {BR.STATE_KEY: {"next_block": 100, "skipped_ranges": [[1, 2]]}}
+        ad5, evs5 = run(Throttled(), st5)
+    finally:
+        mod.time.sleep = real_sleep
+    assert evs5 == [] and ad5.session.calls.count("getLogs") == 4, ad5.session.calls
+    assert st5[BR.STATE_KEY]["next_block"] == 100
+    assert st5[BR.STATE_KEY]["skipped_ranges"] == [[1, 2]], st5
+
     print("ALL BASE-RPC TESTS PASSED")
     print("  exact + permit2 decoded; non-facilitator EIP-3009 and reverted txs dropped")
     print("  block watermark resumes; batch fallback; node range limits; gaps recorded")
