@@ -165,6 +165,16 @@ def main():
                     help="census mode: facilitator wallets to visit this run (default 12 Base / 6 Solana)")
     cs = sub.add_parser("census", help="facilitator census: every x402 facilitator wallet from the x402scan registry")
     cs.add_argument("--write", action="store_true", help="write docs/facilitators.json")
+    stp = sub.add_parser("statement", help="monthly close pack for one wallet: statement, invoices, exceptions, QuickBooks/Xero, tie-out")
+    stp.add_argument("--wallet", required=True, help="seller or buyer wallet")
+    stp.add_argument("--period", default=None, help="YYYY-MM (default: latest month with activity)")
+    stp.add_argument("--role", choices=["seller", "buyer"], default=None, help="default: auto-detect")
+    stp.add_argument("--issuer", default=None,
+                     help="JSON file with the seller's legal details {name,address,tax_id,email} - makes invoices tax-ready")
+    stp.add_argument("--out", default=None, help="output folder (default out/statements/<wallet>/<period>)")
+    dm = sub.add_parser("statements-demo", help="close packs for the top identified sellers -> docs/demo/ (public sample)")
+    dm.add_argument("--top", type=int, default=10)
+    dm.add_argument("--period", default=None, help="YYYY-MM (default: last full month)")
     ex = sub.add_parser("explorer", help="build the public network explorer data (docs/data/) from the ledger")
     ex.add_argument("--write", action="store_true", help="write docs/data/ (network, sellers, seller pages, revenue ledgers)")
     lb = sub.add_parser("label", help="label every wallet and categorise every payment in the ledger (+ coverage)")
@@ -661,6 +671,34 @@ def main():
             print("wrote docs/facilitators.json")
         else:
             print("(dry run - add --write to save docs/facilitators.json)")
+        return
+
+    if args.mode == "statement":
+        from counterralib import statements as _st
+        try:
+            r = _st.run(args.wallet, period=args.period, role=args.role,
+                        issuer_path=args.issuer, out_dir=args.out)
+        except ValueError as e:
+            print("statement: " + str(e))
+            sys.exit(1)
+        pk, t = r["pack"], r["pack"]["tie_out"]
+        print("{} statement {} for {} ({})".format(pk["role"], pk["period"], pk["name"] or pk["wallet"], pk["chain"]))
+        print("  {:,} payments, {:,} counterparties, total ${:,.2f}, {} invoices, {} exceptions".format(
+            pk["summary"]["payments"], pk["summary"]["counterparties"], pk["summary"]["total"],
+            len(pk["invoices"]), len(pk["exceptions"])))
+        for c in t["checks"]:
+            print("  [{}] {}".format("PASS" if c["pass"] else "FAIL", c["check"]))
+        print("open: " + r["index"])
+        return
+
+    if args.mode == "statements-demo":
+        from counterralib import statements as _st
+        r = _st.build_demo(top=args.top, period=args.period)
+        print("close packs for {} -> docs/demo/".format(r["period"]))
+        for x in r["packs"]:
+            print("  {:<34} {:<7} ${:>9,.2f} {:>6,} pays {:>4} buyers {:>4} invoices  tie-out {}".format(
+                (x["name"] or x["wallet"])[:34], x["chain"], x["total"], x["payments"], x["buyers"],
+                x["invoices"], "PASS" if x["tie_out"] else "FAIL"))
         return
 
     if args.mode == "explorer":

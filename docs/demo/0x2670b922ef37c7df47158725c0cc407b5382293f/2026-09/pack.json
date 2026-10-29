@@ -1,0 +1,245 @@
+{
+ "generated_at": "2026-10-29T14:16:17+00:00",
+ "wallet": "0x2670b922ef37c7df47158725c0cc407b5382293f",
+ "chain": "base",
+ "role": "seller",
+ "period": "2026-09",
+ "period_start": "2026-09-01",
+ "period_end": "2026-09-30",
+ "name": "SafeProxy",
+ "tier": "verified",
+ "evidence": "Verified contract on Base Blockscout named 'SafeProxy' (deployer-verified source)",
+ "issuer": {},
+ "summary": {
+  "payments": 3,
+  "counterparties": 2,
+  "total": 5.02,
+  "total_exact": 5.02,
+  "escrow_deposits": 0.0,
+  "first": "2026-09-05T19:37:57+00:00",
+  "last": "2026-09-13T01:39:51+00:00",
+  "days_active": 3,
+  "exceptions": 1
+ },
+ "counterparties": [
+  {
+   "wallet": "0x2373e6ee419a178801ac15d49b8d8d55727a3b4b",
+   "name": "",
+   "tier": "buyer",
+   "category": "x402 revenue",
+   "account": "4100 - x402 Revenue",
+   "payments": 1,
+   "amount_exact": 5.0,
+   "amount": 5.0,
+   "first": "2026-09-05T19:37:57+00:00",
+   "last": "2026-09-05T19:37:57+00:00",
+   "flags": []
+  },
+  {
+   "wallet": "0x06eef33d2d9a23eeeda20f12b0c2bd0d554baace",
+   "name": "",
+   "tier": "buyer",
+   "category": "x402 revenue",
+   "account": "4100 - x402 Revenue",
+   "payments": 2,
+   "amount_exact": 0.02,
+   "amount": 0.02,
+   "first": "2026-09-09T20:08:13+00:00",
+   "last": "2026-09-13T01:39:51+00:00",
+   "flags": []
+  }
+ ],
+ "invoices": [
+  {
+   "number": "CTR-202609-82293F-7A3B4B",
+   "kind": "issued",
+   "issue_date": "2026-09-30",
+   "service_period": [
+    "2026-09-01",
+    "2026-09-30"
+   ],
+   "seller": {
+    "wallet": "0x2670b922ef37c7df47158725c0cc407b5382293f",
+    "name": "SafeProxy"
+   },
+   "buyer": {
+    "wallet": "0x2373e6ee419a178801ac15d49b8d8d55727a3b4b"
+   },
+   "currency": "USDC",
+   "chain": "base",
+   "lines": [
+    {
+     "description": "x402 paid requests @ $5.00",
+     "quantity": 1,
+     "unit_price": 5.0,
+     "amount_exact": 5.0
+    }
+   ],
+   "total": 5.0,
+   "total_exact": 5.0,
+   "payments": [
+    {
+     "ts": "2026-09-05T19:37:57+00:00",
+     "tx": "0xa4942e669cf46a8b4ac5e0f54c14a897af5fad8a31ece7be31eca9265f120d59",
+     "amount": 5.0,
+     "path": "exact",
+     "facilitator": ""
+    }
+   ],
+   "tax_ready": false
+  },
+  {
+   "number": "CTR-202609-82293F-4BAACE",
+   "kind": "issued",
+   "issue_date": "2026-09-30",
+   "service_period": [
+    "2026-09-01",
+    "2026-09-30"
+   ],
+   "seller": {
+    "wallet": "0x2670b922ef37c7df47158725c0cc407b5382293f",
+    "name": "SafeProxy"
+   },
+   "buyer": {
+    "wallet": "0x06eef33d2d9a23eeeda20f12b0c2bd0d554baace"
+   },
+   "currency": "USDC",
+   "chain": "base",
+   "lines": [
+    {
+     "description": "x402 paid requests @ $0.01",
+     "quantity": 2,
+     "unit_price": 0.01,
+     "amount_exact": 0.02
+    }
+   ],
+   "total": 0.02,
+   "total_exact": 0.02,
+   "payments": [
+    {
+     "ts": "2026-09-09T20:08:13+00:00",
+     "tx": "0x0db9f4f8842d42afabcbd9b95d111cc92b88d88f3992a40c378857bce0378e9c",
+     "amount": 0.01,
+     "path": "exact",
+     "facilitator": ""
+    },
+    {
+     "ts": "2026-09-13T01:39:51+00:00",
+     "tx": "0x855523f68ded13cc587e36cff438096830e8893ed0efc615e7abeedef705d1db",
+     "amount": 0.01,
+     "path": "exact",
+     "facilitator": ""
+    }
+   ],
+   "tax_ready": false
+  }
+ ],
+ "exceptions": [
+  {
+   "severity": "info",
+   "type": "customer concentration",
+   "counterparty": "0x2373e6ee419a178801ac15d49b8d8d55727a3b4b",
+   "amount": 5.0,
+   "payments": 1,
+   "detail": "100% of this month's revenue came from one buyer wallet"
+  }
+ ],
+ "journal": [
+  {
+   "period": "2026-09",
+   "debit_account": "1085 - Digital Assets (USDC)",
+   "credit_account": "4100 - x402 Revenue",
+   "amount_usd": 5.0,
+   "provider": "buyer 0x2373e6\u20263b4b",
+   "category": "x402 revenue",
+   "settlements": 1,
+   "memo": "x402 revenue 2026-09 - buyer 0x2373e6\u20263b4b (1 settlements)"
+  },
+  {
+   "period": "2026-09",
+   "debit_account": "1085 - Digital Assets (USDC)",
+   "credit_account": "4100 - x402 Revenue",
+   "amount_usd": 0.02,
+   "provider": "buyer 0x06eef3\u2026aace",
+   "category": "x402 revenue",
+   "settlements": 2,
+   "memo": "x402 revenue 2026-09 - buyer 0x06eef3\u2026aace (2 settlements)"
+  }
+ ],
+ "tie_out": {
+  "payments_exact": 5.02,
+  "statement": 5.02,
+  "invoices": 5.02,
+  "journal": 5.02,
+  "rounding_difference": 0.0,
+  "sub_cent_counterparties": 0,
+  "checks": [
+   {
+    "check": "Statement total equals sum of invoices",
+    "pass": true
+   },
+   {
+    "check": "Statement total equals journal total",
+    "pass": true
+   },
+   {
+    "check": "Every payment appears on exactly one invoice",
+    "pass": true
+   },
+   {
+    "check": "Statement total equals the exact payments total, rounded once",
+    "pass": true
+   },
+   {
+    "check": "QuickBooks file balances (debits = credits)",
+    "pass": true
+   },
+   {
+    "check": "Xero file balances (debits = credits)",
+    "pass": true
+   },
+   {
+    "check": "QuickBooks and Xero files total the statement",
+    "pass": true
+   }
+  ],
+  "all_pass": true,
+  "exports": {
+   "quickbooks_debits": 5.02,
+   "xero_debits": 5.02
+  }
+ },
+ "payments": [
+  {
+   "ts": "2026-09-05T19:37:57+00:00",
+   "tx": "0xa4942e669cf46a8b4ac5e0f54c14a897af5fad8a31ece7be31eca9265f120d59",
+   "counterparty": "0x2373e6ee419a178801ac15d49b8d8d55727a3b4b",
+   "amount": 5.0,
+   "path": "exact",
+   "facilitator": "",
+   "category": "Uncategorized",
+   "flags": []
+  },
+  {
+   "ts": "2026-09-09T20:08:13+00:00",
+   "tx": "0x0db9f4f8842d42afabcbd9b95d111cc92b88d88f3992a40c378857bce0378e9c",
+   "counterparty": "0x06eef33d2d9a23eeeda20f12b0c2bd0d554baace",
+   "amount": 0.01,
+   "path": "exact",
+   "facilitator": "",
+   "category": "Uncategorized",
+   "flags": []
+  },
+  {
+   "ts": "2026-09-13T01:39:51+00:00",
+   "tx": "0x855523f68ded13cc587e36cff438096830e8893ed0efc615e7abeedef705d1db",
+   "counterparty": "0x06eef33d2d9a23eeeda20f12b0c2bd0d554baace",
+   "amount": 0.01,
+   "path": "exact",
+   "facilitator": "",
+   "category": "Uncategorized",
+   "flags": []
+  }
+ ],
+ "disclaimer": "Generated by Counterra from public on-chain x402 settlements. Invoices are payment-backed records of what was paid; they become tax invoices only once the issuer's legal name, address and tax ID are added, and tax treatment depends on jurisdiction. Figures cover decoded x402 settlements only, not the wallet's full balance. Not tax or legal advice."
+}

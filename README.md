@@ -31,6 +31,21 @@ has no token. Nothing leaves your machine.
 **Running paying agents and want your books closed?** I'm onboarding 2–3 design
 partners free, in exchange for feedback — open an issue or reach out.
 
+## Monthly close packs
+
+```bash
+python3 counterra.py statement --wallet 0xYOUR_WALLET --period 2026-09 [--issuer issuer.json]
+```
+
+For one wallet and one month: a statement by counterparty, one numbered
+invoice per counterparty (each payment listed with its transaction), an
+exceptions review, QuickBooks + Xero journals, and a tie-out that re-reads
+the exported files and proves every document agrees to the cent. Sellers get
+revenue packs; buyers get spend packs. Add your legal details with
+`--issuer` (`{"name","address","tax_id","email"}`) and the invoices become
+tax-ready. Sample packs: **[counterra.xyz/demo](https://counterra.xyz/demo/)**.
+Treatment and open questions: [docs/statement-methodology.md](docs/statement-methodology.md).
+
 ## The x402 network explorer
 
 **[counterra.xyz/explorer.html](https://counterra.xyz/explorer.html)** — every
@@ -184,6 +199,7 @@ counterralib/books.py     one-command design-partner handoff
 counterralib/whois.py     seller identification
 counterralib/facilitators.py  facilitator census + sweep scheduler + x402 contracts
 counterralib/labels.py    network label book: wallet tiers, payment categories, coverage
+counterralib/statements.py  monthly close packs: statement, invoices, exceptions, exports, tie-out
 counterralib/explorer.py  public explorer data: network, sellers, revenue ledgers (docs/data/)
 counterralib/base_rpc.py  Base collector reading settlements straight from an RPC node
 report.py                 HTML report
