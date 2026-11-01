@@ -1,0 +1,361 @@
+{
+ "generated_at": "2026-11-01T03:05:11+00:00",
+ "wallet": "0x213c8d7434e2ae7aa1c392767c5120778d413215",
+ "chain": "base",
+ "role": "seller",
+ "period": "2026-10",
+ "period_start": "2026-10-01",
+ "period_end": "2026-10-31",
+ "name": "cheaptokens.ai",
+ "tier": "verified",
+ "evidence": "payTo resolved from seller's own endpoint: https://cheaptokens.ai/.well-known/x402.json [key:payTo]",
+ "issuer": {},
+ "summary": {
+  "payments": 10,
+  "counterparties": 2,
+  "total": 12.5,
+  "total_exact": 12.5,
+  "escrow_deposits": 0.0,
+  "first": "2026-10-26T20:52:33+00:00",
+  "last": "2026-10-31T21:22:25+00:00",
+  "days_active": 5,
+  "exceptions": 0
+ },
+ "counterparties": [
+  {
+   "wallet": "0x751a2728bf348832688e75428efaf97963b1bc1e",
+   "name": "",
+   "tier": "buyer",
+   "category": "x402 revenue",
+   "account": "4100 - x402 Revenue",
+   "payments": 4,
+   "amount_exact": 6.5,
+   "amount": 6.5,
+   "first": "2026-10-26T20:52:33+00:00",
+   "last": "2026-10-30T06:00:05+00:00",
+   "flags": []
+  },
+  {
+   "wallet": "0x73b4c9335fa239f9c6df3d28d5bf5d3cdf4de736",
+   "name": "",
+   "tier": "buyer",
+   "category": "x402 revenue",
+   "account": "4100 - x402 Revenue",
+   "payments": 6,
+   "amount_exact": 6.0,
+   "amount": 6.0,
+   "first": "2026-10-26T21:11:39+00:00",
+   "last": "2026-10-31T21:22:25+00:00",
+   "flags": []
+  }
+ ],
+ "invoices": [
+  {
+   "number": "CTR-202610-413215-B1BC1E",
+   "kind": "issued",
+   "issue_date": "2026-10-31",
+   "service_period": [
+    "2026-10-01",
+    "2026-10-31"
+   ],
+   "seller": {
+    "wallet": "0x213c8d7434e2ae7aa1c392767c5120778d413215",
+    "name": "cheaptokens.ai"
+   },
+   "buyer": {
+    "wallet": "0x751a2728bf348832688e75428efaf97963b1bc1e"
+   },
+   "currency": "USDC",
+   "chain": "base",
+   "lines": [
+    {
+     "description": "x402 paid requests @ $5.00",
+     "quantity": 1,
+     "unit_price": 5.0,
+     "amount_exact": 5.0
+    },
+    {
+     "description": "x402 paid requests @ $0.5",
+     "quantity": 3,
+     "unit_price": 0.5,
+     "amount_exact": 1.5
+    }
+   ],
+   "total": 6.5,
+   "total_exact": 6.5,
+   "payments": [
+    {
+     "ts": "2026-10-26T20:52:33+00:00",
+     "tx": "0xfe917d353326e15c0e5816c12f019e81cd1af9495dbacc960b6adda43cbab1c1",
+     "amount": 5.0,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    },
+    {
+     "ts": "2026-10-28T06:00:05+00:00",
+     "tx": "0xfb2985e0a8e486f0356787690ee7c613fb714c504604242bb016ad3f22059ea1",
+     "amount": 0.5,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    },
+    {
+     "ts": "2026-10-29T06:00:05+00:00",
+     "tx": "0xceaa2be52913f1422bff95d6e975da0bc3c2759a997a230ba7f1f5ab6312de2a",
+     "amount": 0.5,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    },
+    {
+     "ts": "2026-10-30T06:00:05+00:00",
+     "tx": "0xeaebe203804d47cfc2d7138aec980ffde118261d5c101d05283b93abf95da430",
+     "amount": 0.5,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    }
+   ],
+   "tax_ready": false
+  },
+  {
+   "number": "CTR-202610-413215-4DE736",
+   "kind": "issued",
+   "issue_date": "2026-10-31",
+   "service_period": [
+    "2026-10-01",
+    "2026-10-31"
+   ],
+   "seller": {
+    "wallet": "0x213c8d7434e2ae7aa1c392767c5120778d413215",
+    "name": "cheaptokens.ai"
+   },
+   "buyer": {
+    "wallet": "0x73b4c9335fa239f9c6df3d28d5bf5d3cdf4de736"
+   },
+   "currency": "USDC",
+   "chain": "base",
+   "lines": [
+    {
+     "description": "x402 paid requests @ $1.00",
+     "quantity": 6,
+     "unit_price": 1.0,
+     "amount_exact": 6.0
+    }
+   ],
+   "total": 6.0,
+   "total_exact": 6.0,
+   "payments": [
+    {
+     "ts": "2026-10-26T21:11:39+00:00",
+     "tx": "0x48ed306a4847b69443d6b0a3944b9e0cc25ed9917f56ff3b0429edd734fc7a6d",
+     "amount": 1.0,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    },
+    {
+     "ts": "2026-10-28T16:01:29+00:00",
+     "tx": "0xf88de29c003646c08db3f5cba11d33f3c7084eb6ee3c9047c0f4f606e8ecd9a8",
+     "amount": 1.0,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    },
+    {
+     "ts": "2026-10-29T16:10:23+00:00",
+     "tx": "0x1690ff5cceb4611a9b0dca28ae6946f0b1b68e1dbec7321c167a8d1c588bda44",
+     "amount": 1.0,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    },
+    {
+     "ts": "2026-10-30T15:58:15+00:00",
+     "tx": "0xeb5d06cad9d0a55c897c7288cac77e65b3af6f0a41d544f5032de89ad7a2e859",
+     "amount": 1.0,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    },
+    {
+     "ts": "2026-10-31T21:04:25+00:00",
+     "tx": "0x3bfd271a262c55ad67e0770ea5ffe815032c2f24288421b6978c8f489e0b0020",
+     "amount": 1.0,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    },
+    {
+     "ts": "2026-10-31T21:22:25+00:00",
+     "tx": "0x57467c1948a7eb3db311a3a644ac3d813ada203c60094c8c078fe17c55dac68a",
+     "amount": 1.0,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    }
+   ],
+   "tax_ready": false
+  }
+ ],
+ "exceptions": [],
+ "journal": [
+  {
+   "period": "2026-10",
+   "debit_account": "1085 - Digital Assets (USDC)",
+   "credit_account": "4100 - x402 Revenue",
+   "amount_usd": 6.5,
+   "provider": "buyer 0x751a27\u2026bc1e",
+   "category": "x402 revenue",
+   "settlements": 4,
+   "memo": "x402 revenue 2026-10 - buyer 0x751a27\u2026bc1e (4 settlements)"
+  },
+  {
+   "period": "2026-10",
+   "debit_account": "1085 - Digital Assets (USDC)",
+   "credit_account": "4100 - x402 Revenue",
+   "amount_usd": 6.0,
+   "provider": "buyer 0x73b4c9\u2026e736",
+   "category": "x402 revenue",
+   "settlements": 6,
+   "memo": "x402 revenue 2026-10 - buyer 0x73b4c9\u2026e736 (6 settlements)"
+  }
+ ],
+ "tie_out": {
+  "payments_exact": 12.5,
+  "statement": 12.5,
+  "invoices": 12.5,
+  "journal": 12.5,
+  "rounding_difference": 0.0,
+  "sub_cent_counterparties": 0,
+  "checks": [
+   {
+    "check": "Statement total equals sum of invoices",
+    "pass": true
+   },
+   {
+    "check": "Statement total equals journal total",
+    "pass": true
+   },
+   {
+    "check": "Every payment appears on exactly one invoice",
+    "pass": true
+   },
+   {
+    "check": "Statement total equals the exact payments total, rounded once",
+    "pass": true
+   },
+   {
+    "check": "QuickBooks file balances (debits = credits)",
+    "pass": true
+   },
+   {
+    "check": "Xero file balances (debits = credits)",
+    "pass": true
+   },
+   {
+    "check": "QuickBooks and Xero files total the statement",
+    "pass": true
+   }
+  ],
+  "all_pass": true,
+  "exports": {
+   "quickbooks_debits": 12.5,
+   "xero_debits": 12.5
+  }
+ },
+ "payments": [
+  {
+   "ts": "2026-10-26T20:52:33+00:00",
+   "tx": "0xfe917d353326e15c0e5816c12f019e81cd1af9495dbacc960b6adda43cbab1c1",
+   "counterparty": "0x751a2728bf348832688e75428efaf97963b1bc1e",
+   "amount": 5.0,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-26T21:11:39+00:00",
+   "tx": "0x48ed306a4847b69443d6b0a3944b9e0cc25ed9917f56ff3b0429edd734fc7a6d",
+   "counterparty": "0x73b4c9335fa239f9c6df3d28d5bf5d3cdf4de736",
+   "amount": 1.0,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-28T06:00:05+00:00",
+   "tx": "0xfb2985e0a8e486f0356787690ee7c613fb714c504604242bb016ad3f22059ea1",
+   "counterparty": "0x751a2728bf348832688e75428efaf97963b1bc1e",
+   "amount": 0.5,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-28T16:01:29+00:00",
+   "tx": "0xf88de29c003646c08db3f5cba11d33f3c7084eb6ee3c9047c0f4f606e8ecd9a8",
+   "counterparty": "0x73b4c9335fa239f9c6df3d28d5bf5d3cdf4de736",
+   "amount": 1.0,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-29T06:00:05+00:00",
+   "tx": "0xceaa2be52913f1422bff95d6e975da0bc3c2759a997a230ba7f1f5ab6312de2a",
+   "counterparty": "0x751a2728bf348832688e75428efaf97963b1bc1e",
+   "amount": 0.5,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-29T16:10:23+00:00",
+   "tx": "0x1690ff5cceb4611a9b0dca28ae6946f0b1b68e1dbec7321c167a8d1c588bda44",
+   "counterparty": "0x73b4c9335fa239f9c6df3d28d5bf5d3cdf4de736",
+   "amount": 1.0,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-30T06:00:05+00:00",
+   "tx": "0xeaebe203804d47cfc2d7138aec980ffde118261d5c101d05283b93abf95da430",
+   "counterparty": "0x751a2728bf348832688e75428efaf97963b1bc1e",
+   "amount": 0.5,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-30T15:58:15+00:00",
+   "tx": "0xeb5d06cad9d0a55c897c7288cac77e65b3af6f0a41d544f5032de89ad7a2e859",
+   "counterparty": "0x73b4c9335fa239f9c6df3d28d5bf5d3cdf4de736",
+   "amount": 1.0,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-31T21:04:25+00:00",
+   "tx": "0x3bfd271a262c55ad67e0770ea5ffe815032c2f24288421b6978c8f489e0b0020",
+   "counterparty": "0x73b4c9335fa239f9c6df3d28d5bf5d3cdf4de736",
+   "amount": 1.0,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-31T21:22:25+00:00",
+   "tx": "0x57467c1948a7eb3db311a3a644ac3d813ada203c60094c8c078fe17c55dac68a",
+   "counterparty": "0x73b4c9335fa239f9c6df3d28d5bf5d3cdf4de736",
+   "amount": 1.0,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  }
+ ],
+ "disclaimer": "Generated by Counterra from public on-chain x402 settlements. Invoices are payment-backed records of what was paid; they become tax invoices only once the issuer's legal name, address and tax ID are added, and tax treatment depends on jurisdiction. Figures cover decoded x402 settlements only, not the wallet's full balance. Not tax or legal advice."
+}

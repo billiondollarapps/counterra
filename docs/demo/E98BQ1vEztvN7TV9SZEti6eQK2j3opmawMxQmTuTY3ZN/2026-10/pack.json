@@ -1,0 +1,228 @@
+{
+ "generated_at": "2026-11-01T03:05:11+00:00",
+ "wallet": "E98BQ1vEztvN7TV9SZEti6eQK2j3opmawMxQmTuTY3ZN",
+ "chain": "solana",
+ "role": "seller",
+ "period": "2026-10",
+ "period_start": "2026-10-01",
+ "period_end": "2026-10-31",
+ "name": "exchangerebel.com",
+ "tier": "verified",
+ "evidence": "Discovery catalog payTo match: 1 resources at exchangerebel.com/* (category auto-suggested - review)",
+ "issuer": {},
+ "summary": {
+  "payments": 5,
+  "counterparties": 1,
+  "total": 50.07,
+  "total_exact": 50.07,
+  "escrow_deposits": 0.0,
+  "first": "2026-10-23T14:20:12+00:00",
+  "last": "2026-10-23T21:59:35+00:00",
+  "days_active": 1,
+  "exceptions": 0
+ },
+ "counterparties": [
+  {
+   "wallet": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
+   "name": "",
+   "tier": "buyer",
+   "category": "x402 revenue",
+   "account": "4100 - x402 Revenue",
+   "payments": 5,
+   "amount_exact": 50.07,
+   "amount": 50.07,
+   "first": "2026-10-23T14:20:12+00:00",
+   "last": "2026-10-23T21:59:35+00:00",
+   "flags": []
+  }
+ ],
+ "invoices": [
+  {
+   "number": "CTR-202610-UTY3ZN-AYTS49",
+   "kind": "issued",
+   "issue_date": "2026-10-31",
+   "service_period": [
+    "2026-10-01",
+    "2026-10-31"
+   ],
+   "seller": {
+    "wallet": "E98BQ1vEztvN7TV9SZEti6eQK2j3opmawMxQmTuTY3ZN",
+    "name": "exchangerebel.com"
+   },
+   "buyer": {
+    "wallet": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49"
+   },
+   "currency": "USDC",
+   "chain": "solana",
+   "lines": [
+    {
+     "description": "x402 paid requests @ $25.00",
+     "quantity": 2,
+     "unit_price": 25.0,
+     "amount_exact": 50.0
+    },
+    {
+     "description": "x402 paid requests @ $0.05",
+     "quantity": 1,
+     "unit_price": 0.05,
+     "amount_exact": 0.05
+    },
+    {
+     "description": "x402 paid requests @ $0.01",
+     "quantity": 2,
+     "unit_price": 0.01,
+     "amount_exact": 0.02
+    }
+   ],
+   "total": 50.07,
+   "total_exact": 50.07,
+   "payments": [
+    {
+     "ts": "2026-10-23T14:20:12+00:00",
+     "tx": "9FvJZM9fPLoN5TQGALDS38K1vyiX9gStdAMM8aqRsUE33DbpUbojEN33TX2t47NG3ZPfp1jSF3kBspNh51cNUkE",
+     "amount": 0.01,
+     "path": "exact",
+     "facilitator": "Dexter"
+    },
+    {
+     "ts": "2026-10-23T14:21:21+00:00",
+     "tx": "4A2Wo3gwGJ4NbqJNNcZQWdegSFavr62DXgmseY23VmjoxNmbsCnB11jwGCZihRj5sLTBevy7pF7hX4hYr1PjWoAd",
+     "amount": 0.01,
+     "path": "exact",
+     "facilitator": "Dexter"
+    },
+    {
+     "ts": "2026-10-23T14:22:34+00:00",
+     "tx": "3FScmoM83sp36Fz3pMA8xBpwJ9L2d9sJhjVUN3pwzuZwLJ44Zipr2GAJenFW68N6HEcT3ccHtSPshqxppVsKA5mr",
+     "amount": 0.05,
+     "path": "exact",
+     "facilitator": "Dexter"
+    },
+    {
+     "ts": "2026-10-23T19:05:22+00:00",
+     "tx": "3xiymTHyNXkwAoJBrMxNBTxtc6nNBRWRTBv2ewJWrwTmMR9Zwzu63dXRm4Eyqp4jq5hmKgbvUU6bx3XKC9mkZ2Aj",
+     "amount": 25.0,
+     "path": "exact",
+     "facilitator": "Dexter"
+    },
+    {
+     "ts": "2026-10-23T21:59:35+00:00",
+     "tx": "3L4pnWZ5PRzQcw6seutq9iiYFVEp7V4EgTFqGM3fdGZapE2sUjQnjJ9S5TXNeDxn5ahvpUfEtYqmwyhickJpvcZ",
+     "amount": 25.0,
+     "path": "exact",
+     "facilitator": "Dexter"
+    }
+   ],
+   "tax_ready": false
+  }
+ ],
+ "exceptions": [],
+ "journal": [
+  {
+   "period": "2026-10",
+   "debit_account": "1085 - Digital Assets (USDC)",
+   "credit_account": "4100 - x402 Revenue",
+   "amount_usd": 50.07,
+   "provider": "buyer 8U85u8YJ\u2026tS49",
+   "category": "x402 revenue",
+   "settlements": 5,
+   "memo": "x402 revenue 2026-10 - buyer 8U85u8YJ\u2026tS49 (5 settlements)"
+  }
+ ],
+ "tie_out": {
+  "payments_exact": 50.07,
+  "statement": 50.07,
+  "invoices": 50.07,
+  "journal": 50.07,
+  "rounding_difference": 0.0,
+  "sub_cent_counterparties": 0,
+  "checks": [
+   {
+    "check": "Statement total equals sum of invoices",
+    "pass": true
+   },
+   {
+    "check": "Statement total equals journal total",
+    "pass": true
+   },
+   {
+    "check": "Every payment appears on exactly one invoice",
+    "pass": true
+   },
+   {
+    "check": "Statement total equals the exact payments total, rounded once",
+    "pass": true
+   },
+   {
+    "check": "QuickBooks file balances (debits = credits)",
+    "pass": true
+   },
+   {
+    "check": "Xero file balances (debits = credits)",
+    "pass": true
+   },
+   {
+    "check": "QuickBooks and Xero files total the statement",
+    "pass": true
+   }
+  ],
+  "all_pass": true,
+  "exports": {
+   "quickbooks_debits": 50.07,
+   "xero_debits": 50.07
+  }
+ },
+ "payments": [
+  {
+   "ts": "2026-10-23T14:20:12+00:00",
+   "tx": "9FvJZM9fPLoN5TQGALDS38K1vyiX9gStdAMM8aqRsUE33DbpUbojEN33TX2t47NG3ZPfp1jSF3kBspNh51cNUkE",
+   "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
+   "amount": 0.01,
+   "path": "exact",
+   "facilitator": "Dexter",
+   "category": "Uncategorized",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-23T14:21:21+00:00",
+   "tx": "4A2Wo3gwGJ4NbqJNNcZQWdegSFavr62DXgmseY23VmjoxNmbsCnB11jwGCZihRj5sLTBevy7pF7hX4hYr1PjWoAd",
+   "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
+   "amount": 0.01,
+   "path": "exact",
+   "facilitator": "Dexter",
+   "category": "Uncategorized",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-23T14:22:34+00:00",
+   "tx": "3FScmoM83sp36Fz3pMA8xBpwJ9L2d9sJhjVUN3pwzuZwLJ44Zipr2GAJenFW68N6HEcT3ccHtSPshqxppVsKA5mr",
+   "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
+   "amount": 0.05,
+   "path": "exact",
+   "facilitator": "Dexter",
+   "category": "Uncategorized",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-23T19:05:22+00:00",
+   "tx": "3xiymTHyNXkwAoJBrMxNBTxtc6nNBRWRTBv2ewJWrwTmMR9Zwzu63dXRm4Eyqp4jq5hmKgbvUU6bx3XKC9mkZ2Aj",
+   "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
+   "amount": 25.0,
+   "path": "exact",
+   "facilitator": "Dexter",
+   "category": "Uncategorized",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-23T21:59:35+00:00",
+   "tx": "3L4pnWZ5PRzQcw6seutq9iiYFVEp7V4EgTFqGM3fdGZapE2sUjQnjJ9S5TXNeDxn5ahvpUfEtYqmwyhickJpvcZ",
+   "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
+   "amount": 25.0,
+   "path": "exact",
+   "facilitator": "Dexter",
+   "category": "Uncategorized",
+   "flags": []
+  }
+ ],
+ "disclaimer": "Generated by Counterra from public on-chain x402 settlements. Invoices are payment-backed records of what was paid; they become tax invoices only once the issuer's legal name, address and tax ID are added, and tax treatment depends on jurisdiction. Figures cover decoded x402 settlements only, not the wallet's full balance. Not tax or legal advice."
+}

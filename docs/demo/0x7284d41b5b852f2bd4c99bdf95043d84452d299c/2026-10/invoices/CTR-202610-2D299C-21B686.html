@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>CTR-202610-2D299C-21B686</title><style>
+:root{--navy:#15243b;--acc:#2f6fed;--ink:#1c1e22;--mut:#5f6672;--line:#e3e6ec;--bg:#f7f8fa;
+--green:#177245;--red:#b23b3b;--warn:#8a5a00}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--ink);background:#fff;font-size:13.5px}
+.page{max-width:900px;margin:0 auto;padding:32px 24px 56px}
+a{color:#1f4fb0}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;
+border-bottom:2px solid var(--navy);padding-bottom:16px}
+.brand{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--acc)}
+h1{font-size:24px;color:var(--navy);margin-top:4px}
+.sub{color:var(--mut);margin-top:4px;line-height:1.5}
+.meta{text-align:right;color:var(--mut);font-size:12.5px;line-height:1.6}
+.meta b{color:var(--ink)}
+h2{font-size:11px;letter-spacing:2.2px;text-transform:uppercase;color:#1f4fb0;margin:26px 0 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
+.card{border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:7px;padding:10px 12px;background:var(--bg)}
+.card .l{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut)}
+.card .v{font-size:20px;font-weight:700;color:var(--navy);margin-top:3px;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--mut);
+padding:6px 8px;border-bottom:1.5px solid var(--navy);white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tfoot td{font-weight:700;border-top:1.5px solid var(--navy);border-bottom:none}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.muted{color:var(--mut)}
+.pill{display:inline-block;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:999px;border:1px solid var(--line)}
+.sev-high{background:#fbeaea;color:var(--red);border-color:#f0c4c4}
+.sev-medium{background:#fdf6e7;color:var(--warn);border-color:#f0dfb5}
+.sev-low,.sev-info{background:#eef3fe;color:#1f4fb0;border-color:#c9d8fb}
+.pass{color:var(--green);font-weight:700}.fail{color:var(--red);font-weight:700}
+.note{font-size:11.5px;color:var(--mut);line-height:1.55;margin-top:24px;border-top:1px solid var(--line);padding-top:12px}
+.dl a{display:inline-block;margin:0 8px 8px 0;padding:7px 12px;border:1px solid var(--acc);border-radius:6px;
+text-decoration:none;font-size:12.5px;font-weight:600}
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.party{border:1px solid var(--line);border-radius:7px;padding:12px;background:var(--bg)}
+.party .l{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
+.warnbox{margin-top:14px;font-size:12px;color:var(--warn);background:#fdf6e7;border:1px solid #f0dfb5;border-radius:7px;padding:9px 12px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media (max-width:640px){.parties{grid-template-columns:1fr}.meta{text-align:left}}
+@media print{.dl,.noprint{display:none}.page{padding:0}a{color:inherit;text-decoration:none}}
+</style></head><body><div class='page'><div class='top'><div><div class='brand'>Counterra · payment-backed invoice</div><h1>Invoice</h1><div class='sub mono'>CTR-202610-2D299C-21B686</div></div><div class='meta'>Issue date <b>2026-10-31</b><br>Service period <b>2026-10-01 – 2026-10-31</b><br>Currency <b>USDC on Base</b><br>Status <b>PAID</b> (settled on-chain)</div></div><div class='parties'><div class='party'><div class='l'>From (seller)</div>www.ax1.vc<br><span class='mono'>0x7284d41b5b852f2bd4c99bdf95043d84452d299c</span></div><div class='party'><div class='l'>To (buyer)</div>x402 buyer wallet<br><span class='mono'>0x989f14836c2cc4960fd052cf76c8cf053121b686</span></div></div><div class='warnbox'>Payment-backed record. To use as a tax invoice, the seller's legal name, address and tax ID must be added (Counterra: <span class='mono'>statement --issuer issuer.json</span>).</div><h2>Line items</h2><div class='tw'><table><thead><tr><th>Description</th><th class='num'>Qty</th><th class='num'>Unit price</th><th class='num'>Amount</th></tr></thead><tbody><tr><td>x402 paid requests @ $0.02</td><td class='num'>8</td><td class='num'>$0.02</td><td class='num'>$0.160000</td></tr></tbody><tfoot><tr><td colspan='3'>Total (rounded to cents)</td><td class='num'>$0.16</td></tr><tr><td colspan='3' class='muted' style='font-weight:400'>Amount paid on-chain (exact)</td><td class='num muted' style='font-weight:400'>$0.160000</td></tr><tr><td colspan='3'>Balance due</td><td class='num'>$0.00</td></tr></tfoot></table></div><h2>Settlement evidence (8 payments)</h2><div class='tw'><table><thead><tr><th>Time (UTC)</th><th>Transaction</th><th>Path</th><th class='num'>Amount</th></tr></thead><tbody><tr><td class='num' style='text-align:left'>2026-10-31 15:01:31</td><td class='mono'><a href='https://basescan.org/tx/0x56dbb515c6bf31280b9100c0ad5a6d014bb8c554f6feeaba3c525c56f4785bb3'>0x56dbb5…5bb3</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-31 15:01:47</td><td class='mono'><a href='https://basescan.org/tx/0xc14bd9856728adab5aa67d80d2534635da6cc2934b8adb2d4243fc7503857dff'>0xc14bd9…7dff</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-31 15:01:49</td><td class='mono'><a href='https://basescan.org/tx/0x1ccf22c428d7d91e237f03c160e6d6f4988ee77ecbe55f294932daafc1b0961b'>0x1ccf22…961b</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-31 15:02:11</td><td class='mono'><a href='https://basescan.org/tx/0xa7686ed696b373d8e9d856ecb3ed8f40ac26b4d95874593ec46691fb69aaf55d'>0xa7686e…f55d</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-31 15:02:49</td><td class='mono'><a href='https://basescan.org/tx/0x726ad79ebec746c977676ada9aac837c3689d3e009f81ce559ef0cdaae1ac21e'>0x726ad7…c21e</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-31 15:02:51</td><td class='mono'><a href='https://basescan.org/tx/0x093dac856518ccbc627e9edbad56da32f6da5b4f83173f19354f60ffd28808a4'>0x093dac…08a4</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-31 15:03:13</td><td class='mono'><a href='https://basescan.org/tx/0xed92a50e71e1ea99a1df04b1d3da15fd5b7440ae6b1b7cfbc59f022b91000bc0'>0xed92a5…0bc0</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-31 21:01:35</td><td class='mono'><a href='https://basescan.org/tx/0x463f4597561673c35c3485e073b7257b48dabe6ef426e0ce0a397c873a6c0dff'>0x463f45…0dff</a></td><td>exact</td><td class='num'>$0.02</td></tr></tbody></table></div><p class='noprint' style='margin-top:18px'><a href='../index.html'>← Back to statement</a></p><div class='note'>Generated by Counterra from public on-chain x402 settlements. Invoices are payment-backed records of what was paid; they become tax invoices only once the issuer&#x27;s legal name, address and tax ID are added, and tax treatment depends on jurisdiction. Figures cover decoded x402 settlements only, not the wallet&#x27;s full balance. Not tax or legal advice.</div></div></body></html>

@@ -1,0 +1,296 @@
+{
+ "generated_at": "2026-11-01T03:05:11+00:00",
+ "wallet": "0x7662e00f8ab4c362166e1ff649ff6c2a638c80ad",
+ "chain": "base",
+ "role": "seller",
+ "period": "2026-10",
+ "period_start": "2026-10-01",
+ "period_end": "2026-10-31",
+ "name": "ai.glianalabs.com",
+ "tier": "verified",
+ "evidence": "payTo resolved from seller's own endpoint: https://ai.glianalabs.com/llms.txt [bazaar-merchant-link]",
+ "issuer": {},
+ "summary": {
+  "payments": 4,
+  "counterparties": 3,
+  "total": 5.22,
+  "total_exact": 5.224,
+  "escrow_deposits": 0.0,
+  "first": "2026-10-28T21:17:05+00:00",
+  "last": "2026-10-31T21:10:55+00:00",
+  "days_active": 3,
+  "exceptions": 1
+ },
+ "counterparties": [
+  {
+   "wallet": "0x61d3dde1f31094bbceb611e4686663a72dbe7548",
+   "name": "",
+   "tier": "buyer",
+   "category": "x402 revenue",
+   "account": "4100 - x402 Revenue",
+   "payments": 2,
+   "amount_exact": 5.22,
+   "amount": 5.22,
+   "first": "2026-10-31T21:02:09+00:00",
+   "last": "2026-10-31T21:10:55+00:00",
+   "flags": []
+  },
+  {
+   "wallet": "0x1ec5840530f6730507162035e4924c49ccf9679d",
+   "name": "",
+   "tier": "buyer",
+   "category": "x402 revenue",
+   "account": "4100 - x402 Revenue",
+   "payments": 1,
+   "amount_exact": 0.002,
+   "amount": 0.0,
+   "first": "2026-10-28T21:17:05+00:00",
+   "last": "2026-10-28T21:17:05+00:00",
+   "flags": []
+  },
+  {
+   "wallet": "0xc9c7b38c0942914fc8ea12063bc92dcd3b581670",
+   "name": "",
+   "tier": "buyer",
+   "category": "x402 revenue",
+   "account": "4100 - x402 Revenue",
+   "payments": 1,
+   "amount_exact": 0.002,
+   "amount": 0.0,
+   "first": "2026-10-30T06:02:07+00:00",
+   "last": "2026-10-30T06:02:07+00:00",
+   "flags": []
+  }
+ ],
+ "invoices": [
+  {
+   "number": "CTR-202610-8C80AD-BE7548",
+   "kind": "issued",
+   "issue_date": "2026-10-31",
+   "service_period": [
+    "2026-10-01",
+    "2026-10-31"
+   ],
+   "seller": {
+    "wallet": "0x7662e00f8ab4c362166e1ff649ff6c2a638c80ad",
+    "name": "ai.glianalabs.com"
+   },
+   "buyer": {
+    "wallet": "0x61d3dde1f31094bbceb611e4686663a72dbe7548"
+   },
+   "currency": "USDC",
+   "chain": "base",
+   "lines": [
+    {
+     "description": "x402 paid requests @ $2.61",
+     "quantity": 2,
+     "unit_price": 2.61,
+     "amount_exact": 5.22
+    }
+   ],
+   "total": 5.22,
+   "total_exact": 5.22,
+   "payments": [
+    {
+     "ts": "2026-10-31T21:02:09+00:00",
+     "tx": "0xd99732c844f1eff5729ddbc0807f1210bc941fcdc5806c41b9a5d49a26c5beb7",
+     "amount": 2.61,
+     "path": "permit2",
+     "facilitator": "Coinbase"
+    },
+    {
+     "ts": "2026-10-31T21:10:55+00:00",
+     "tx": "0x201eceb439c3a94c625f6ae82d34f1fc150a8f00f68c6aa858f8c0ff439a9781",
+     "amount": 2.61,
+     "path": "permit2",
+     "facilitator": "Coinbase"
+    }
+   ],
+   "tax_ready": false
+  },
+  {
+   "number": "CTR-202610-8C80AD-F9679D",
+   "kind": "issued",
+   "issue_date": "2026-10-31",
+   "service_period": [
+    "2026-10-01",
+    "2026-10-31"
+   ],
+   "seller": {
+    "wallet": "0x7662e00f8ab4c362166e1ff649ff6c2a638c80ad",
+    "name": "ai.glianalabs.com"
+   },
+   "buyer": {
+    "wallet": "0x1ec5840530f6730507162035e4924c49ccf9679d"
+   },
+   "currency": "USDC",
+   "chain": "base",
+   "lines": [
+    {
+     "description": "x402 paid requests @ $0.002",
+     "quantity": 1,
+     "unit_price": 0.002,
+     "amount_exact": 0.002
+    }
+   ],
+   "total": 0.0,
+   "total_exact": 0.002,
+   "payments": [
+    {
+     "ts": "2026-10-28T21:17:05+00:00",
+     "tx": "0x599308125359a2b3d269a0c0e0811547fd0b1023de16c8c08c57a425805c72c3",
+     "amount": 0.002,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    }
+   ],
+   "tax_ready": false
+  },
+  {
+   "number": "CTR-202610-8C80AD-581670",
+   "kind": "issued",
+   "issue_date": "2026-10-31",
+   "service_period": [
+    "2026-10-01",
+    "2026-10-31"
+   ],
+   "seller": {
+    "wallet": "0x7662e00f8ab4c362166e1ff649ff6c2a638c80ad",
+    "name": "ai.glianalabs.com"
+   },
+   "buyer": {
+    "wallet": "0xc9c7b38c0942914fc8ea12063bc92dcd3b581670"
+   },
+   "currency": "USDC",
+   "chain": "base",
+   "lines": [
+    {
+     "description": "x402 paid requests @ $0.002",
+     "quantity": 1,
+     "unit_price": 0.002,
+     "amount_exact": 0.002
+    }
+   ],
+   "total": 0.0,
+   "total_exact": 0.002,
+   "payments": [
+    {
+     "ts": "2026-10-30T06:02:07+00:00",
+     "tx": "0xd1b53c44933f240b436d881677da1f7f1d07f02592c379a68837faa66f9563ca",
+     "amount": 0.002,
+     "path": "exact",
+     "facilitator": "Coinbase"
+    }
+   ],
+   "tax_ready": false
+  }
+ ],
+ "exceptions": [
+  {
+   "severity": "info",
+   "type": "customer concentration",
+   "counterparty": "0x61d3dde1f31094bbceb611e4686663a72dbe7548",
+   "amount": 5.22,
+   "payments": 2,
+   "detail": "100% of this month's revenue came from one buyer wallet"
+  }
+ ],
+ "journal": [
+  {
+   "period": "2026-10",
+   "debit_account": "1085 - Digital Assets (USDC)",
+   "credit_account": "4100 - x402 Revenue",
+   "amount_usd": 5.22,
+   "provider": "buyer 0x61d3dd\u20267548",
+   "category": "x402 revenue",
+   "settlements": 2,
+   "memo": "x402 revenue 2026-10 - buyer 0x61d3dd\u20267548 (2 settlements)"
+  }
+ ],
+ "tie_out": {
+  "payments_exact": 5.224,
+  "statement": 5.22,
+  "invoices": 5.22,
+  "journal": 5.22,
+  "rounding_difference": -0.004,
+  "sub_cent_counterparties": 0.0,
+  "checks": [
+   {
+    "check": "Statement total equals sum of invoices",
+    "pass": true
+   },
+   {
+    "check": "Statement total equals journal total",
+    "pass": true
+   },
+   {
+    "check": "Every payment appears on exactly one invoice",
+    "pass": true
+   },
+   {
+    "check": "Statement total equals the exact payments total, rounded once",
+    "pass": true
+   },
+   {
+    "check": "QuickBooks file balances (debits = credits)",
+    "pass": true
+   },
+   {
+    "check": "Xero file balances (debits = credits)",
+    "pass": true
+   },
+   {
+    "check": "QuickBooks and Xero files total the statement",
+    "pass": true
+   }
+  ],
+  "all_pass": true,
+  "exports": {
+   "quickbooks_debits": 5.22,
+   "xero_debits": 5.22
+  }
+ },
+ "payments": [
+  {
+   "ts": "2026-10-28T21:17:05+00:00",
+   "tx": "0x599308125359a2b3d269a0c0e0811547fd0b1023de16c8c08c57a425805c72c3",
+   "counterparty": "0x1ec5840530f6730507162035e4924c49ccf9679d",
+   "amount": 0.002,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-30T06:02:07+00:00",
+   "tx": "0xd1b53c44933f240b436d881677da1f7f1d07f02592c379a68837faa66f9563ca",
+   "counterparty": "0xc9c7b38c0942914fc8ea12063bc92dcd3b581670",
+   "amount": 0.002,
+   "path": "exact",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-31T21:02:09+00:00",
+   "tx": "0xd99732c844f1eff5729ddbc0807f1210bc941fcdc5806c41b9a5d49a26c5beb7",
+   "counterparty": "0x61d3dde1f31094bbceb611e4686663a72dbe7548",
+   "amount": 2.61,
+   "path": "permit2",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  },
+  {
+   "ts": "2026-10-31T21:10:55+00:00",
+   "tx": "0x201eceb439c3a94c625f6ae82d34f1fc150a8f00f68c6aa858f8c0ff439a9781",
+   "counterparty": "0x61d3dde1f31094bbceb611e4686663a72dbe7548",
+   "amount": 2.61,
+   "path": "permit2",
+   "facilitator": "Coinbase",
+   "category": "AI inference",
+   "flags": []
+  }
+ ],
+ "disclaimer": "Generated by Counterra from public on-chain x402 settlements. Invoices are payment-backed records of what was paid; they become tax invoices only once the issuer's legal name, address and tax ID are added, and tax treatment depends on jurisdiction. Figures cover decoded x402 settlements only, not the wallet's full balance. Not tax or legal advice."
+}

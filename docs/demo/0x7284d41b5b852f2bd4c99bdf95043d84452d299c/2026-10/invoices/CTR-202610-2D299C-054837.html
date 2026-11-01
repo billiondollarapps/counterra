@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>CTR-202610-2D299C-054837</title><style>
+:root{--navy:#15243b;--acc:#2f6fed;--ink:#1c1e22;--mut:#5f6672;--line:#e3e6ec;--bg:#f7f8fa;
+--green:#177245;--red:#b23b3b;--warn:#8a5a00}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--ink);background:#fff;font-size:13.5px}
+.page{max-width:900px;margin:0 auto;padding:32px 24px 56px}
+a{color:#1f4fb0}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;
+border-bottom:2px solid var(--navy);padding-bottom:16px}
+.brand{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--acc)}
+h1{font-size:24px;color:var(--navy);margin-top:4px}
+.sub{color:var(--mut);margin-top:4px;line-height:1.5}
+.meta{text-align:right;color:var(--mut);font-size:12.5px;line-height:1.6}
+.meta b{color:var(--ink)}
+h2{font-size:11px;letter-spacing:2.2px;text-transform:uppercase;color:#1f4fb0;margin:26px 0 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
+.card{border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:7px;padding:10px 12px;background:var(--bg)}
+.card .l{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut)}
+.card .v{font-size:20px;font-weight:700;color:var(--navy);margin-top:3px;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--mut);
+padding:6px 8px;border-bottom:1.5px solid var(--navy);white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tfoot td{font-weight:700;border-top:1.5px solid var(--navy);border-bottom:none}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.muted{color:var(--mut)}
+.pill{display:inline-block;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:999px;border:1px solid var(--line)}
+.sev-high{background:#fbeaea;color:var(--red);border-color:#f0c4c4}
+.sev-medium{background:#fdf6e7;color:var(--warn);border-color:#f0dfb5}
+.sev-low,.sev-info{background:#eef3fe;color:#1f4fb0;border-color:#c9d8fb}
+.pass{color:var(--green);font-weight:700}.fail{color:var(--red);font-weight:700}
+.note{font-size:11.5px;color:var(--mut);line-height:1.55;margin-top:24px;border-top:1px solid var(--line);padding-top:12px}
+.dl a{display:inline-block;margin:0 8px 8px 0;padding:7px 12px;border:1px solid var(--acc);border-radius:6px;
+text-decoration:none;font-size:12.5px;font-weight:600}
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.party{border:1px solid var(--line);border-radius:7px;padding:12px;background:var(--bg)}
+.party .l{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
+.warnbox{margin-top:14px;font-size:12px;color:var(--warn);background:#fdf6e7;border:1px solid #f0dfb5;border-radius:7px;padding:9px 12px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media (max-width:640px){.parties{grid-template-columns:1fr}.meta{text-align:left}}
+@media print{.dl,.noprint{display:none}.page{padding:0}a{color:inherit;text-decoration:none}}
+</style></head><body><div class='page'><div class='top'><div><div class='brand'>Counterra · payment-backed invoice</div><h1>Invoice</h1><div class='sub mono'>CTR-202610-2D299C-054837</div></div><div class='meta'>Issue date <b>2026-10-31</b><br>Service period <b>2026-10-01 – 2026-10-31</b><br>Currency <b>USDC on Base</b><br>Status <b>PAID</b> (settled on-chain)</div></div><div class='parties'><div class='party'><div class='l'>From (seller)</div>www.ax1.vc<br><span class='mono'>0x7284d41b5b852f2bd4c99bdf95043d84452d299c</span></div><div class='party'><div class='l'>To (buyer)</div>x402 buyer wallet<br><span class='mono'>0x766a2b6756402d92603a5ff7733453037a054837</span></div></div><div class='warnbox'>Payment-backed record. To use as a tax invoice, the seller's legal name, address and tax ID must be added (Counterra: <span class='mono'>statement --issuer issuer.json</span>).</div><h2>Line items</h2><div class='tw'><table><thead><tr><th>Description</th><th class='num'>Qty</th><th class='num'>Unit price</th><th class='num'>Amount</th></tr></thead><tbody><tr><td>x402 paid requests @ $0.02</td><td class='num'>10</td><td class='num'>$0.02</td><td class='num'>$0.200000</td></tr></tbody><tfoot><tr><td colspan='3'>Total (rounded to cents)</td><td class='num'>$0.20</td></tr><tr><td colspan='3' class='muted' style='font-weight:400'>Amount paid on-chain (exact)</td><td class='num muted' style='font-weight:400'>$0.200000</td></tr><tr><td colspan='3'>Balance due</td><td class='num'>$0.00</td></tr></tfoot></table></div><h2>Settlement evidence (10 payments)</h2><div class='tw'><table><thead><tr><th>Time (UTC)</th><th>Transaction</th><th>Path</th><th class='num'>Amount</th></tr></thead><tbody><tr><td class='num' style='text-align:left'>2026-10-27 21:03:35</td><td class='mono'><a href='https://basescan.org/tx/0x15977a6f202261d374ef33613ac0a09e636edb199c69839659b5c6e26ac5b8b8'>0x15977a…b8b8</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-27 21:04:33</td><td class='mono'><a href='https://basescan.org/tx/0x1e185d507071378734a981ac232f019ae25063844208b0ab416c0ac184b1984b'>0x1e185d…984b</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-27 21:04:43</td><td class='mono'><a href='https://basescan.org/tx/0x255279d3133729c09cbe54826aff433d8faff4a968ec688d084cd9d464e8004c'>0x255279…004c</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-27 21:04:55</td><td class='mono'><a href='https://basescan.org/tx/0x80dbf9fb3c8566c74dbeafb28405c5af44088a7f3c71fe2804ed5dcdbf60cb79'>0x80dbf9…cb79</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-27 21:05:07</td><td class='mono'><a href='https://basescan.org/tx/0x5f73e9170ae86468005db3c93120952330c706f29804e5b69bef95472e9bd57f'>0x5f73e9…d57f</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-27 21:05:25</td><td class='mono'><a href='https://basescan.org/tx/0x527898651af95454488893c5845a4a5e83216b878944fbc0f6bc6436b198cf75'>0x527898…cf75</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-27 21:05:37</td><td class='mono'><a href='https://basescan.org/tx/0x363cc439c39450eec67716d2b160176bca7eee17360de661d876ecb11cd185c5'>0x363cc4…85c5</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-27 21:05:51</td><td class='mono'><a href='https://basescan.org/tx/0xef79abb60c79ea30a9148f7ced2f059e1792effe1bf1f472b5205a59584a6d05'>0xef79ab…6d05</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-27 21:06:03</td><td class='mono'><a href='https://basescan.org/tx/0x10df8973cdd6925d5f57249253e0ad8fcf81334daafb5fd6e6096e17d6ab6779'>0x10df89…6779</a></td><td>exact</td><td class='num'>$0.02</td></tr><tr><td class='num' style='text-align:left'>2026-10-27 21:06:19</td><td class='mono'><a href='https://basescan.org/tx/0x641a66ffbd170c7f59bcf8bb542bea48780bded4a7b4c9beda175893780bbcfa'>0x641a66…bcfa</a></td><td>exact</td><td class='num'>$0.02</td></tr></tbody></table></div><p class='noprint' style='margin-top:18px'><a href='../index.html'>← Back to statement</a></p><div class='note'>Generated by Counterra from public on-chain x402 settlements. Invoices are payment-backed records of what was paid; they become tax invoices only once the issuer&#x27;s legal name, address and tax ID are added, and tax treatment depends on jurisdiction. Figures cover decoded x402 settlements only, not the wallet&#x27;s full balance. Not tax or legal advice.</div></div></body></html>
