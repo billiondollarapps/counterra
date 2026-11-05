@@ -1,10 +1,11 @@
 # Counterra x402 revenue ledger
-# seller,0x07f067959297767c887dbfa3c72379c66e82a045,base,Unidentified metered API
+# seller,0x07f067959297767c887dbfa3c72379c66e82a045,base,Unidentified tiered service
 # scope,"Observed x402 settlements only. Base is sampled from the chain (free RPC tier: a fraction of all blocks); Solana is swept from known facilitators. Every figure is a floor, not a census."
-# generated,2026-11-05T04:08:00+00:00
+# generated,2026-11-05T13:47:11+00:00
 
 section,period,debit_account,credit_account,amount_usd,settlements,buyers,memo
 journal,2026-10,1085 - Digital Assets (USDC),4100 - x402 Revenue,1.820000,10,2,x402 revenue 2026-10 (10 settlements aggregated)
+journal,2026-11,1085 - Digital Assets (USDC),4100 - x402 Revenue,0.200000,4,1,x402 revenue 2026-11 (4 settlements aggregated)
 
 section,timestamp_utc,tx_hash,buyer_wallet,amount_usdc,settlement_path,facilitator,chain
 payment,2026-10-28T15:59:39+00:00,0x87cc540cf6a899e1f45da802af08a5adedd3111785ff6445ca47b8d15ba3d023,0xc4a30220296e967fad47689d2a29b3efaea28060,0.210000,exact,Coinbase,base
@@ -17,3 +18,7 @@ payment,2026-10-28T16:02:37+00:00,0x59b167899d5087c2584a96ce4601b6259d1cd862573a
 payment,2026-10-28T16:02:41+00:00,0x4fb2019d69feee573c83479a885d4d87612b65e50015207666553c102837c0c8,0xc4a30220296e967fad47689d2a29b3efaea28060,0.210000,exact,Coinbase,base
 payment,2026-10-31T14:50:37+00:00,0x7ba0b97449f450a78525ac79ff1cb26511286471a97d93d322154a72a099b48d,0xda677724c32e1bd7b506cabcd52067a42f1b3ea7,0.070000,exact,Coinbase,base
 payment,2026-10-31T14:50:37+00:00,0xef8515ea1b533780ed4c30a03fd9d5ec38299b877eb31afa9e2e2242a711c9ef,0xda677724c32e1bd7b506cabcd52067a42f1b3ea7,0.070000,exact,Coinbase,base
+payment,2026-11-05T07:45:39+00:00,0x235f5d8b8feb0174a81badfa27aa9c2575616e401232ad47d80f0ee2a7ce4d6b,0xe2d8dc842fc5037c99c332bd57baaba3649f66c2,0.050000,exact,Coinbase,base
+payment,2026-11-05T07:45:41+00:00,0xbbdc82e815564dab8b8264395ac88511a5338a73f0e499538c245af46de52e92,0xe2d8dc842fc5037c99c332bd57baaba3649f66c2,0.050000,exact,Coinbase,base
+payment,2026-11-05T07:45:47+00:00,0xbb4b5114573d1e43d700554773b8cfbd8a88bc9ca6a5fc0815b6cb0cde8742ba,0xe2d8dc842fc5037c99c332bd57baaba3649f66c2,0.050000,exact,Coinbase,base
+payment,2026-11-05T07:45:51+00:00,0xae81b25a869f4824703ea02d182bc37ef955ef4b79d2b33a922bdac3d8ad62b2,0xe2d8dc842fc5037c99c332bd57baaba3649f66c2,0.050000,exact,Coinbase,base
