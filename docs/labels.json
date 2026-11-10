@@ -1,7 +1,7 @@
 {
  "$schema_note": "Counterra network label book: every seller, facilitator and x402 contract seen in the ledger, with an evidence tier. Tiers: hard-stop > verified > protocol > probable > behavioral > unknown. 'behavioral' is a spend TYPE inferred from settlement pattern, never an identity. Buyers are not published. Regenerate: counterra.py label --write",
  "version": 1,
- "generated_at": "2026-11-09T14:42:25+00:00",
+ "generated_at": "2026-11-10T01:05:06+00:00",
  "wallets": [
   {
    "wallet": "3MZVk97x9SeRxbYpc3jhzRfU2fyA3emYutnqfn9kNfYX",
@@ -40,12 +40,12 @@
     "facilitator"
    ],
    "as_seller": {
-    "settlements": 70,
-    "usd": 2127.268954,
+    "settlements": 71,
+    "usd": 2139.854994,
     "buyers": 7,
     "first_seen": "2026-10-26T11:39:05+00:00",
-    "last_seen": "2026-11-09T13:08:17+00:00",
-    "price_points": 70
+    "last_seen": "2026-11-09T21:08:15+00:00",
+    "price_points": 71
    }
   },
   {
@@ -61,11 +61,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 33599,
-    "usd": 663.1,
+    "settlements": 33671,
+    "usd": 663.83,
     "buyers": 1335,
     "first_seen": "2026-09-08T15:30:43+00:00",
-    "last_seen": "2026-11-09T13:17:03+00:00",
+    "last_seen": "2026-11-09T22:39:45+00:00",
     "price_points": 2
    }
   },
@@ -82,12 +82,12 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 6184,
-    "usd": 178.380184,
-    "buyers": 78,
+    "settlements": 6197,
+    "usd": 179.627524,
+    "buyers": 80,
     "first_seen": "2026-07-21T13:25:21+00:00",
-    "last_seen": "2026-11-09T12:32:57+00:00",
-    "price_points": 4404
+    "last_seen": "2026-11-09T22:34:53+00:00",
+    "price_points": 4411
    }
   },
   {
@@ -166,11 +166,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 33,
-    "usd": 40.26,
+    "settlements": 35,
+    "usd": 40.28,
     "buyers": 6,
     "first_seen": "2026-08-03T01:32:03+00:00",
-    "last_seen": "2026-11-08T22:01:59+00:00",
+    "last_seen": "2026-11-09T22:28:21+00:00",
     "price_points": 3
    }
   },
@@ -208,11 +208,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 1130,
-    "usd": 20.8104,
+    "settlements": 1133,
+    "usd": 21.2504,
     "buyers": 62,
     "first_seen": "2026-07-21T13:26:51+00:00",
-    "last_seen": "2026-11-09T13:03:57+00:00",
+    "last_seen": "2026-11-09T19:43:27+00:00",
     "price_points": 14
    }
   },
@@ -229,11 +229,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 1033,
-    "usd": 20.612,
+    "settlements": 1034,
+    "usd": 20.632,
     "buyers": 28,
     "first_seen": "2026-01-03T20:01:49+00:00",
-    "last_seen": "2026-11-09T14:33:12+00:00",
+    "last_seen": "2026-11-10T00:55:00+00:00",
     "price_points": 3
    }
   },
@@ -250,12 +250,12 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 7089,
-    "usd": 19.575731,
+    "settlements": 7206,
+    "usd": 19.881863,
     "buyers": 199,
     "first_seen": "2026-07-21T13:26:13+00:00",
-    "last_seen": "2026-11-09T13:16:19+00:00",
-    "price_points": 678
+    "last_seen": "2026-11-09T22:49:33+00:00",
+    "price_points": 687
    }
   },
   {
@@ -301,6 +301,27 @@
    }
   },
   {
+   "wallet": "0xabf4fabd7c416fb67202e5f9002389fc75e2a9d0",
+   "chain": "base",
+   "name": "agent402.tools",
+   "category": "Uncategorized",
+   "tier": "verified",
+   "evidence": "payTo resolved from seller's own endpoint: https://agent402.tools/.well-known/x402 [key:payTo]",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 276,
+    "usd": 7.055889,
+    "buyers": 21,
+    "first_seen": "2026-07-27T19:09:05+00:00",
+    "last_seen": "2026-11-09T22:49:55+00:00",
+    "price_points": 23
+   }
+  },
+  {
    "wallet": "0xcfa26f13c6c18307033ece13bbb8f470da5b4dbe",
    "chain": "base",
    "name": "stablesocial.dev",
@@ -319,27 +340,6 @@
     "first_seen": "2026-07-22T13:16:51+00:00",
     "last_seen": "2026-11-02T18:14:15+00:00",
     "price_points": 1
-   }
-  },
-  {
-   "wallet": "0xabf4fabd7c416fb67202e5f9002389fc75e2a9d0",
-   "chain": "base",
-   "name": "agent402.tools",
-   "category": "Uncategorized",
-   "tier": "verified",
-   "evidence": "payTo resolved from seller's own endpoint: https://agent402.tools/.well-known/x402 [key:payTo]",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 245,
-    "usd": 6.768378,
-    "buyers": 21,
-    "first_seen": "2026-07-27T19:09:05+00:00",
-    "last_seen": "2026-11-09T13:13:23+00:00",
-    "price_points": 23
    }
   },
   {
@@ -486,11 +486,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 135,
-    "usd": 3.07,
+    "settlements": 137,
+    "usd": 3.08,
     "buyers": 6,
     "first_seen": "2026-07-23T08:06:27+00:00",
-    "last_seen": "2026-10-31T21:25:15+00:00",
+    "last_seen": "2026-11-09T19:51:21+00:00",
     "price_points": 17
    }
   },
@@ -614,11 +614,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 196,
-    "usd": 1.272,
-    "buyers": 64,
+    "settlements": 199,
+    "usd": 1.287,
+    "buyers": 65,
     "first_seen": "2026-07-22T08:04:43+00:00",
-    "last_seen": "2026-11-09T11:00:51+00:00",
+    "last_seen": "2026-11-09T21:57:17+00:00",
     "price_points": 4
    }
   },
@@ -635,11 +635,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 374,
-    "usd": 0.748,
-    "buyers": 6,
+    "settlements": 376,
+    "usd": 0.752,
+    "buyers": 7,
     "first_seen": "2026-10-26T20:43:39+00:00",
-    "last_seen": "2026-11-09T00:53:57+00:00",
+    "last_seen": "2026-11-09T20:21:49+00:00",
     "price_points": 1
    }
   },
@@ -803,11 +803,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 132,
-    "usd": 0.273,
-    "buyers": 22,
+    "settlements": 133,
+    "usd": 0.274,
+    "buyers": 23,
     "first_seen": "2026-07-21T13:27:11+00:00",
-    "last_seen": "2026-11-09T11:29:57+00:00",
+    "last_seen": "2026-11-09T19:07:27+00:00",
     "price_points": 6
    }
   },
@@ -1234,6 +1234,27 @@
    }
   },
   {
+   "wallet": "0x367f1b3d8ca90d1e087481a9a40d585bf3451a03",
+   "chain": "base",
+   "name": "x402-agent-pay.com",
+   "category": "Uncategorized",
+   "tier": "verified",
+   "evidence": "payTo resolved from seller's own endpoint: https://x402-agent-pay.com [GET 402 body] [address-in-text]",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 5,
+    "usd": 0.015,
+    "buyers": 5,
+    "first_seen": "2026-09-04T19:49:43+00:00",
+    "last_seen": "2026-11-09T20:44:45+00:00",
+    "price_points": 3
+   }
+  },
+  {
    "wallet": "0x4cb662b1aaa109ddd603050a0a39687b1d4a1abb",
    "chain": "base",
    "name": "brianbooms.com",
@@ -1293,27 +1314,6 @@
     "buyers": 1,
     "first_seen": "2026-10-31T21:05:43+00:00",
     "last_seen": "2026-11-06T00:20:56+00:00",
-    "price_points": 2
-   }
-  },
-  {
-   "wallet": "0x367f1b3d8ca90d1e087481a9a40d585bf3451a03",
-   "chain": "base",
-   "name": "x402-agent-pay.com",
-   "category": "Uncategorized",
-   "tier": "verified",
-   "evidence": "payTo resolved from seller's own endpoint: https://x402-agent-pay.com [GET 402 body] [address-in-text]",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 4,
-    "usd": 0.013,
-    "buyers": 4,
-    "first_seen": "2026-09-04T19:49:43+00:00",
-    "last_seen": "2026-11-01T06:36:51+00:00",
     "price_points": 2
    }
   },
@@ -1637,6 +1637,27 @@
    }
   },
   {
+   "wallet": "0x21f4a2da07bcce60878cab223358d11ad8f11a94",
+   "chain": "base",
+   "name": "intel.degenscan.io",
+   "category": "Uncategorized",
+   "tier": "verified",
+   "evidence": "payTo resolved from seller's own endpoint: https://intel.degenscan.io/.well-known/x402 [key:payTo]",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.004,
+    "buyers": 2,
+    "first_seen": "2026-10-27T05:32:33+00:00",
+    "last_seen": "2026-11-09T21:11:29+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0x9863ab6242663fcc84c33632741711db78f8fd15",
    "chain": "base",
    "name": "agentservices.to",
@@ -1738,27 +1759,6 @@
     "buyers": 2,
     "first_seen": "2026-09-04T20:04:07+00:00",
     "last_seen": "2026-10-30T11:34:37+00:00",
-    "price_points": 1
-   }
-  },
-  {
-   "wallet": "0x21f4a2da07bcce60878cab223358d11ad8f11a94",
-   "chain": "base",
-   "name": "intel.degenscan.io",
-   "category": "Uncategorized",
-   "tier": "verified",
-   "evidence": "payTo resolved from seller's own endpoint: https://intel.degenscan.io/.well-known/x402 [key:payTo]",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.002,
-    "buyers": 1,
-    "first_seen": "2026-10-27T05:32:33+00:00",
-    "last_seen": "2026-10-27T05:32:33+00:00",
     "price_points": 1
    }
   },
@@ -4235,18 +4235,18 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "18 distinct price points ($0.5-$15) each recurring across 492 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "18 distinct price points ($0.5-$15) each recurring across 501 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 492,
-    "usd": 1092.4,
+    "settlements": 501,
+    "usd": 1130.2,
     "buyers": 27,
     "first_seen": "2026-07-21T18:59:55+00:00",
-    "last_seen": "2026-11-09T13:09:27+00:00",
+    "last_seen": "2026-11-09T22:42:27+00:00",
     "price_points": 18
    }
   },
@@ -4256,19 +4256,19 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "5 distinct price points ($3.87-$215) each recurring across 11 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "6 distinct price points ($3.87-$215) each recurring across 13 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 11,
-    "usd": 562.68,
-    "buyers": 8,
+    "settlements": 13,
+    "usd": 574.54,
+    "buyers": 10,
     "first_seen": "2026-10-27T10:59:43+00:00",
-    "last_seen": "2026-11-09T09:35:57+00:00",
-    "price_points": 5
+    "last_seen": "2026-11-09T21:16:11+00:00",
+    "price_points": 6
    }
   },
   {
@@ -4385,6 +4385,29 @@
    }
   },
   {
+   "wallet": "0x475436ef0a97286081d0fc2a762ad6296949327b",
+   "chain": "base",
+   "name": "Unidentified bulk purchase",
+   "category": "Unidentified - bulk purchase",
+   "tier": "behavioral",
+   "evidence": "8 settlements, median $26.3375 (top $34.4112), mostly distinct amounts - suggests reports, datasets or compute jobs rather than API metering",
+   "confidence": "medium",
+   "flags": [
+    "round-trip"
+   ],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 8,
+    "usd": 202.033421,
+    "buyers": 1,
+    "first_seen": "2026-10-30T21:09:45+00:00",
+    "last_seen": "2026-11-09T21:08:15+00:00",
+    "price_points": 8
+   }
+  },
+  {
    "wallet": "0x593c8f423f64c1f0be76a2bdb68815d82eca4c89",
    "chain": "base",
    "name": "Unidentified bulk purchase",
@@ -4404,29 +4427,6 @@
     "buyers": 1,
     "first_seen": "2026-10-27T05:24:01+00:00",
     "last_seen": "2026-11-06T17:31:50+00:00",
-    "price_points": 7
-   }
-  },
-  {
-   "wallet": "0x475436ef0a97286081d0fc2a762ad6296949327b",
-   "chain": "base",
-   "name": "Unidentified bulk purchase",
-   "category": "Unidentified - bulk purchase",
-   "tier": "behavioral",
-   "evidence": "7 settlements, median $26.9506 (top $34.4112), mostly distinct amounts - suggests reports, datasets or compute jobs rather than API metering",
-   "confidence": "medium",
-   "flags": [
-    "round-trip"
-   ],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 7,
-    "usd": 189.573241,
-    "buyers": 1,
-    "first_seen": "2026-10-30T21:09:45+00:00",
-    "last_seen": "2026-11-09T09:05:01+00:00",
     "price_points": 7
    }
   },
@@ -4501,18 +4501,18 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "4 distinct price points ($0.001-$20) each recurring across 1115 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "4 distinct price points ($0.001-$20) each recurring across 1128 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 1115,
-    "usd": 85.516,
-    "buyers": 52,
+    "settlements": 1128,
+    "usd": 85.581,
+    "buyers": 54,
     "first_seen": "2026-09-13T10:40:51+00:00",
-    "last_seen": "2026-11-09T12:20:15+00:00",
+    "last_seen": "2026-11-09T22:49:49+00:00",
     "price_points": 4
    }
   },
@@ -4591,18 +4591,18 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "3 distinct price points ($0.001-$30.01) each recurring across 9 settlements - a price list behind one wallet, not a single flat-rate API",
-   "confidence": "low",
+   "evidence": "3 distinct price points ($0.001-$30.01) each recurring across 10 settlements - a price list behind one wallet, not a single flat-rate API",
+   "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 9,
-    "usd": 36.517,
-    "buyers": 6,
+    "settlements": 10,
+    "usd": 36.518,
+    "buyers": 7,
     "first_seen": "2026-09-11T15:20:43+00:00",
-    "last_seen": "2026-11-04T17:09:09+00:00",
+    "last_seen": "2026-11-09T21:10:41+00:00",
     "price_points": 3
    }
   },
@@ -4714,45 +4714,66 @@
    }
   },
   {
-   "wallet": "0x6b7b3cb62a2d7d232bf5e0d030676bfb4f9ba4e5",
-   "chain": "base",
-   "name": "Unidentified recurring charge",
-   "category": "Unidentified - recurring charge",
-   "tier": "behavioral",
-   "evidence": "18 settlements of exactly $1 at a regular ~2.0h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
-   "confidence": "medium",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 18,
-    "usd": 18.0,
-    "buyers": 18,
-    "first_seen": "2026-11-04T22:08:19+00:00",
-    "last_seen": "2026-11-09T11:45:33+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0x8b29dabd6fbb5a09dacbc7978eaed66a8540721d",
    "chain": "base",
    "name": "Unidentified metered API",
    "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "882 settlements at 2 price point(s), all under $1 (median $0.02), median gap 58s (machine cadence) - per-call API metering",
+   "evidence": "954 settlements at 2 price point(s), all under $1 (median $0.02), median gap 58s (machine cadence) - per-call API metering",
    "confidence": "high",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 882,
-    "usd": 17.583,
-    "buyers": 234,
+    "settlements": 954,
+    "usd": 19.004,
+    "buyers": 235,
     "first_seen": "2026-10-29T16:26:25+00:00",
-    "last_seen": "2026-11-09T13:11:51+00:00",
+    "last_seen": "2026-11-09T22:39:21+00:00",
     "price_points": 2
+   }
+  },
+  {
+   "wallet": "0x6b7b3cb62a2d7d232bf5e0d030676bfb4f9ba4e5",
+   "chain": "base",
+   "name": "Unidentified recurring charge",
+   "category": "Unidentified - recurring charge",
+   "tier": "behavioral",
+   "evidence": "19 settlements of exactly $1 at a regular ~3.9h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 19,
+    "usd": 19.0,
+    "buyers": 19,
+    "first_seen": "2026-11-04T22:08:19+00:00",
+    "last_seen": "2026-11-09T22:30:59+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf000ab8b02aa5c52b62bdb10bf63312317e994fc",
+   "chain": "base",
+   "name": "Unidentified tiered service",
+   "category": "Unidentified - tiered service",
+   "tier": "behavioral",
+   "evidence": "5 distinct price points ($0.01-$0.2) each recurring across 187 settlements - a price list behind one wallet, not a single flat-rate API",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 187,
+    "usd": 16.42,
+    "buyers": 18,
+    "first_seen": "2026-07-23T18:58:57+00:00",
+    "last_seen": "2026-11-09T22:42:31+00:00",
+    "price_points": 5
    }
   },
   {
@@ -4777,33 +4798,12 @@
    }
   },
   {
-   "wallet": "0xf000ab8b02aa5c52b62bdb10bf63312317e994fc",
-   "chain": "base",
-   "name": "Unidentified tiered service",
-   "category": "Unidentified - tiered service",
-   "tier": "behavioral",
-   "evidence": "5 distinct price points ($0.01-$0.2) each recurring across 184 settlements - a price list behind one wallet, not a single flat-rate API",
-   "confidence": "medium",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 184,
-    "usd": 16.12,
-    "buyers": 18,
-    "first_seen": "2026-07-23T18:58:57+00:00",
-    "last_seen": "2026-11-08T23:36:29+00:00",
-    "price_points": 5
-   }
-  },
-  {
    "wallet": "0x9c955c40dc98fce89a133f402ffbf94070e6e299",
    "chain": "base",
    "name": "Unidentified metered API",
    "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "12447 settlements at 1 price point(s), all under $1 (median $0.001), median gap 2s (machine cadence) - per-call API metering",
+   "evidence": "12901 settlements at 1 price point(s), all under $1 (median $0.001), median gap 2s (machine cadence) - per-call API metering",
    "confidence": "high",
    "flags": [
     "closed-loop"
@@ -4812,11 +4812,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 12447,
-    "usd": 12.447,
+    "settlements": 12901,
+    "usd": 12.901,
     "buyers": 768,
     "first_seen": "2026-10-26T11:28:15+00:00",
-    "last_seen": "2026-11-09T13:16:27+00:00",
+    "last_seen": "2026-11-09T22:49:49+00:00",
     "price_points": 1
    }
   },
@@ -4826,7 +4826,7 @@
    "name": "Unidentified metered API",
    "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "12447 settlements at 1 price point(s), all under $1 (median $0.001), median gap 2s (machine cadence) - per-call API metering",
+   "evidence": "12901 settlements at 1 price point(s), all under $1 (median $0.001), median gap 2s (machine cadence) - per-call API metering",
    "confidence": "high",
    "flags": [
     "closed-loop"
@@ -4835,11 +4835,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 12447,
-    "usd": 12.447,
+    "settlements": 12901,
+    "usd": 12.901,
     "buyers": 1,
     "first_seen": "2026-10-26T11:28:15+00:00",
-    "last_seen": "2026-11-09T13:16:27+00:00",
+    "last_seen": "2026-11-09T22:49:49+00:00",
     "price_points": 1
    }
   },
@@ -4849,18 +4849,18 @@
    "name": "Unidentified metered API",
    "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "2462 settlements at 1 price point(s), all under $1 (median $0.005), median gap 22s (machine cadence) - per-call API metering",
+   "evidence": "2549 settlements at 1 price point(s), all under $1 (median $0.005), median gap 22s (machine cadence) - per-call API metering",
    "confidence": "high",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 2462,
-    "usd": 12.31,
-    "buyers": 53,
+    "settlements": 2549,
+    "usd": 12.745,
+    "buyers": 55,
     "first_seen": "2026-09-24T01:41:09+00:00",
-    "last_seen": "2026-11-09T13:12:21+00:00",
+    "last_seen": "2026-11-09T22:49:17+00:00",
     "price_points": 1
    }
   },
@@ -4870,18 +4870,18 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "3 distinct price points ($0.15-$0.55) each recurring across 34 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "3 distinct price points ($0.15-$0.55) each recurring across 37 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 34,
-    "usd": 8.7,
+    "settlements": 37,
+    "usd": 9.45,
     "buyers": 3,
     "first_seen": "2026-09-29T21:34:15+00:00",
-    "last_seen": "2026-11-09T11:09:25+00:00",
+    "last_seen": "2026-11-09T22:37:41+00:00",
     "price_points": 3
    }
   },
@@ -4935,19 +4935,40 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "3 distinct price points ($0.01-$3) each recurring across 9 settlements - a price list behind one wallet, not a single flat-rate API",
-   "confidence": "low",
+   "evidence": "3 distinct price points ($0.01-$3) each recurring across 11 settlements - a price list behind one wallet, not a single flat-rate API",
+   "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 9,
-    "usd": 6.56,
-    "buyers": 9,
+    "settlements": 11,
+    "usd": 6.58,
+    "buyers": 11,
     "first_seen": "2026-11-07T06:42:26+00:00",
-    "last_seen": "2026-11-09T11:31:37+00:00",
+    "last_seen": "2026-11-09T22:27:45+00:00",
     "price_points": 3
+   }
+  },
+  {
+   "wallet": "0x4df66b6c140778fe0717880a7c6dde5ea53acdea",
+   "chain": "base",
+   "name": "Unidentified tiered service",
+   "category": "Unidentified - tiered service",
+   "tier": "behavioral",
+   "evidence": "5 distinct price points ($0.005-$0.05) each recurring across 422 settlements - a price list behind one wallet, not a single flat-rate API",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 422,
+    "usd": 6.305,
+    "buyers": 4,
+    "first_seen": "2026-08-22T00:32:31+00:00",
+    "last_seen": "2026-11-09T22:48:51+00:00",
+    "price_points": 5
    }
   },
   {
@@ -4972,6 +4993,27 @@
    }
   },
   {
+   "wallet": "0x7d2ceb7a0e0c39a3d0f7b5b491659fde4bb7bcfe",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "120 settlements at 1 price point(s), all under $1 (median $0.05), median gap 34s (machine cadence) - per-call API metering",
+   "confidence": "high",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 120,
+    "usd": 6.0,
+    "buyers": 28,
+    "first_seen": "2026-07-27T14:08:29+00:00",
+    "last_seen": "2026-11-09T20:48:57+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0xcfb32a7d01ca2b4b538c83b2b38656d3502d76ea",
    "chain": "base",
    "name": "Unidentified recurring charge",
@@ -4993,44 +5035,23 @@
    }
   },
   {
-   "wallet": "0x4df66b6c140778fe0717880a7c6dde5ea53acdea",
-   "chain": "base",
-   "name": "Unidentified tiered service",
-   "category": "Unidentified - tiered service",
-   "tier": "behavioral",
-   "evidence": "5 distinct price points ($0.005-$0.05) each recurring across 402 settlements - a price list behind one wallet, not a single flat-rate API",
-   "confidence": "medium",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 402,
-    "usd": 5.885,
-    "buyers": 4,
-    "first_seen": "2026-08-22T00:32:31+00:00",
-    "last_seen": "2026-11-09T11:19:03+00:00",
-    "price_points": 5
-   }
-  },
-  {
-   "wallet": "0x7d2ceb7a0e0c39a3d0f7b5b491659fde4bb7bcfe",
+   "wallet": "0x44adc7d3199486730d6346f2dc2424de97124700",
    "chain": "base",
    "name": "Unidentified metered API",
    "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "113 settlements at 1 price point(s), all under $1 (median $0.05), median gap 29s (machine cadence) - per-call API metering",
+   "evidence": "501 settlements at 1 price point(s), all under $1 (median $0.01), median gap 60s (machine cadence) - per-call API metering",
    "confidence": "high",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 113,
-    "usd": 5.65,
-    "buyers": 28,
-    "first_seen": "2026-07-27T14:08:29+00:00",
-    "last_seen": "2026-11-08T23:02:11+00:00",
+    "settlements": 501,
+    "usd": 5.01,
+    "buyers": 1,
+    "first_seen": "2026-10-03T02:38:33+00:00",
+    "last_seen": "2026-11-09T22:45:59+00:00",
     "price_points": 1
    }
   },
@@ -5075,27 +5096,6 @@
     "buyers": 1,
     "first_seen": "2026-11-08T23:22:57+00:00",
     "last_seen": "2026-11-09T00:13:01+00:00",
-    "price_points": 1
-   }
-  },
-  {
-   "wallet": "0x44adc7d3199486730d6346f2dc2424de97124700",
-   "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "474 settlements at 1 price point(s), all under $1 (median $0.01), median gap 60s (machine cadence) - per-call API metering",
-   "confidence": "high",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 474,
-    "usd": 4.74,
-    "buyers": 1,
-    "first_seen": "2026-10-03T02:38:33+00:00",
-    "last_seen": "2026-11-08T23:44:13+00:00",
     "price_points": 1
    }
   },
@@ -5191,18 +5191,18 @@
    "name": "Unidentified metered API",
    "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "307 settlements at 1 price point(s), all under $1 (median $0.01), median gap 281s (machine cadence) - per-call API metering",
+   "evidence": "320 settlements at 1 price point(s), all under $1 (median $0.01), median gap 288s (machine cadence) - per-call API metering",
    "confidence": "high",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 307,
-    "usd": 3.07,
+    "settlements": 320,
+    "usd": 3.2,
     "buyers": 2,
     "first_seen": "2026-10-28T21:18:15+00:00",
-    "last_seen": "2026-11-09T13:03:31+00:00",
+    "last_seen": "2026-11-09T22:39:59+00:00",
     "price_points": 1
    }
   },
@@ -5251,6 +5251,27 @@
    }
   },
   {
+   "wallet": "0x93053f1e7a5efeda532fe69cbbe43cbec3a0f13f",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "123 settlements at 2 price point(s), all under $1 (median $0.01), median gap 82s (machine cadence) - per-call API metering",
+   "confidence": "high",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 123,
+    "usd": 2.83,
+    "buyers": 29,
+    "first_seen": "2026-08-07T07:00:37+00:00",
+    "last_seen": "2026-11-09T21:20:47+00:00",
+    "price_points": 2
+   }
+  },
+  {
    "wallet": "0x75f93f8ad9a437d415f277def4cc268a8bf1c45c",
    "chain": "base",
    "name": "Unidentified tiered service",
@@ -5269,27 +5290,6 @@
     "first_seen": "2026-10-27T05:42:01+00:00",
     "last_seen": "2026-11-09T13:09:09+00:00",
     "price_points": 3
-   }
-  },
-  {
-   "wallet": "0x93053f1e7a5efeda532fe69cbbe43cbec3a0f13f",
-   "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "118 settlements at 2 price point(s), all under $1 (median $0.01), median gap 64s (machine cadence) - per-call API metering",
-   "confidence": "high",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 118,
-    "usd": 2.66,
-    "buyers": 27,
-    "first_seen": "2026-08-07T07:00:37+00:00",
-    "last_seen": "2026-11-09T09:45:43+00:00",
-    "price_points": 2
    }
   },
   {
@@ -5319,18 +5319,18 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "4 distinct price points ($0.001-$0.017) each recurring across 393 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "4 distinct price points ($0.001-$0.017) each recurring across 398 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 393,
-    "usd": 2.427,
+    "settlements": 398,
+    "usd": 2.462,
     "buyers": 29,
     "first_seen": "2026-07-29T01:25:13+00:00",
-    "last_seen": "2026-11-09T09:33:49+00:00",
+    "last_seen": "2026-11-09T20:44:13+00:00",
     "price_points": 4
    }
   },
@@ -5403,19 +5403,19 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "14 distinct price points ($0.001-$0.642466) each recurring across 33 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "17 distinct price points ($0.001-$0.642466) each recurring across 36 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 33,
-    "usd": 1.395493,
-    "buyers": 11,
+    "settlements": 36,
+    "usd": 1.40868,
+    "buyers": 12,
     "first_seen": "2026-07-25T07:46:27+00:00",
-    "last_seen": "2026-11-09T03:24:15+00:00",
-    "price_points": 14
+    "last_seen": "2026-11-10T00:55:02+00:00",
+    "price_points": 17
    }
   },
   {
@@ -5424,18 +5424,18 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "5 distinct price points ($0.001-$0.01) each recurring across 281 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "5 distinct price points ($0.001-$0.01) each recurring across 282 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 281,
-    "usd": 1.391,
+    "settlements": 282,
+    "usd": 1.396,
     "buyers": 13,
     "first_seen": "2026-07-24T12:47:30+00:00",
-    "last_seen": "2026-11-09T14:33:13+00:00",
+    "last_seen": "2026-11-10T00:55:12+00:00",
     "price_points": 5
    }
   },
@@ -5531,19 +5531,19 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "13 distinct price points ($0.001-$0.06) each recurring across 53 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "14 distinct price points ($0.001-$0.06) each recurring across 57 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 53,
-    "usd": 1.252,
-    "buyers": 9,
+    "settlements": 57,
+    "usd": 1.267,
+    "buyers": 10,
     "first_seen": "2026-10-26T11:51:43+00:00",
-    "last_seen": "2026-11-05T07:43:21+00:00",
-    "price_points": 13
+    "last_seen": "2026-11-09T21:14:39+00:00",
+    "price_points": 14
    }
   },
   {
@@ -5719,22 +5719,22 @@
   {
    "wallet": "0xe740d5701749d262da5e4fcb9f814c5b6d91cf46",
    "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
+   "name": "Unidentified tiered service",
+   "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "12 settlements at 2 price point(s), all under $1 (median $0.05), median gap 56s (machine cadence) - per-call API metering",
+   "evidence": "3 distinct price points ($0.01-$0.3) each recurring across 13 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 12,
-    "usd": 0.85,
-    "buyers": 3,
+    "settlements": 13,
+    "usd": 0.86,
+    "buyers": 4,
     "first_seen": "2026-07-30T13:21:45+00:00",
-    "last_seen": "2026-10-05T23:16:05+00:00",
-    "price_points": 2
+    "last_seen": "2026-11-09T21:13:23+00:00",
+    "price_points": 3
    }
   },
   {
@@ -5805,6 +5805,27 @@
    }
   },
   {
+   "wallet": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
+   "chain": "solana",
+   "name": "Unidentified tiered service",
+   "category": "Unidentified - tiered service",
+   "tier": "behavioral",
+   "evidence": "79 distinct price points ($0.000317-$0.052501) each recurring across 175 settlements - a price list behind one wallet, not a single flat-rate API",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 175,
+    "usd": 0.805815,
+    "buyers": 22,
+    "first_seen": "2026-08-04T01:20:04+00:00",
+    "last_seen": "2026-11-10T00:45:14+00:00",
+    "price_points": 79
+   }
+  },
+  {
    "wallet": "0x52ab53912d37759b2ad364f22dd06b16714b6c06",
    "chain": "base",
    "name": "Unidentified metered API",
@@ -5823,27 +5844,6 @@
     "first_seen": "2026-08-04T13:41:09+00:00",
     "last_seen": "2026-11-01T15:31:37+00:00",
     "price_points": 2
-   }
-  },
-  {
-   "wallet": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-   "chain": "solana",
-   "name": "Unidentified tiered service",
-   "category": "Unidentified - tiered service",
-   "tier": "behavioral",
-   "evidence": "78 distinct price points ($0.000317-$0.052501) each recurring across 174 settlements - a price list behind one wallet, not a single flat-rate API",
-   "confidence": "medium",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 174,
-    "usd": 0.80439,
-    "buyers": 21,
-    "first_seen": "2026-08-04T01:20:04+00:00",
-    "last_seen": "2026-11-08T21:26:19+00:00",
-    "price_points": 78
    }
   },
   {
@@ -6047,18 +6047,18 @@
    "name": "Unidentified recurring charge",
    "category": "Unidentified - recurring charge",
    "tier": "behavioral",
-   "evidence": "60 settlements of exactly $0.01 at a regular ~4.9h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
+   "evidence": "62 settlements of exactly $0.01 at a regular ~4.9h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 60,
-    "usd": 0.6,
+    "settlements": 62,
+    "usd": 0.62,
     "buyers": 1,
     "first_seen": "2026-07-30T19:08:23+00:00",
-    "last_seen": "2026-11-08T23:28:29+00:00",
+    "last_seen": "2026-11-09T21:28:11+00:00",
     "price_points": 1
    }
   },
@@ -6151,6 +6151,27 @@
    }
   },
   {
+   "wallet": "0xc751344ee09b5159160173f77d4a1169bcd386a1",
+   "chain": "base",
+   "name": "Unidentified tiered service",
+   "category": "Unidentified - tiered service",
+   "tier": "behavioral",
+   "evidence": "5 distinct price points ($0.001-$0.01) each recurring across 148 settlements - a price list behind one wallet, not a single flat-rate API",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 148,
+    "usd": 0.534,
+    "buyers": 14,
+    "first_seen": "2026-07-21T13:30:13+00:00",
+    "last_seen": "2026-11-09T20:50:29+00:00",
+    "price_points": 5
+   }
+  },
+  {
    "wallet": "0x203ba8c19f595b092239e19da67c05783cb29e25",
    "chain": "base",
    "name": "Unidentified metered API",
@@ -6214,27 +6235,6 @@
    }
   },
   {
-   "wallet": "0xc751344ee09b5159160173f77d4a1169bcd386a1",
-   "chain": "base",
-   "name": "Unidentified tiered service",
-   "category": "Unidentified - tiered service",
-   "tier": "behavioral",
-   "evidence": "5 distinct price points ($0.001-$0.01) each recurring across 138 settlements - a price list behind one wallet, not a single flat-rate API",
-   "confidence": "medium",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 138,
-    "usd": 0.497,
-    "buyers": 14,
-    "first_seen": "2026-07-21T13:30:13+00:00",
-    "last_seen": "2026-11-09T10:57:45+00:00",
-    "price_points": 5
-   }
-  },
-  {
    "wallet": "0x46e18aa644cff035aec1cb9ca412900aae78e928",
    "chain": "base",
    "name": "Unidentified metered API",
@@ -6261,18 +6261,18 @@
    "name": "Unidentified metered API",
    "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "51 settlements at 1 price point(s), all under $1 (median $0.0085) - per-call API metering",
+   "evidence": "54 settlements at 1 price point(s), all under $1 (median $0.0085), median gap 428s (machine cadence) - per-call API metering",
    "confidence": "high",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 51,
-    "usd": 0.4335,
+    "settlements": 54,
+    "usd": 0.459,
     "buyers": 8,
     "first_seen": "2026-09-06T01:38:01+00:00",
-    "last_seen": "2026-11-08T22:53:45+00:00",
+    "last_seen": "2026-11-09T20:15:03+00:00",
     "price_points": 1
    }
   },
@@ -6401,6 +6401,27 @@
     "buyers": 1,
     "first_seen": "2026-07-26T08:04:33+00:00",
     "last_seen": "2026-10-30T05:48:55+00:00",
+    "price_points": 2
+   }
+  },
+  {
+   "wallet": "0x2ec4545f96a24876764bf2b04d54e66a1351be71",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "36 settlements at 2 price point(s), all under $1 (median $0.01), median gap 18s (machine cadence) - per-call API metering",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 36,
+    "usd": 0.38,
+    "buyers": 9,
+    "first_seen": "2026-07-29T01:24:43+00:00",
+    "last_seen": "2026-11-09T20:43:25+00:00",
     "price_points": 2
    }
   },
@@ -6559,18 +6580,18 @@
    "name": "Unidentified metered API",
    "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "93 settlements at 2 price point(s), all under $1 (median $0.003), median gap 12s (machine cadence) - per-call API metering",
+   "evidence": "94 settlements at 2 price point(s), all under $1 (median $0.003), median gap 12s (machine cadence) - per-call API metering",
    "confidence": "high",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 93,
-    "usd": 0.313,
-    "buyers": 7,
+    "settlements": 94,
+    "usd": 0.318,
+    "buyers": 8,
     "first_seen": "2026-10-26T11:39:47+00:00",
-    "last_seen": "2026-11-09T08:53:37+00:00",
+    "last_seen": "2026-11-09T20:45:05+00:00",
     "price_points": 2
    }
   },
@@ -6792,6 +6813,27 @@
     "first_seen": "2026-11-07T21:22:35+00:00",
     "last_seen": "2026-11-07T22:29:51+00:00",
     "price_points": 2
+   }
+  },
+  {
+   "wallet": "0x2a462db85807f0ff497ddd15f5978317d079a3a1",
+   "chain": "base",
+   "name": "Unidentified tiered service",
+   "category": "Unidentified - tiered service",
+   "tier": "behavioral",
+   "evidence": "4 distinct price points ($0.003-$0.02) each recurring across 37 settlements - a price list behind one wallet, not a single flat-rate API",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 37,
+    "usd": 0.2522,
+    "buyers": 9,
+    "first_seen": "2026-10-28T06:01:49+00:00",
+    "last_seen": "2026-11-09T19:42:59+00:00",
+    "price_points": 4
    }
   },
   {
@@ -7272,23 +7314,23 @@
    }
   },
   {
-   "wallet": "0x2ec4545f96a24876764bf2b04d54e66a1351be71",
+   "wallet": "0xc3d01fd2f79d4c57ad106ab8ecc12a5de24f97cb",
    "chain": "base",
    "name": "Unidentified metered API",
    "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "16 settlements at 2 price point(s), all under $1 (median $0.01), median gap 68s (machine cadence) - per-call API metering",
+   "evidence": "18 settlements at 2 price point(s), all under $1 (median $0.01) - per-call API metering",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 16,
-    "usd": 0.18,
-    "buyers": 9,
-    "first_seen": "2026-07-29T01:24:43+00:00",
-    "last_seen": "2026-11-01T06:45:41+00:00",
+    "settlements": 18,
+    "usd": 0.175,
+    "buyers": 4,
+    "first_seen": "2026-09-21T21:13:01+00:00",
+    "last_seen": "2026-11-09T22:40:19+00:00",
     "price_points": 2
    }
   },
@@ -7379,27 +7421,6 @@
    }
   },
   {
-   "wallet": "0xc3d01fd2f79d4c57ad106ab8ecc12a5de24f97cb",
-   "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "17 settlements at 2 price point(s), all under $1 (median $0.01) - per-call API metering",
-   "confidence": "medium",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 17,
-    "usd": 0.165,
-    "buyers": 4,
-    "first_seen": "2026-09-21T21:13:01+00:00",
-    "last_seen": "2026-11-07T21:53:17+00:00",
-    "price_points": 2
-   }
-  },
-  {
    "wallet": "0x2c871c2b8876dc35e9e19646fda5abf1cd27735f",
    "chain": "base",
    "name": "Unidentified tiered service",
@@ -7439,27 +7460,6 @@
     "first_seen": "2026-10-26T11:41:03+00:00",
     "last_seen": "2026-10-26T11:42:29+00:00",
     "price_points": 4
-   }
-  },
-  {
-   "wallet": "0x2a462db85807f0ff497ddd15f5978317d079a3a1",
-   "chain": "base",
-   "name": "Unidentified recurring charge",
-   "category": "Unidentified - recurring charge",
-   "tier": "behavioral",
-   "evidence": "8 settlements of exactly $0.02 at a regular ~44.9h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
-   "confidence": "medium",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 8,
-    "usd": 0.16,
-    "buyers": 8,
-    "first_seen": "2026-10-28T06:01:49+00:00",
-    "last_seen": "2026-11-09T00:38:11+00:00",
-    "price_points": 1
    }
   },
   {
@@ -7547,6 +7547,27 @@
    }
   },
   {
+   "wallet": "0x803522d25f7b6f2e6df006650cdc032e644057a2",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "13 settlements at 1 price point(s), all under $1 (median $0.01), median gap 7s (machine cadence) - per-call API metering",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 13,
+    "usd": 0.13,
+    "buyers": 3,
+    "first_seen": "2026-10-26T12:03:19+00:00",
+    "last_seen": "2026-11-09T21:05:21+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0xb41cf7b6ef68b193f56d17928d9fe11afbed66c5",
    "chain": "base",
    "name": "Unidentified tiered service",
@@ -7607,27 +7628,6 @@
     "first_seen": "2026-09-13T10:40:29+00:00",
     "last_seen": "2026-10-26T11:43:05+00:00",
     "price_points": 2
-   }
-  },
-  {
-   "wallet": "0x803522d25f7b6f2e6df006650cdc032e644057a2",
-   "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "12 settlements at 1 price point(s), all under $1 (median $0.01), median gap 6s (machine cadence) - per-call API metering",
-   "confidence": "medium",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 12,
-    "usd": 0.12,
-    "buyers": 2,
-    "first_seen": "2026-10-26T12:03:19+00:00",
-    "last_seen": "2026-10-30T11:39:49+00:00",
-    "price_points": 1
    }
   },
   {
@@ -7992,6 +7992,27 @@
    }
   },
   {
+   "wallet": "7r4e5dwNS68MDaxbw7N8jbzHq7RCMBp9z6smHFH4NXWw",
+   "chain": "solana",
+   "name": "Unidentified recurring charge",
+   "category": "Unidentified - recurring charge",
+   "tier": "behavioral",
+   "evidence": "9 settlements of exactly $0.01 at a regular ~5.1h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 9,
+    "usd": 0.09,
+    "buyers": 1,
+    "first_seen": "2026-09-15T15:49:31+00:00",
+    "last_seen": "2026-11-10T00:55:23+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0xa7f3ad0e69f61864092fabba6cee00af6e584689",
    "chain": "base",
    "name": "Unidentified metered API",
@@ -8009,6 +8030,27 @@
     "buyers": 1,
     "first_seen": "2026-11-03T21:51:33+00:00",
     "last_seen": "2026-11-03T21:53:15+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x0ce1c00d5164952019ed5b923f9a58ab2e96a4e9",
+   "chain": "base",
+   "name": "Unidentified recurring charge",
+   "category": "Unidentified - recurring charge",
+   "tier": "behavioral",
+   "evidence": "9 settlements of exactly $0.01 at a regular ~1.6h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 9,
+    "usd": 0.09,
+    "buyers": 2,
+    "first_seen": "2026-11-07T21:11:33+00:00",
+    "last_seen": "2026-11-09T21:56:51+00:00",
     "price_points": 1
    }
   },
@@ -8051,6 +8093,27 @@
     "buyers": 2,
     "first_seen": "2026-09-05T09:33:49+00:00",
     "last_seen": "2026-10-05T12:49:51+00:00",
+    "price_points": 2
+   }
+  },
+  {
+   "wallet": "0x8d0663bbb967ebf1c047405a888ddf865f3e8854",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "9 settlements at 2 price point(s), all under $1 (median $0.007) - per-call API metering",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 9,
+    "usd": 0.084,
+    "buyers": 2,
+    "first_seen": "2026-10-02T21:25:07+00:00",
+    "last_seen": "2026-11-09T19:41:11+00:00",
     "price_points": 2
    }
   },
@@ -8104,19 +8167,40 @@
    "name": "Unidentified tiered service",
    "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "5 distinct price points ($0.001-$0.02) each recurring across 19 settlements - a price list behind one wallet, not a single flat-rate API",
+   "evidence": "5 distinct price points ($0.001-$0.02) each recurring across 20 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 19,
-    "usd": 0.075,
-    "buyers": 6,
+    "settlements": 20,
+    "usd": 0.076,
+    "buyers": 7,
     "first_seen": "2026-09-06T14:30:23+00:00",
-    "last_seen": "2026-10-31T21:00:03+00:00",
+    "last_seen": "2026-11-09T20:45:27+00:00",
     "price_points": 5
+   }
+  },
+  {
+   "wallet": "0x1563cde0042d17f53b23d91fd9b73ace9da26a09",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "16 settlements at 2 price point(s), all under $1 (median $0.006), median gap 110s (machine cadence) - per-call API metering",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 16,
+    "usd": 0.076,
+    "buyers": 2,
+    "first_seen": "2026-11-05T22:23:44+00:00",
+    "last_seen": "2026-11-09T20:43:55+00:00",
+    "price_points": 2
    }
   },
   {
@@ -8206,66 +8290,24 @@
    }
   },
   {
-   "wallet": "0x8d0663bbb967ebf1c047405a888ddf865f3e8854",
+   "wallet": "0xc23d1dc0f5fce1abffb051e06cb93f0329968b4e",
    "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
+   "name": "Unidentified tiered service",
+   "category": "Unidentified - tiered service",
    "tier": "behavioral",
-   "evidence": "8 settlements at 2 price point(s), all under $1 (median $0.007) - per-call API metering",
-   "confidence": "low",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 8,
-    "usd": 0.07,
-    "buyers": 2,
-    "first_seen": "2026-10-02T21:25:07+00:00",
-    "last_seen": "2026-11-05T22:33:28+00:00",
-    "price_points": 2
-   }
-  },
-  {
-   "wallet": "0x1563cde0042d17f53b23d91fd9b73ace9da26a09",
-   "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "13 settlements at 2 price point(s), all under $1 (median $0.006), median gap 96s (machine cadence) - per-call API metering",
+   "evidence": "4 distinct price points ($0.001-$0.014) each recurring across 21 settlements - a price list behind one wallet, not a single flat-rate API",
    "confidence": "medium",
    "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 13,
-    "usd": 0.07,
-    "buyers": 1,
-    "first_seen": "2026-11-05T22:23:44+00:00",
-    "last_seen": "2026-11-05T23:51:10+00:00",
-    "price_points": 2
-   }
-  },
-  {
-   "wallet": "0x0ce1c00d5164952019ed5b923f9a58ab2e96a4e9",
-   "chain": "base",
-   "name": "Unidentified recurring charge",
-   "category": "Unidentified - recurring charge",
-   "tier": "behavioral",
-   "evidence": "7 settlements of exactly $0.01 at a regular ~1.1h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
-   "confidence": "low",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 7,
-    "usd": 0.07,
-    "buyers": 2,
-    "first_seen": "2026-11-07T21:11:33+00:00",
-    "last_seen": "2026-11-08T09:33:41+00:00",
-    "price_points": 1
+    "settlements": 21,
+    "usd": 0.068093,
+    "buyers": 5,
+    "first_seen": "2026-10-26T11:54:01+00:00",
+    "last_seen": "2026-11-09T19:41:41+00:00",
+    "price_points": 4
    }
   },
   {
@@ -8395,27 +8437,6 @@
    }
   },
   {
-   "wallet": "7r4e5dwNS68MDaxbw7N8jbzHq7RCMBp9z6smHFH4NXWw",
-   "chain": "solana",
-   "name": "Unidentified recurring charge",
-   "category": "Unidentified - recurring charge",
-   "tier": "behavioral",
-   "evidence": "6 settlements of exactly $0.01 at a regular ~10.1h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
-   "confidence": "low",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 6,
-    "usd": 0.06,
-    "buyers": 1,
-    "first_seen": "2026-09-15T15:49:31+00:00",
-    "last_seen": "2026-11-06T22:28:08+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0xa499f6f6ab97ba87db2e1fd7a1e3534125b60018",
    "chain": "base",
    "name": "Unidentified metered API",
@@ -8497,29 +8518,6 @@
     "first_seen": "2026-10-31T21:02:21+00:00",
     "last_seen": "2026-10-31T21:15:59+00:00",
     "price_points": 1
-   }
-  },
-  {
-   "wallet": "0xc23d1dc0f5fce1abffb051e06cb93f0329968b4e",
-   "chain": "base",
-   "name": "Unidentified tiered service",
-   "category": "Unidentified - tiered service",
-   "tier": "behavioral",
-   "evidence": "4 distinct price points ($0.001-$0.014) each recurring across 13 settlements - a price list behind one wallet, not a single flat-rate API",
-   "confidence": "medium",
-   "flags": [
-    "closed-loop"
-   ],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 13,
-    "usd": 0.056093,
-    "buyers": 3,
-    "first_seen": "2026-10-26T11:54:01+00:00",
-    "last_seen": "2026-11-08T16:14:03+00:00",
-    "price_points": 4
    }
   },
   {
@@ -8756,6 +8754,27 @@
    }
   },
   {
+   "wallet": "0x2ecb9e1fcca7a62758c679f11bc3241466d181d8",
+   "chain": "base",
+   "name": "Unidentified tiered service",
+   "category": "Unidentified - tiered service",
+   "tier": "behavioral",
+   "evidence": "5 distinct price points ($0.001-$0.01) each recurring across 13 settlements - a price list behind one wallet, not a single flat-rate API",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 13,
+    "usd": 0.048,
+    "buyers": 3,
+    "first_seen": "2026-10-26T12:02:51+00:00",
+    "last_seen": "2026-11-09T20:44:51+00:00",
+    "price_points": 5
+   }
+  },
+  {
    "wallet": "0xa5b46001f5faafa9d7bb4efeea6c724d52567a02",
    "chain": "base",
    "name": "Unidentified tiered service",
@@ -8779,26 +8798,24 @@
    }
   },
   {
-   "wallet": "0x2ecb9e1fcca7a62758c679f11bc3241466d181d8",
+   "wallet": "0x6293ded2684f1a76e26becef87c137d691fbf800",
    "chain": "base",
-   "name": "Unidentified tiered service",
-   "category": "Unidentified - tiered service",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
    "tier": "behavioral",
-   "evidence": "5 distinct price points ($0.001-$0.01) each recurring across 12 settlements - a price list behind one wallet, not a single flat-rate API",
-   "confidence": "medium",
-   "flags": [
-    "closed-loop"
-   ],
+   "evidence": "5 settlements at 2 price point(s), all under $1 (median $0.01) - per-call API metering",
+   "confidence": "low",
+   "flags": [],
    "roles": [
     "seller"
    ],
    "as_seller": {
-    "settlements": 12,
-    "usd": 0.043,
-    "buyers": 2,
-    "first_seen": "2026-10-26T12:02:51+00:00",
-    "last_seen": "2026-11-08T15:40:37+00:00",
-    "price_points": 5
+    "settlements": 5,
+    "usd": 0.042,
+    "buyers": 3,
+    "first_seen": "2026-11-08T00:28:23+00:00",
+    "last_seen": "2026-11-09T20:25:01+00:00",
+    "price_points": 2
    }
   },
   {
@@ -8970,6 +8987,27 @@
    }
   },
   {
+   "wallet": "0xc210ea7d5692a6401adf25bbcb7acde9cdb7e9ff",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "8 settlements at 2 price point(s), all under $1 (median $0.005) - per-call API metering",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 8,
+    "usd": 0.0375,
+    "buyers": 5,
+    "first_seen": "2026-09-10T15:12:33+00:00",
+    "last_seen": "2026-11-09T21:11:07+00:00",
+    "price_points": 2
+   }
+  },
+  {
    "wallet": "0x8d38d6026cf3a9805de9c5f0611cee95b532b120",
    "chain": "base",
    "name": "Unidentified metered API",
@@ -9113,27 +9151,6 @@
     "buyers": 1,
     "first_seen": "2026-08-23T00:32:09+00:00",
     "last_seen": "2026-11-03T16:41:27+00:00",
-    "price_points": 2
-   }
-  },
-  {
-   "wallet": "0xc210ea7d5692a6401adf25bbcb7acde9cdb7e9ff",
-   "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "7 settlements at 2 price point(s), all under $1 (median $0.005) - per-call API metering",
-   "confidence": "low",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 7,
-    "usd": 0.0325,
-    "buyers": 4,
-    "first_seen": "2026-09-10T15:12:33+00:00",
-    "last_seen": "2026-10-26T11:45:47+00:00",
     "price_points": 2
    }
   },
@@ -9521,6 +9538,27 @@
    }
   },
   {
+   "wallet": "0xf567cfe0fdb87a1d6ca330e3f30f0d3da0f7cb98",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "8 settlements at 2 price point(s), all under $1 (median $0.001) - per-call API metering",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 8,
+    "usd": 0.017,
+    "buyers": 5,
+    "first_seen": "2026-08-01T18:54:17+00:00",
+    "last_seen": "2026-11-09T21:25:59+00:00",
+    "price_points": 2
+   }
+  },
+  {
    "wallet": "J8vnmBx4pS1X7UUBTfz1yWBKiw69Dj2yRGRHDaXBRdhR",
    "chain": "solana",
    "name": "Unidentified metered API",
@@ -9538,27 +9576,6 @@
     "buyers": 3,
     "first_seen": "2026-10-25T01:57:28+00:00",
     "last_seen": "2026-11-01T02:44:50+00:00",
-    "price_points": 2
-   }
-  },
-  {
-   "wallet": "0xf567cfe0fdb87a1d6ca330e3f30f0d3da0f7cb98",
-   "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "7 settlements at 2 price point(s), all under $1 (median $0.001) - per-call API metering",
-   "confidence": "low",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 7,
-    "usd": 0.016,
-    "buyers": 4,
-    "first_seen": "2026-08-01T18:54:17+00:00",
-    "last_seen": "2026-10-30T15:50:09+00:00",
     "price_points": 2
    }
   },
@@ -9605,6 +9622,27 @@
    }
   },
   {
+   "wallet": "0xd6fce15298fc9d60f867d9455d497177da9bfb0a",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "16 settlements at 1 price point(s), all under $1 (median $0.001) - per-call API metering",
+   "confidence": "medium",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 16,
+    "usd": 0.016,
+    "buyers": 14,
+    "first_seen": "2026-10-26T20:47:03+00:00",
+    "last_seen": "2026-11-09T21:21:25+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0xdbd64967bae55891bd198240c3dfab803689f1ab",
    "chain": "base",
    "name": "Unidentified recurring charge",
@@ -9647,27 +9685,6 @@
    }
   },
   {
-   "wallet": "0xd6fce15298fc9d60f867d9455d497177da9bfb0a",
-   "chain": "base",
-   "name": "Unidentified metered API",
-   "category": "Unidentified - metered API",
-   "tier": "behavioral",
-   "evidence": "15 settlements at 1 price point(s), all under $1 (median $0.001) - per-call API metering",
-   "confidence": "medium",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 15,
-    "usd": 0.015,
-    "buyers": 13,
-    "first_seen": "2026-10-26T20:47:03+00:00",
-    "last_seen": "2026-11-09T11:28:05+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "3Pmft74EbGeVFMpQjGCnjuRi8kDw6JrbX2VJ2WnCw9hH",
    "chain": "solana",
    "name": "Unidentified metered API",
@@ -9685,6 +9702,27 @@
     "buyers": 1,
     "first_seen": "2026-10-14T21:00:45+00:00",
     "last_seen": "2026-10-19T02:01:29+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x1b2272a2ca1792e8497a8d45fd3eb8665ae88fae",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "7 settlements at 1 price point(s), all under $1 (median $0.002), median gap 9s (machine cadence) - per-call API metering",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 7,
+    "usd": 0.014,
+    "buyers": 1,
+    "first_seen": "2026-11-01T06:33:53+00:00",
+    "last_seen": "2026-11-09T20:34:09+00:00",
     "price_points": 1
    }
   },
@@ -9882,6 +9920,27 @@
    }
   },
   {
+   "wallet": "0xb3f32bdfe8d07825bc0d7387295ab1d7559ba69d",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "10 settlements at 1 price point(s), all under $1 (median $0.001), median gap 382s (machine cadence) - per-call API metering",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 10,
+    "usd": 0.01,
+    "buyers": 4,
+    "first_seen": "2026-10-27T05:32:35+00:00",
+    "last_seen": "2026-11-09T19:42:49+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0x763a39fe8e8bfd0f8b764c6acefd4b0a33543b18",
    "chain": "base",
    "name": "Unidentified recurring charge",
@@ -9924,6 +9983,27 @@
     "buyers": 1,
     "first_seen": "2026-10-26T11:55:41+00:00",
     "last_seen": "2026-11-03T16:55:39+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x1f291b5b41b6e5ffbdc4f2ad8b5f45811438184a",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "9 settlements at 1 price point(s), all under $1 (median $0.001), median gap 377s (machine cadence) - per-call API metering",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 9,
+    "usd": 0.009,
+    "buyers": 3,
+    "first_seen": "2026-11-08T23:37:43+00:00",
+    "last_seen": "2026-11-09T19:38:19+00:00",
     "price_points": 1
    }
   },
@@ -9987,6 +10067,27 @@
     "buyers": 4,
     "first_seen": "2026-10-26T11:51:55+00:00",
     "last_seen": "2026-11-01T06:14:59+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x3574999dd4c96eb73bd6e11d4177010c83e14f5b",
+   "chain": "base",
+   "name": "Unidentified metered API",
+   "category": "Unidentified - metered API",
+   "tier": "behavioral",
+   "evidence": "6 settlements at 1 price point(s), all under $1 (median $0.0012), median gap 374s (machine cadence) - per-call API metering",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 6,
+    "usd": 0.0072,
+    "buyers": 2,
+    "first_seen": "2026-11-09T18:59:23+00:00",
+    "last_seen": "2026-11-09T19:28:53+00:00",
     "price_points": 1
    }
   },
@@ -10225,6 +10326,27 @@
    }
   },
   {
+   "wallet": "0x5d89060682fce50ecaa7600af6a5645bd2b107eb",
+   "chain": "base",
+   "name": "Unidentified recurring charge",
+   "category": "Unidentified - recurring charge",
+   "tier": "behavioral",
+   "evidence": "4 settlements of exactly $0.001 at a regular ~143.7h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 4,
+    "usd": 0.004,
+    "buyers": 2,
+    "first_seen": "2026-09-17T15:42:27+00:00",
+    "last_seen": "2026-11-09T21:31:09+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0xd685efa22e80262db5b5e2a5d0b9d7565b36334b",
    "chain": "base",
    "name": "Unidentified recurring charge",
@@ -10263,6 +10385,27 @@
     "buyers": 1,
     "first_seen": "2026-10-26T11:30:51+00:00",
     "last_seen": "2026-11-07T07:03:04+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x3fb1413adb2aadb1c84f34e762d9cacfd8b068c1",
+   "chain": "base",
+   "name": "Unidentified recurring charge",
+   "category": "Unidentified - recurring charge",
+   "tier": "behavioral",
+   "evidence": "4 settlements of exactly $0.001 at a regular ~21.8h cadence - behaves like a subscription or scheduled job, not ad-hoc calls",
+   "confidence": "low",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 4,
+    "usd": 0.004,
+    "buyers": 3,
+    "first_seen": "2026-11-01T06:45:37+00:00",
+    "last_seen": "2026-11-09T21:14:29+00:00",
     "price_points": 1
    }
   },
@@ -10514,11 +10657,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 9,
-    "usd": 88.119,
-    "buyers": 8,
+    "settlements": 11,
+    "usd": 109.701,
+    "buyers": 10,
     "first_seen": "2026-10-26T11:54:57+00:00",
-    "last_seen": "2026-11-09T00:01:31+00:00",
+    "last_seen": "2026-11-09T22:41:33+00:00",
     "price_points": 2
    }
   },
@@ -10685,12 +10828,12 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 5,
-    "usd": 16.32,
-    "buyers": 1,
+    "settlements": 6,
+    "usd": 16.33,
+    "buyers": 2,
     "first_seen": "2026-09-29T11:38:17+00:00",
-    "last_seen": "2026-11-08T16:44:51+00:00",
-    "price_points": 5
+    "last_seen": "2026-11-09T21:08:09+00:00",
+    "price_points": 6
    }
   },
   {
@@ -10962,12 +11105,12 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 136,
-    "usd": 3.224022,
-    "buyers": 3,
+    "settlements": 137,
+    "usd": 3.227324,
+    "buyers": 4,
     "first_seen": "2026-10-02T21:23:07+00:00",
-    "last_seen": "2026-11-05T07:55:37+00:00",
-    "price_points": 129
+    "last_seen": "2026-11-09T21:08:53+00:00",
+    "price_points": 130
    }
   },
   {
@@ -11876,12 +12019,12 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 1,
-    "usd": 0.65,
-    "buyers": 1,
+    "settlements": 2,
+    "usd": 0.651,
+    "buyers": 2,
     "first_seen": "2026-10-30T11:30:05+00:00",
-    "last_seen": "2026-10-30T11:30:05+00:00",
-    "price_points": 1
+    "last_seen": "2026-11-09T20:37:01+00:00",
+    "price_points": 2
    }
   },
   {
@@ -12014,6 +12157,27 @@
    }
   },
   {
+   "wallet": "0x8c5d5e535a00ededba8b96990a30ca8feaf13bca",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.546,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:15+00:00",
+    "last_seen": "2026-11-09T21:42:43+00:00",
+    "price_points": 2
+   }
+  },
+  {
    "wallet": "0xf6c6e2e530bb311c14a49c1a07c720fc232c07c5",
    "chain": "base",
    "name": "",
@@ -12136,6 +12300,27 @@
     "buyers": 2,
     "first_seen": "2026-11-08T07:27:25+00:00",
     "last_seen": "2026-11-09T12:46:59+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x0261a15545ba198f793f27465f82a99ec2d317b1",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.5,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:53+00:00",
+    "last_seen": "2026-11-09T21:43:53+00:00",
     "price_points": 1
    }
   },
@@ -12395,6 +12580,27 @@
    }
   },
   {
+   "wallet": "0x49e39272da36e9c7a9472e471bb345b9cd65be7a",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.38,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:46:05+00:00",
+    "last_seen": "2026-11-09T21:46:05+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0x8aa6a85a2723e2816204f3cf48d76b84bafdaab4",
    "chain": "base",
    "name": "",
@@ -12566,6 +12772,90 @@
    }
   },
   {
+   "wallet": "0xa41425407d179e48fb84cb841dcdb9cb4d1c3f22",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.3,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:45+00:00",
+    "last_seen": "2026-11-09T21:42:45+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x8150df9a1c2be0448a562215ed5c6aa4a086a90a",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.3,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:03+00:00",
+    "last_seen": "2026-11-09T21:44:03+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x618ac14626ec404de174210730bb427ae4262025",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.3,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:43+00:00",
+    "last_seen": "2026-11-09T21:44:43+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xe2c99dc855256f3cc7e7ef71abd4352bb17ec647",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.3,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:53+00:00",
+    "last_seen": "2026-11-09T21:44:53+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0x22e35149493b9bb147f8225af27bcf499407aa7b",
    "chain": "base",
    "name": "",
@@ -12632,6 +12922,28 @@
    }
   },
   {
+   "wallet": "0xabec4bd07360875762c6ce3b941d4e41e2bc45f6",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller",
+    "batch-channel-receiver"
+   ],
+   "as_seller": {
+    "settlements": 161,
+    "usd": 0.26184,
+    "buyers": 1,
+    "first_seen": "2026-10-26T11:28:53+00:00",
+    "last_seen": "2026-11-09T22:13:35+00:00",
+    "price_points": 0
+   }
+  },
+  {
    "wallet": "0xd9087e0cd545a59a141f4ab19ffd635fc1c3438a",
    "chain": "base",
    "name": "",
@@ -12653,7 +12965,7 @@
    }
   },
   {
-   "wallet": "0xabec4bd07360875762c6ce3b941d4e41e2bc45f6",
+   "wallet": "0xa4b2ec16f1e9660baf29cce080070887cc155e07",
    "chain": "base",
    "name": "",
    "category": "Uncategorized",
@@ -12662,16 +12974,15 @@
    "confidence": "",
    "flags": [],
    "roles": [
-    "seller",
-    "batch-channel-receiver"
+    "seller"
    ],
    "as_seller": {
-    "settlements": 157,
-    "usd": 0.25632,
+    "settlements": 1,
+    "usd": 0.257,
     "buyers": 1,
-    "first_seen": "2026-10-26T11:28:53+00:00",
-    "last_seen": "2026-11-08T10:47:11+00:00",
-    "price_points": 0
+    "first_seen": "2026-11-09T21:43:03+00:00",
+    "last_seen": "2026-11-09T21:43:03+00:00",
+    "price_points": 1
    }
   },
   {
@@ -12734,6 +13045,27 @@
     "buyers": 1,
     "first_seen": "2026-10-28T11:48:45+00:00",
     "last_seen": "2026-10-28T11:48:45+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xff89a00ed3ddcb3ee0c97306aa1d8e41e622111c",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.2396,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:25+00:00",
+    "last_seen": "2026-11-09T21:44:25+00:00",
     "price_points": 1
    }
   },
@@ -14903,6 +15235,90 @@
    }
   },
   {
+   "wallet": "0x8bb299de3d310565adce16c90620e1d95ece68e8",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.2,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:15+00:00",
+    "last_seen": "2026-11-09T21:44:15+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xd1e09d04eb3468852f27299719d1ede38a837b0d",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.2,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:15+00:00",
+    "last_seen": "2026-11-09T21:44:39+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xce53111195ae15782592a7b570b3b442d88e0b68",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.2,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:23+00:00",
+    "last_seen": "2026-11-09T21:44:23+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x0e9737deb199e39d32359b10718ee25b4fc2da38",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.2,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:43+00:00",
+    "last_seen": "2026-11-09T21:44:43+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0x7360d007c5b96c1a0be4d3faf7f4bc3f8d1fb832",
    "chain": "base",
    "name": "",
@@ -15094,6 +15510,27 @@
    }
   },
   {
+   "wallet": "0x0511410c625bcffcde8b13a978d7d4c58747e3c3",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.15,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:43+00:00",
+    "last_seen": "2026-11-09T21:43:43+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0x960564011cc8263f1c5c4442de5bc86fa8b3d9dd",
    "chain": "base",
    "name": "",
@@ -15134,6 +15571,27 @@
     "first_seen": "2026-10-28T05:56:53+00:00",
     "last_seen": "2026-10-28T05:58:49+00:00",
     "price_points": 3
+   }
+  },
+  {
+   "wallet": "0xd23e47c1dceb65b67e2c0a21e19787076b9e18e1",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.146,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:57+00:00",
+    "last_seen": "2026-11-09T21:42:57+00:00",
+    "price_points": 1
    }
   },
   {
@@ -15287,6 +15745,27 @@
    }
   },
   {
+   "wallet": "0xe82ebef57fa5af958b8ecb6843d4327d314f59e3",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 42,
+    "usd": 0.121,
+    "buyers": 8,
+    "first_seen": "2026-07-30T01:15:47+00:00",
+    "last_seen": "2026-11-09T21:03:07+00:00",
+    "price_points": 5
+   }
+  },
+  {
    "wallet": "EivkVANVzAMMJMrJ7oEPTJ9Q6n3rLGPX1YrXzCb3ihtg",
    "chain": "solana",
    "name": "",
@@ -15352,6 +15831,28 @@
    }
   },
   {
+   "wallet": "0x6be3a763e0faddaa2f2fcbbaff60f1a91d49227a",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller",
+    "batch-channel-receiver"
+   ],
+   "as_seller": {
+    "settlements": 7,
+    "usd": 0.115355,
+    "buyers": 1,
+    "first_seen": "2026-11-07T09:08:44+00:00",
+    "last_seen": "2026-11-09T20:14:17+00:00",
+    "price_points": 0
+   }
+  },
+  {
    "wallet": "0xbd65c2d2ac9d3df9ce77e5e2579b5b38efee36f0",
    "chain": "base",
    "name": "",
@@ -15396,7 +15897,7 @@
    }
   },
   {
-   "wallet": "0xe82ebef57fa5af958b8ecb6843d4327d314f59e3",
+   "wallet": "0xe3738580ede5384bb8b8d1c8786b391c59d2668d",
    "chain": "base",
    "name": "",
    "category": "Uncategorized",
@@ -15408,12 +15909,12 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 41,
-    "usd": 0.113,
-    "buyers": 7,
-    "first_seen": "2026-07-30T01:15:47+00:00",
-    "last_seen": "2026-11-09T09:05:55+00:00",
-    "price_points": 4
+    "settlements": 5,
+    "usd": 0.11,
+    "buyers": 5,
+    "first_seen": "2026-08-04T08:15:51+00:00",
+    "last_seen": "2026-11-09T21:05:43+00:00",
+    "price_points": 3
    }
   },
   {
@@ -15628,27 +16129,6 @@
     "first_seen": "2026-07-29T18:54:05+00:00",
     "last_seen": "2026-07-29T18:54:05+00:00",
     "price_points": 1
-   }
-  },
-  {
-   "wallet": "0xe3738580ede5384bb8b8d1c8786b391c59d2668d",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 4,
-    "usd": 0.1,
-    "buyers": 4,
-    "first_seen": "2026-08-04T08:15:51+00:00",
-    "last_seen": "2026-10-05T02:40:41+00:00",
-    "price_points": 3
    }
   },
   {
@@ -16681,6 +17161,699 @@
    }
   },
   {
+   "wallet": "0x921fa3230eb85651e9554d8e5448459146a51165",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:15:31+00:00",
+    "last_seen": "2026-11-09T21:15:31+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x1524a3cbe09a9a0fd9b2c4124a9d1c52ccd31a52",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:15:49+00:00",
+    "last_seen": "2026-11-09T21:15:49+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x3eba927e5307d1a728e8f0086284a0970eecb31e",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:16:59+00:00",
+    "last_seen": "2026-11-09T21:16:59+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xbc8b996b5f04c8c7575ca9d92b2fbc495c8e084f",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:17:19+00:00",
+    "last_seen": "2026-11-09T21:17:19+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xdb427bb69f85392d682834cad6b901a9108a0b26",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:18:21+00:00",
+    "last_seen": "2026-11-09T21:18:21+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xb9361cdf606abe89515214662bed5b143750e95b",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:18:37+00:00",
+    "last_seen": "2026-11-09T21:18:37+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x05a052ad548925306892681ecffc9964ba0b3009",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:18:41+00:00",
+    "last_seen": "2026-11-09T21:18:41+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x98fb949f01dd02b518a586514cf633c2069b234b",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:17+00:00",
+    "last_seen": "2026-11-09T21:42:17+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x959558bbb8eb141ec6c56434f885b24e88e6614f",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:17+00:00",
+    "last_seen": "2026-11-09T21:42:17+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x9f74a31e6d69891b7270e8b1c2f26635bdca81e5",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:23+00:00",
+    "last_seen": "2026-11-09T21:42:23+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x8f9ab88ec9a9c94587d1ea6ac7cb5e382134f94b",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:27+00:00",
+    "last_seen": "2026-11-09T21:42:27+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xc40ffcf3ca030ddc44a4f7042dc3d8f1842370b7",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:33+00:00",
+    "last_seen": "2026-11-09T21:42:33+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xae91381d7c788c246e90b02ca5c5d0176bb32992",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:33+00:00",
+    "last_seen": "2026-11-09T21:42:33+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf121f9687aa5d0e9e6245d4d6fa45105826d2dce",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:39+00:00",
+    "last_seen": "2026-11-09T21:42:39+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf62bde20881dc7fb24e41aeedad4f21d28fdecc3",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:45+00:00",
+    "last_seen": "2026-11-09T21:42:45+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xb76682e04c64a9b67186fe41a33cfbe1ad6fc9b9",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:03+00:00",
+    "last_seen": "2026-11-09T21:43:03+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x849c2db01e36531d703a4790ae76aa7339b7f26c",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:07+00:00",
+    "last_seen": "2026-11-09T21:43:07+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x90486e3d8135ccf960f61555db724b9357766478",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:11+00:00",
+    "last_seen": "2026-11-09T21:43:11+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x2c397f21db447251a6fcc63819bf072cd1f37bc0",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:13+00:00",
+    "last_seen": "2026-11-09T21:43:13+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x9fbbd2e9fe6ae71e05d28b5796cc738243610efa",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:17+00:00",
+    "last_seen": "2026-11-09T21:43:17+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xe35d34d0a9c1bf4a90d82e0d81229c91b36151db",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:23+00:00",
+    "last_seen": "2026-11-09T21:43:23+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x05e35058296aef54f23f351f75284933c39bedab",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:27+00:00",
+    "last_seen": "2026-11-09T21:43:27+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf7b72190c2b3530b88ffa06b181580ac0818bdc1",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:33+00:00",
+    "last_seen": "2026-11-09T21:43:33+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xe2c4f99171d0b7262f4338db5f3ce80f2c84772f",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:39+00:00",
+    "last_seen": "2026-11-09T21:43:39+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf10949af61beefd43605eec4b34293a99c9130d4",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:39+00:00",
+    "last_seen": "2026-11-09T21:43:39+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x282bdcea77db4d9dcd53c1ffb46ea4e3307d1e12",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:43+00:00",
+    "last_seen": "2026-11-09T21:43:43+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x04af0bb820591bac39241371e797cce6a3d65222",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:43+00:00",
+    "last_seen": "2026-11-09T21:43:43+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xb98f865b6936d828d06ab19e14f97db8de6a0745",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:51+00:00",
+    "last_seen": "2026-11-09T21:43:51+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x3e70b1eb6a190016595ecc0a336491448081edbc",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:03+00:00",
+    "last_seen": "2026-11-09T21:44:03+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xa1452dd74b964aac11afaefb26cf1a520229b4c8",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:09+00:00",
+    "last_seen": "2026-11-09T21:44:09+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xd2d1e0998f7c8114c3cb675c0bef9c6c0a20a0db",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:15+00:00",
+    "last_seen": "2026-11-09T21:44:15+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x290178cd2538b55bd66a25db772bd5376e42fe11",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:35+00:00",
+    "last_seen": "2026-11-09T21:44:35+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf459dd1da403ad34ada1579aae26d2ca5a5e1d11",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.1,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:39+00:00",
+    "last_seen": "2026-11-09T21:44:39+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0x1fd1cfd2a8c3cdaedd24c5e9c6c6a86e9b0a8daf",
    "chain": "base",
    "name": "",
@@ -16700,28 +17873,6 @@
     "buyers": 1,
     "first_seen": "2026-10-28T16:05:49+00:00",
     "last_seen": "2026-10-28T16:11:09+00:00",
-    "price_points": 0
-   }
-  },
-  {
-   "wallet": "0x6be3a763e0faddaa2f2fcbbaff60f1a91d49227a",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller",
-    "batch-channel-receiver"
-   ],
-   "as_seller": {
-    "settlements": 6,
-    "usd": 0.090636,
-    "buyers": 1,
-    "first_seen": "2026-11-07T09:08:44+00:00",
-    "last_seen": "2026-11-09T08:39:09+00:00",
     "price_points": 0
    }
   },
@@ -16852,6 +18003,27 @@
     "buyers": 1,
     "first_seen": "2026-10-27T05:11:37+00:00",
     "last_seen": "2026-10-27T05:11:43+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xa8c59792e89545768576371428601dd38f50518c",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.08,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:44:43+00:00",
+    "last_seen": "2026-11-09T21:44:43+00:00",
     "price_points": 1
    }
   },
@@ -18169,6 +19341,27 @@
    }
   },
   {
+   "wallet": "0x932f750f468988822a0c8490e1bda503bc7613ac",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.05,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:36:57+00:00",
+    "last_seen": "2026-11-09T19:36:57+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0xf99b281010c5e6cbcf486d7ef108b315be7ce0e9",
    "chain": "base",
    "name": "",
@@ -18362,6 +19555,27 @@
    }
   },
   {
+   "wallet": "0x59f3a6dcb6f482c53872dd8f8f9e1f9161a1c5f7",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.04,
+    "buyers": 2,
+    "first_seen": "2026-09-06T19:41:11+00:00",
+    "last_seen": "2026-11-09T21:12:29+00:00",
+    "price_points": 2
+   }
+  },
+  {
    "wallet": "0x549c82e6bfc54bdae9a2073744cbc2af5d1fc6d1",
    "chain": "base",
    "name": "",
@@ -18467,6 +19681,48 @@
     "first_seen": "2026-11-04T21:59:51+00:00",
     "last_seen": "2026-11-04T21:59:51+00:00",
     "price_points": 0
+   }
+  },
+  {
+   "wallet": "0xc45e70793c01c6ae4336dd5a5503bac958d32403",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.04,
+    "buyers": 2,
+    "first_seen": "2026-11-06T07:46:45+00:00",
+    "last_seen": "2026-11-09T21:03:59+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x06ba8fe1716dc81c7277c5c1e040646bd139d157",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.04,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:16:21+00:00",
+    "last_seen": "2026-11-09T19:25:05+00:00",
+    "price_points": 1
    }
   },
   {
@@ -18726,27 +19982,6 @@
    }
   },
   {
-   "wallet": "0x59f3a6dcb6f482c53872dd8f8f9e1f9161a1c5f7",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.03,
-    "buyers": 1,
-    "first_seen": "2026-09-06T19:41:11+00:00",
-    "last_seen": "2026-09-06T19:41:11+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0x3c5f3a6ce224bb89d72f5eb4232ecc27f67b3eea",
    "chain": "base",
    "name": "",
@@ -18957,6 +20192,27 @@
    }
   },
   {
+   "wallet": "0xf0f285a471c69907d8d536348daf0df3fbf1a1d4",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 4,
+    "usd": 0.03,
+    "buyers": 2,
+    "first_seen": "2026-10-26T12:13:21+00:00",
+    "last_seen": "2026-11-09T20:43:43+00:00",
+    "price_points": 3
+   }
+  },
+  {
    "wallet": "0x847f54ae8ddfd71ed7bc930c1f7a73576fab03a9",
    "chain": "base",
    "name": "",
@@ -19100,6 +20356,27 @@
     "buyers": 1,
     "first_seen": "2026-11-01T06:21:51+00:00",
     "last_seen": "2026-11-01T06:21:51+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x7f4ce6c23f851f13b386efdb22fe0d09821b9d53",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 3,
+    "usd": 0.03,
+    "buyers": 2,
+    "first_seen": "2026-11-01T06:42:51+00:00",
+    "last_seen": "2026-11-09T19:01:27+00:00",
     "price_points": 1
    }
   },
@@ -19248,6 +20525,27 @@
     "first_seen": "2026-11-08T11:36:11+00:00",
     "last_seen": "2026-11-08T11:36:50+00:00",
     "price_points": 2
+   }
+  },
+  {
+   "wallet": "0x8366f3ce5c7c40a5fd24f83b9a8b2d2b4a76844e",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.03,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:44:59+00:00",
+    "last_seen": "2026-11-09T20:44:59+00:00",
+    "price_points": 1
    }
   },
   {
@@ -20241,27 +21539,6 @@
    }
   },
   {
-   "wallet": "0xf0f285a471c69907d8d536348daf0df3fbf1a1d4",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 3,
-    "usd": 0.02,
-    "buyers": 1,
-    "first_seen": "2026-10-26T12:13:21+00:00",
-    "last_seen": "2026-10-26T12:15:51+00:00",
-    "price_points": 3
-   }
-  },
-  {
    "wallet": "4Bf6zpkrv4gtirAzM3kzqXrRRLXNmbKrpHLebTpAk3Wg",
    "chain": "solana",
    "name": "",
@@ -20724,27 +22001,6 @@
    }
   },
   {
-   "wallet": "0xc45e70793c01c6ae4336dd5a5503bac958d32403",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.02,
-    "buyers": 1,
-    "first_seen": "2026-11-06T07:46:45+00:00",
-    "last_seen": "2026-11-06T07:46:45+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0xcc2c505ad9cdd23619d52d51f0e97f904ef74bf5",
    "chain": "base",
    "name": "",
@@ -20916,6 +22172,48 @@
    }
   },
   {
+   "wallet": "0x5d83d8f433e72013cebd649665662ee07e030b05",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.02,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:43:47+00:00",
+    "last_seen": "2026-11-09T20:43:47+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xc3bcd24a2b350cc73b8516b2a0539a323b42cc32",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.02,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:44:25+00:00",
+    "last_seen": "2026-11-09T20:44:25+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0xb3cddccee6b150c8effd55b961afc0ecefe7f247",
    "chain": "base",
    "name": "",
@@ -20979,6 +22277,28 @@
    }
   },
   {
+   "wallet": "0x37b44bd509fcf24a55b8097894df6fd332ee4379",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller",
+    "batch-channel-receiver"
+   ],
+   "as_seller": {
+    "settlements": 16,
+    "usd": 0.0172,
+    "buyers": 1,
+    "first_seen": "2026-11-05T22:53:36+00:00",
+    "last_seen": "2026-11-09T22:06:25+00:00",
+    "price_points": 0
+   }
+  },
+  {
    "wallet": "0x879739e5f9f83d4c9e2ae368466464fb5a743bb4",
    "chain": "base",
    "name": "",
@@ -20997,28 +22317,6 @@
     "first_seen": "2026-09-10T19:59:29+00:00",
     "last_seen": "2026-09-10T19:59:29+00:00",
     "price_points": 1
-   }
-  },
-  {
-   "wallet": "0x37b44bd509fcf24a55b8097894df6fd332ee4379",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller",
-    "batch-channel-receiver"
-   ],
-   "as_seller": {
-    "settlements": 14,
-    "usd": 0.0167,
-    "buyers": 1,
-    "first_seen": "2026-11-05T22:53:36+00:00",
-    "last_seen": "2026-11-09T12:19:27+00:00",
-    "price_points": 0
    }
   },
   {
@@ -21229,6 +22527,27 @@
     "buyers": 2,
     "first_seen": "2026-11-01T06:24:51+00:00",
     "last_seen": "2026-11-09T00:27:21+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x9b442c40daac631f74de4094f2998e4ac016098a",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 3,
+    "usd": 0.015174,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:54:19+00:00",
+    "last_seen": "2026-11-09T21:00:31+00:00",
     "price_points": 1
    }
   },
@@ -21569,6 +22888,27 @@
    }
   },
   {
+   "wallet": "0x1caa1962428382106eb3f29b9719bdf797621c90",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 6,
+    "usd": 0.014,
+    "buyers": 5,
+    "first_seen": "2026-10-27T05:17:15+00:00",
+    "last_seen": "2026-11-09T21:09:19+00:00",
+    "price_points": 3
+   }
+  },
+  {
    "wallet": "0x9cd3f0d8a73a9a87f752f09d220652dc7de398cc",
    "chain": "base",
    "name": "",
@@ -21718,27 +23058,6 @@
    }
   },
   {
-   "wallet": "0x1caa1962428382106eb3f29b9719bdf797621c90",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 5,
-    "usd": 0.012,
-    "buyers": 4,
-    "first_seen": "2026-10-27T05:17:15+00:00",
-    "last_seen": "2026-11-07T09:17:28+00:00",
-    "price_points": 3
-   }
-  },
-  {
    "wallet": "0xdb423e72b1d83940ae70487b8fcd6e34f472fb4c",
    "chain": "base",
    "name": "",
@@ -21781,27 +23100,6 @@
    }
   },
   {
-   "wallet": "0x6293ded2684f1a76e26becef87c137d691fbf800",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 2,
-    "usd": 0.012,
-    "buyers": 2,
-    "first_seen": "2026-11-08T00:28:23+00:00",
-    "last_seen": "2026-11-09T11:36:43+00:00",
-    "price_points": 2
-   }
-  },
-  {
    "wallet": "0x8647f7d7a1368a467ad1ff757fbc2e7167973558",
    "chain": "base",
    "name": "",
@@ -21819,6 +23117,27 @@
     "buyers": 2,
     "first_seen": "2026-08-26T06:25:21+00:00",
     "last_seen": "2026-10-01T17:55:47+00:00",
+    "price_points": 2
+   }
+  },
+  {
+   "wallet": "0xe813d34c0525e0fbb1e6478b86d40b83603c2008",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 3,
+    "usd": 0.011,
+    "buyers": 3,
+    "first_seen": "2026-10-26T12:01:01+00:00",
+    "last_seen": "2026-11-09T21:14:59+00:00",
     "price_points": 2
    }
   },
@@ -26968,27 +28287,6 @@
    }
   },
   {
-   "wallet": "0x7f4ce6c23f851f13b386efdb22fe0d09821b9d53",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.01,
-    "buyers": 1,
-    "first_seen": "2026-11-01T06:42:51+00:00",
-    "last_seen": "2026-11-01T06:42:51+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0x68cbf5d3780361a56791f3639c5cd3e2c91e21f3",
    "chain": "base",
    "name": "",
@@ -28987,6 +30285,1875 @@
    }
   },
   {
+   "wallet": "0x003b70839467c54ab00a61680130048c71f26b56",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T18:56:47+00:00",
+    "last_seen": "2026-11-09T18:56:47+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xce3b4234770d1f54c0e2e213ebdbd01dfbc510d9",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T18:57:41+00:00",
+    "last_seen": "2026-11-09T18:57:41+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x6284e08c36d4d01f1a365e70c106e31efaa67e3d",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T18:58:45+00:00",
+    "last_seen": "2026-11-09T18:58:45+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x12cfd16b3e3d868428204209097a5a2f675d81bc",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T18:59:25+00:00",
+    "last_seen": "2026-11-09T18:59:25+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xc3ba591b6419d86ab88c3eba628caad547afd7a9",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:00:07+00:00",
+    "last_seen": "2026-11-09T19:00:07+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x915b2705a183c23b1b44fd8697cfbea7f65dc9b3",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:00:59+00:00",
+    "last_seen": "2026-11-09T19:00:59+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x58064f02fb36952f3515034d53011ea2c9c518d7",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:07:27+00:00",
+    "last_seen": "2026-11-09T19:07:27+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x4553d97c3bc716597552491900fc62c663a6e145",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:08:11+00:00",
+    "last_seen": "2026-11-09T19:08:11+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x7d36aeb9e5563cda5b18c8ef147c92588fdb34c2",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:10:45+00:00",
+    "last_seen": "2026-11-09T19:10:45+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x45f6e93eb8d95d9c483d18d815746a53df76800a",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:12:13+00:00",
+    "last_seen": "2026-11-09T19:12:13+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x0440a7301408fb435e1534ec1e214831a6099bb9",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:12:59+00:00",
+    "last_seen": "2026-11-09T19:12:59+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x66f98f00a0e08703aa35746f8c2298f6bfa6ab1d",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:14:09+00:00",
+    "last_seen": "2026-11-09T19:14:09+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xc2a04dd089d5f09de6445750b253fec764d7b731",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:14:55+00:00",
+    "last_seen": "2026-11-09T19:14:55+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x1f87087fec831d2d1cece6be448312f0ece18c08",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:15:39+00:00",
+    "last_seen": "2026-11-09T19:15:39+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x17fe5bf9d252652b5475f831c2a312a30864cd8d",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:16:21+00:00",
+    "last_seen": "2026-11-09T19:16:21+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x66a41d71183c627c7079f92ea8f6994cac231556",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:44:25+00:00",
+    "last_seen": "2026-11-09T19:44:25+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x8aeb0d40ec22c1097ec17d4288c4fea1b58b5188",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:45:09+00:00",
+    "last_seen": "2026-11-09T19:45:09+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x34594dac887975af490100520ba7e28551074689",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T19:45:55+00:00",
+    "last_seen": "2026-11-09T19:45:55+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xfd7572f9aa159bb3dec9cc26b559f46fe48fa32d",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:24:45+00:00",
+    "last_seen": "2026-11-09T20:24:45+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x24bab504a05658fc409686da41656a04977237f2",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:28:45+00:00",
+    "last_seen": "2026-11-09T20:28:45+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x037cf990d61b645254d9b570dee20cf984a9c4d2",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:29:29+00:00",
+    "last_seen": "2026-11-09T20:29:29+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xebf19a4514c6c457b0064de51a5730abc0e86d6a",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:30:13+00:00",
+    "last_seen": "2026-11-09T20:30:13+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf99cdab15af4b3431abc8e63def6625ab03254e1",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:31:19+00:00",
+    "last_seen": "2026-11-09T20:31:19+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x776022f10fad3c65b9cfce266a22a6d9cd7b95db",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:32:07+00:00",
+    "last_seen": "2026-11-09T20:32:07+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x025660ac55a596b176e507d6747936cb1c1772f6",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:32:51+00:00",
+    "last_seen": "2026-11-09T20:32:51+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xbaa8b9c9a8bd75fa52491743a8c4e5c04ebc40e9",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:33:33+00:00",
+    "last_seen": "2026-11-09T20:33:33+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x29c0b3504e212e28943229b1903aa087217cc6f3",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:34:25+00:00",
+    "last_seen": "2026-11-09T20:34:25+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x7012ba14c99559940c46e0e86a0c07272eb32696",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:35:11+00:00",
+    "last_seen": "2026-11-09T20:35:11+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x3eb577e60eee89ba9556675826bdbd36bd5dcb15",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:35:53+00:00",
+    "last_seen": "2026-11-09T20:35:53+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x4c6bb86280b70cfd72944d54dac7e87276177d43",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:36:37+00:00",
+    "last_seen": "2026-11-09T20:36:37+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x3b6e69e866e94a11de182bd6cd68435ed96b46ec",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:37:19+00:00",
+    "last_seen": "2026-11-09T20:37:19+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x4637f436723cc34c5071dc9b8e647886442ecaaa",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:38:05+00:00",
+    "last_seen": "2026-11-09T20:38:05+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xcfa8bc56e2341ae880913ad0c5c53d3515b7b8f5",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:38:47+00:00",
+    "last_seen": "2026-11-09T20:38:47+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x1bed639ec2fe34b40ce6b4d63660591ac5d87bca",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:40:17+00:00",
+    "last_seen": "2026-11-09T20:40:17+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x5f43899de4d8d6bcf095e5f68129527117fea109",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:41:03+00:00",
+    "last_seen": "2026-11-09T20:41:03+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x74a98f62a1278380d07dd7c0fcfecfe834945001",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:41:45+00:00",
+    "last_seen": "2026-11-09T20:41:45+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xef2fc5b24339371a659fd0571c9d0a1d63268d4f",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:43:13+00:00",
+    "last_seen": "2026-11-09T20:43:13+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x55cc9ec560736d24d35e43b763abb0ac72573c80",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:43:15+00:00",
+    "last_seen": "2026-11-09T20:43:15+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xa0a3bb49ea4ac723bcf4d2d1ecde2ee01ba03c82",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:43:43+00:00",
+    "last_seen": "2026-11-09T20:43:43+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x3c43a3646d8c4564a3709417b91bbe00ec1e3f47",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:43:57+00:00",
+    "last_seen": "2026-11-09T20:43:57+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xcfe26cc0477dc984288e0b396413e1f7714bdc46",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:44:41+00:00",
+    "last_seen": "2026-11-09T20:44:41+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x1bbabc29ca4c5823e87cad11e3da3ce328a63060",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:46:55+00:00",
+    "last_seen": "2026-11-09T20:46:55+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xd24676ff93b7e0ab7bb4e6b446f51476034ffa90",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:54:51+00:00",
+    "last_seen": "2026-11-09T20:54:51+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x283680c88befe0e965fbd36534bf27702a7a6e80",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:55:39+00:00",
+    "last_seen": "2026-11-09T20:55:39+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x6c5517cc0101f56aee76930a41c988984ddb49d8",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:56:27+00:00",
+    "last_seen": "2026-11-09T20:56:27+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xdd9e1f0d3641da6635f4c64c8e86bb71a38f53cd",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:57:19+00:00",
+    "last_seen": "2026-11-09T20:57:19+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x893c57330c9926a5d39831b6d6151345c2aee13e",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:58:09+00:00",
+    "last_seen": "2026-11-09T20:58:09+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x0ceef21ebe1ff488ea539f96595f028febd01bc4",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:59:07+00:00",
+    "last_seen": "2026-11-09T20:59:07+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x2516da9b394be2cfa6526c0a8f59ff6091e4a4d1",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:59:49+00:00",
+    "last_seen": "2026-11-09T20:59:49+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x8fbb48c69bcbafac605f8fd6f4c662d38a690488",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:00:31+00:00",
+    "last_seen": "2026-11-09T21:00:31+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xcbb1231d247b1a9ce2a732a7f818475c2a1ac3ee",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:01:13+00:00",
+    "last_seen": "2026-11-09T21:01:13+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xe0a77b34534f672de2043dca3451a02bd0f7592d",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:01:53+00:00",
+    "last_seen": "2026-11-09T21:01:53+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x45808b9cc12f1b60f8ee3e6d78ece320cb12ebf1",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:02:33+00:00",
+    "last_seen": "2026-11-09T21:02:33+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xbd7eab05259ecf83267fce057a76896fb8e1844f",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:03:21+00:00",
+    "last_seen": "2026-11-09T21:03:21+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x02f5bde34476a881115bde0aed253856b3f98488",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:04:01+00:00",
+    "last_seen": "2026-11-09T21:04:01+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x49b7945ebe2e10fb7a012f97095c3120e9753a35",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:10:15+00:00",
+    "last_seen": "2026-11-09T21:10:15+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x34cfb8bdbf16e4484b7da0ed31deed5771b16c8f",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:14:55+00:00",
+    "last_seen": "2026-11-09T21:14:55+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xd39b99d2421cead34a5e12bca6caa280f73292ab",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:42:51+00:00",
+    "last_seen": "2026-11-09T21:42:51+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x11df097ea22838f9939fcd454cdf5bc17962f172",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:43:03+00:00",
+    "last_seen": "2026-11-09T21:43:03+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xd54cf16533a54856eff6bceb776d4b9eb274e971",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:15:03+00:00",
+    "last_seen": "2026-11-09T22:15:03+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xa47066ce86c5f310f8ecb6940d2a72fe70a86684",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:15:49+00:00",
+    "last_seen": "2026-11-09T22:15:49+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xaad0feda26e5779732aef2078b163fe70d4ba8c7",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:16:27+00:00",
+    "last_seen": "2026-11-09T22:16:27+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf3ee429f6493c374fb50b62ce80eba977b20c867",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:27:03+00:00",
+    "last_seen": "2026-11-09T22:27:03+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x074f294f9043e6483698229b0dd30683a9e00154",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:27:57+00:00",
+    "last_seen": "2026-11-09T22:27:57+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x678d968d2cbfc485ccac968ebbdf7a2cfa4169fb",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:29:33+00:00",
+    "last_seen": "2026-11-09T22:29:33+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x30fee17abc4572f65595d43e70a3dc99aa5d409b",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:30:17+00:00",
+    "last_seen": "2026-11-09T22:30:17+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x1ce8e1836520c2ac0764466efa935dcdcfa85315",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:31:07+00:00",
+    "last_seen": "2026-11-09T22:31:07+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x124894afdde9ca82b562a4a1083c30feed475457",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:34:01+00:00",
+    "last_seen": "2026-11-09T22:34:01+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x204b9edf55dbd98811e031daf1c4f162e1e29883",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:34:51+00:00",
+    "last_seen": "2026-11-09T22:34:51+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x24b4cb01178f94cb0584e892bb54c575fa268668",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:35:33+00:00",
+    "last_seen": "2026-11-09T22:35:33+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xc11e9b44f8be550bee832475b823cdf4a23f774a",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:36:15+00:00",
+    "last_seen": "2026-11-09T22:36:15+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xecc700481d63121b5c47559e394093d34d16beb1",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:36:57+00:00",
+    "last_seen": "2026-11-09T22:36:57+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x10992d348dfb46a74335be9d474b8ac429603cb4",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:37:37+00:00",
+    "last_seen": "2026-11-09T22:37:37+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x4b2cd261db485b32b89859e24586c56cd9aaf387",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:38:17+00:00",
+    "last_seen": "2026-11-09T22:38:17+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xc6a4a93991a31e2f783d25d3f653beb379baaf0a",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:39:01+00:00",
+    "last_seen": "2026-11-09T22:39:01+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xd095ca366638d4a9fd922ded2f4429ed824ec627",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:39:43+00:00",
+    "last_seen": "2026-11-09T22:39:43+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x12e903a77b966d10b613a720b30173d9e43e8e21",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:40:31+00:00",
+    "last_seen": "2026-11-09T22:40:31+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x116b0683b50c9affd77452b9551f3512c7c29383",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:41:15+00:00",
+    "last_seen": "2026-11-09T22:41:15+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xd8218801e22940c48b281f040f2e8df018b10bc8",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:42:07+00:00",
+    "last_seen": "2026-11-09T22:42:07+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x23998db181cac0799bcb8cab7554a293b752e1f4",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:42:47+00:00",
+    "last_seen": "2026-11-09T22:42:47+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x53d44523191a5fbb225c28b1c6ff53b06a11b537",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:43:27+00:00",
+    "last_seen": "2026-11-09T22:43:27+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x2d1aed4c326f986692cb1b1e2a70923b30dc5e84",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:44:13+00:00",
+    "last_seen": "2026-11-09T22:44:13+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xd7b88f932a2e868c2d204d4b3a4e0ff42a383431",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:44:53+00:00",
+    "last_seen": "2026-11-09T22:44:53+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x7129d3d67a5c084db24f43c119773689eb3182b7",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:45:33+00:00",
+    "last_seen": "2026-11-09T22:45:33+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x22f0ebd9c7912585d3a46c2746581d5f0515ea41",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:46:15+00:00",
+    "last_seen": "2026-11-09T22:46:15+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x7ef9505a0c32e6e8b9014a353ea054b8aadaa811",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:46:55+00:00",
+    "last_seen": "2026-11-09T22:46:55+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x10b4678729e3526689aef8f4b7fa4a4d08125688",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.01,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:47:35+00:00",
+    "last_seen": "2026-11-09T22:47:35+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x4d8d8d4f04512029172e0176744eec4ae5238309",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.0099,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:15:25+00:00",
+    "last_seen": "2026-11-09T21:15:25+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x7849ed8a93815fe26a38b5368498b4fc6210be8a",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.009,
+    "buyers": 2,
+    "first_seen": "2026-10-26T12:02:27+00:00",
+    "last_seen": "2026-11-09T21:10:23+00:00",
+    "price_points": 2
+   }
+  },
+  {
    "wallet": "0xe22f691ed420143bfdab022a14e7d6873b33eef9",
    "chain": "base",
    "name": "",
@@ -29046,27 +32213,6 @@
     "buyers": 1,
     "first_seen": "2026-10-26T11:50:09+00:00",
     "last_seen": "2026-10-26T11:50:09+00:00",
-    "price_points": 1
-   }
-  },
-  {
-   "wallet": "0x7849ed8a93815fe26a38b5368498b4fc6210be8a",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.008,
-    "buyers": 1,
-    "first_seen": "2026-10-26T12:02:27+00:00",
-    "last_seen": "2026-10-26T12:02:27+00:00",
     "price_points": 1
    }
   },
@@ -29173,6 +32319,27 @@
     "first_seen": "2026-10-29T06:06:49+00:00",
     "last_seen": "2026-10-29T06:06:49+00:00",
     "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf1643bd00d3c071d9a0c12a4e7d3a17e6e19f8a5",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 3,
+    "usd": 0.008,
+    "buyers": 3,
+    "first_seen": "2026-10-29T16:18:21+00:00",
+    "last_seen": "2026-11-09T21:12:55+00:00",
+    "price_points": 3
    }
   },
   {
@@ -29743,7 +32910,7 @@
    }
   },
   {
-   "wallet": "0xf1643bd00d3c071d9a0c12a4e7d3a17e6e19f8a5",
+   "wallet": "0x39bf4378b74f9e19c5113b00b01f57d94537bad1",
    "chain": "base",
    "name": "",
    "category": "Uncategorized",
@@ -29755,11 +32922,11 @@
     "seller"
    ],
    "as_seller": {
-    "settlements": 2,
+    "settlements": 3,
     "usd": 0.007,
-    "buyers": 2,
-    "first_seen": "2026-10-29T16:18:21+00:00",
-    "last_seen": "2026-11-01T06:43:35+00:00",
+    "buyers": 3,
+    "first_seen": "2026-10-26T12:01:17+00:00",
+    "last_seen": "2026-11-09T20:46:05+00:00",
     "price_points": 2
    }
   },
@@ -29907,27 +33074,6 @@
     "buyers": 2,
     "first_seen": "2026-10-26T11:48:21+00:00",
     "last_seen": "2026-11-01T06:42:57+00:00",
-    "price_points": 2
-   }
-  },
-  {
-   "wallet": "0xe813d34c0525e0fbb1e6478b86d40b83603c2008",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 2,
-    "usd": 0.006,
-    "buyers": 2,
-    "first_seen": "2026-10-26T12:01:01+00:00",
-    "last_seen": "2026-11-01T06:45:47+00:00",
     "price_points": 2
    }
   },
@@ -30082,27 +33228,6 @@
    }
   },
   {
-   "wallet": "0x1b2272a2ca1792e8497a8d45fd3eb8665ae88fae",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 3,
-    "usd": 0.006,
-    "buyers": 1,
-    "first_seen": "2026-11-01T06:33:53+00:00",
-    "last_seen": "2026-11-01T06:45:23+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0x0dea0030a17bf886543a757c55924710258c2eec",
    "chain": "base",
    "name": "",
@@ -30121,6 +33246,27 @@
     "first_seen": "2026-11-01T06:42:23+00:00",
     "last_seen": "2026-11-01T06:42:55+00:00",
     "price_points": 2
+   }
+  },
+  {
+   "wallet": "0x4842a7d5b2553f4385d5e8d0cf1b94a10b99dba7",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.006,
+    "buyers": 2,
+    "first_seen": "2026-11-01T06:42:45+00:00",
+    "last_seen": "2026-11-09T21:09:29+00:00",
+    "price_points": 1
    }
   },
   {
@@ -30184,6 +33330,27 @@
     "first_seen": "2026-11-07T00:49:21+00:00",
     "last_seen": "2026-11-07T00:49:47+00:00",
     "price_points": 2
+   }
+  },
+  {
+   "wallet": "0x0539a9ef29d47ca13b8604ba2b4970e032c7efec",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.006,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:43:05+00:00",
+    "last_seen": "2026-11-09T20:43:05+00:00",
+    "price_points": 1
    }
   },
   {
@@ -31426,6 +34593,27 @@
    }
   },
   {
+   "wallet": "0x7bcb52707d5c4f334ad0d2548f96a0419fa6203f",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.005,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:13:45+00:00",
+    "last_seen": "2026-11-09T21:13:45+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0x1dc381119b441313d25213572886f004a1d55343",
    "chain": "base",
    "name": "",
@@ -31678,27 +34866,6 @@
     "first_seen": "2026-10-26T11:46:27+00:00",
     "last_seen": "2026-10-28T11:45:13+00:00",
     "price_points": 2
-   }
-  },
-  {
-   "wallet": "0x39bf4378b74f9e19c5113b00b01f57d94537bad1",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 2,
-    "usd": 0.004,
-    "buyers": 2,
-    "first_seen": "2026-10-26T12:01:17+00:00",
-    "last_seen": "2026-11-05T23:44:08+00:00",
-    "price_points": 1
    }
   },
   {
@@ -32017,6 +35184,27 @@
    }
   },
   {
+   "wallet": "0x1e21dba6eeb902343e4128a1957eafb8cdf36f39",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 3,
+    "usd": 0.0033,
+    "buyers": 3,
+    "first_seen": "2026-09-20T10:12:09+00:00",
+    "last_seen": "2026-11-09T20:45:51+00:00",
+    "price_points": 1
+   }
+  },
+  {
    "wallet": "0x8a598a28a435fe44d31854251b1c88d0781ea822",
    "chain": "base",
    "name": "",
@@ -32286,27 +35474,6 @@
     "buyers": 1,
     "first_seen": "2026-09-17T10:30:33+00:00",
     "last_seen": "2026-09-17T10:30:33+00:00",
-    "price_points": 1
-   }
-  },
-  {
-   "wallet": "0x5d89060682fce50ecaa7600af6a5645bd2b107eb",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 3,
-    "usd": 0.003,
-    "buyers": 2,
-    "first_seen": "2026-09-17T15:42:27+00:00",
-    "last_seen": "2026-11-03T21:47:07+00:00",
     "price_points": 1
    }
   },
@@ -32985,48 +36152,6 @@
    }
   },
   {
-   "wallet": "0x4842a7d5b2553f4385d5e8d0cf1b94a10b99dba7",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.003,
-    "buyers": 1,
-    "first_seen": "2026-11-01T06:42:45+00:00",
-    "last_seen": "2026-11-01T06:42:45+00:00",
-    "price_points": 1
-   }
-  },
-  {
-   "wallet": "0x3fb1413adb2aadb1c84f34e762d9cacfd8b068c1",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 3,
-    "usd": 0.003,
-    "buyers": 2,
-    "first_seen": "2026-11-01T06:45:37+00:00",
-    "last_seen": "2026-11-08T23:26:31+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0xed7d30e8bc643503f9da261ed8e623bb6ecf6189",
    "chain": "base",
    "name": "",
@@ -33254,27 +36379,6 @@
     "buyers": 1,
     "first_seen": "2026-09-11T09:54:05+00:00",
     "last_seen": "2026-09-11T09:54:05+00:00",
-    "price_points": 1
-   }
-  },
-  {
-   "wallet": "0x1e21dba6eeb902343e4128a1957eafb8cdf36f39",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 2,
-    "usd": 0.0022,
-    "buyers": 2,
-    "first_seen": "2026-09-20T10:12:09+00:00",
-    "last_seen": "2026-11-01T06:43:13+00:00",
     "price_points": 1
    }
   },
@@ -33972,27 +37076,6 @@
    }
   },
   {
-   "wallet": "0xb3f32bdfe8d07825bc0d7387295ab1d7559ba69d",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 2,
-    "usd": 0.002,
-    "buyers": 2,
-    "first_seen": "2026-10-27T05:32:35+00:00",
-    "last_seen": "2026-10-28T21:20:25+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0xffa9155a0e4b3d8d42351da226cc1feee449686f",
    "chain": "base",
    "name": "",
@@ -34010,6 +37093,27 @@
     "buyers": 1,
     "first_seen": "2026-10-28T06:02:21+00:00",
     "last_seen": "2026-10-28T06:02:21+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x4bafaae3442454bce41b51877017170d2d461ebe",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.002,
+    "buyers": 1,
+    "first_seen": "2026-10-29T06:01:15+00:00",
+    "last_seen": "2026-11-09T21:33:03+00:00",
     "price_points": 1
    }
   },
@@ -34115,6 +37219,27 @@
     "buyers": 1,
     "first_seen": "2026-10-29T16:18:19+00:00",
     "last_seen": "2026-10-29T16:18:19+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x407ebfbe56172fac4795541eb5aef6f463cfc868",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 2,
+    "usd": 0.002,
+    "buyers": 2,
+    "first_seen": "2026-10-29T16:20:05+00:00",
+    "last_seen": "2026-11-09T20:46:13+00:00",
     "price_points": 1
    }
   },
@@ -34796,27 +37921,6 @@
    }
   },
   {
-   "wallet": "0x1f291b5b41b6e5ffbdc4f2ad8b5f45811438184a",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 2,
-    "usd": 0.002,
-    "buyers": 1,
-    "first_seen": "2026-11-08T23:37:43+00:00",
-    "last_seen": "2026-11-08T23:38:31+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0x3a21501419b6dce09176c6e542f533411f466ef1",
    "chain": "base",
    "name": "",
@@ -34876,6 +37980,69 @@
     "buyers": 1,
     "first_seen": "2026-11-09T00:41:43+00:00",
     "last_seen": "2026-11-09T00:41:43+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x1543e42a4a812b647c4393272745ed29d6ddcbea",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.002,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:42:49+00:00",
+    "last_seen": "2026-11-09T20:42:49+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf8c639d3e47ab60ff96bcc144260f5d8bea344f6",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.002,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:42:55+00:00",
+    "last_seen": "2026-11-09T20:42:55+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x539d036a305f78388dca5fc49c27f9e29b83d315",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.002,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:43:31+00:00",
+    "last_seen": "2026-11-09T20:43:31+00:00",
     "price_points": 1
    }
   },
@@ -35891,27 +39058,6 @@
    }
   },
   {
-   "wallet": "0x4bafaae3442454bce41b51877017170d2d461ebe",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.001,
-    "buyers": 1,
-    "first_seen": "2026-10-29T06:01:15+00:00",
-    "last_seen": "2026-10-29T06:01:15+00:00",
-    "price_points": 1
-   }
-  },
-  {
    "wallet": "0xf00679cd8b440c8bd541fb2aab1382e6ffd65a51",
    "chain": "base",
    "name": "",
@@ -35992,27 +39138,6 @@
     "buyers": 1,
     "first_seen": "2026-10-29T16:19:49+00:00",
     "last_seen": "2026-10-29T16:19:49+00:00",
-    "price_points": 1
-   }
-  },
-  {
-   "wallet": "0x407ebfbe56172fac4795541eb5aef6f463cfc868",
-   "chain": "base",
-   "name": "",
-   "category": "Uncategorized",
-   "tier": "unknown",
-   "evidence": "",
-   "confidence": "",
-   "flags": [],
-   "roles": [
-    "seller"
-   ],
-   "as_seller": {
-    "settlements": 1,
-    "usd": 0.001,
-    "buyers": 1,
-    "first_seen": "2026-10-29T16:20:05+00:00",
-    "last_seen": "2026-10-29T16:20:05+00:00",
     "price_points": 1
    }
   },
@@ -36604,6 +39729,132 @@
     "buyers": 1,
     "first_seen": "2026-11-09T12:14:57+00:00",
     "last_seen": "2026-11-09T12:14:57+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x7ec21ee3aa308d2cbb8c65ef0e89af2a30101656",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.001,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:43:03+00:00",
+    "last_seen": "2026-11-09T20:43:03+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xeb76f3442eaf192ebddbc1f7eebd59cde5e00d35",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.001,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:44:19+00:00",
+    "last_seen": "2026-11-09T20:44:19+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x402faccc3faeb72351cc2b68c7966faf5f22b0d4",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.001,
+    "buyers": 1,
+    "first_seen": "2026-11-09T20:45:23+00:00",
+    "last_seen": "2026-11-09T20:45:23+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xf82cb3b092710212e6c5ea46b1ce40d9ef4d88c1",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.001,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:14:07+00:00",
+    "last_seen": "2026-11-09T21:14:07+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0xd85096faec1ac03075667b4c1a1661f5623bf111",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.001,
+    "buyers": 1,
+    "first_seen": "2026-11-09T21:18:07+00:00",
+    "last_seen": "2026-11-09T21:18:07+00:00",
+    "price_points": 1
+   }
+  },
+  {
+   "wallet": "0x6217de9a5146692f0660af6db750b408ab1c02e2",
+   "chain": "base",
+   "name": "",
+   "category": "Uncategorized",
+   "tier": "unknown",
+   "evidence": "",
+   "confidence": "",
+   "flags": [],
+   "roles": [
+    "seller"
+   ],
+   "as_seller": {
+    "settlements": 1,
+    "usd": 0.0005,
+    "buyers": 1,
+    "first_seen": "2026-11-09T22:11:35+00:00",
+    "last_seen": "2026-11-09T22:11:35+00:00",
     "price_points": 1
    }
   },
