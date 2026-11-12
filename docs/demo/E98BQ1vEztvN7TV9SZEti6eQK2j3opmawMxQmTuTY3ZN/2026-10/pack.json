@@ -1,9 +1,12 @@
 {
- "generated_at": "2026-11-12T04:50:18+00:00",
+ "generated_at": "2026-11-12T14:17:38+00:00",
  "wallet": "E98BQ1vEztvN7TV9SZEti6eQK2j3opmawMxQmTuTY3ZN",
  "chain": "solana",
  "role": "seller",
  "period": "2026-10",
+ "token": "USDC",
+ "reporting_currency": "USD",
+ "invoice_mode": "summary",
  "period_start": "2026-10-01",
  "period_end": "2026-10-31",
  "name": "exchangerebel.com",
@@ -13,33 +16,51 @@
  "summary": {
   "payments": 5,
   "counterparties": 1,
-  "total": 50.07,
-  "total_exact": 50.07,
+  "total": 50.05,
+  "total_exact": 50.04802728,
+  "total_usdc": 50.07,
+  "anonymous": 1,
+  "suspense": 0,
+  "suspense_usd": 0,
   "escrow_deposits": 0.0,
   "first": "2026-10-23T14:20:12+00:00",
   "last": "2026-10-23T21:59:35+00:00",
   "days_active": 1,
   "exceptions": 0
  },
+ "rates": [
+  {
+   "date": "2026-10-23",
+   "rate": 0.99956116,
+   "points": 24,
+   "source": "coingecko hourly mean"
+  }
+ ],
  "counterparties": [
   {
    "wallet": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
    "name": "",
-   "tier": "buyer",
+   "tier": "anonymous",
+   "group": "anonymous",
    "category": "x402 revenue",
    "account": "4100 - x402 Revenue",
+   "shape_hint": "",
    "payments": 5,
-   "amount_exact": 50.07,
-   "amount": 50.07,
+   "usdc_exact": 50.07,
+   "usd_exact": 50.04802728,
    "first": "2026-10-23T14:20:12+00:00",
    "last": "2026-10-23T21:59:35+00:00",
-   "flags": []
+   "flags": [],
+   "amount": 50.05,
+   "amount_exact": 50.07,
+   "invoice": "CTR-202610-UTY3ZN-ANON"
   }
  ],
  "invoices": [
   {
-   "number": "CTR-202610-UTY3ZN-AYTS49",
+   "number": "CTR-202610-UTY3ZN-ANON",
    "kind": "issued",
+   "summary": true,
    "issue_date": "2026-10-31",
    "service_period": [
     "2026-10-01",
@@ -50,67 +71,88 @@
     "name": "exchangerebel.com"
    },
    "buyer": {
-    "wallet": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49"
+    "wallet": "",
+    "name": "Anonymous x402 customers",
+    "wallets": 1
    },
    "currency": "USDC",
    "chain": "solana",
    "lines": [
     {
-     "description": "x402 paid requests @ $25.00",
+     "description": "x402 paid requests @ 25.00 USDC",
      "quantity": 2,
      "unit_price": 25.0,
      "amount_exact": 50.0
     },
     {
-     "description": "x402 paid requests @ $0.05",
+     "description": "x402 paid requests @ 0.05 USDC",
      "quantity": 1,
      "unit_price": 0.05,
      "amount_exact": 0.05
     },
     {
-     "description": "x402 paid requests @ $0.01",
+     "description": "x402 paid requests @ 0.01 USDC",
      "quantity": 2,
      "unit_price": 0.01,
      "amount_exact": 0.02
     }
    ],
-   "total": 50.07,
+   "total_usdc": 50.07,
+   "total": 50.05,
    "total_exact": 50.07,
+   "schedule": [
+    {
+     "wallet": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
+     "payments": 5,
+     "usdc": 50.07,
+     "usd": 50.05
+    }
+   ],
    "payments": [
     {
      "ts": "2026-10-23T14:20:12+00:00",
      "tx": "9FvJZM9fPLoN5TQGALDS38K1vyiX9gStdAMM8aqRsUE33DbpUbojEN33TX2t47NG3ZPfp1jSF3kBspNh51cNUkE",
      "amount": 0.01,
+     "rate": 0.99956116,
      "path": "exact",
-     "facilitator": "Dexter"
+     "facilitator": "Dexter",
+     "buyer": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49"
     },
     {
      "ts": "2026-10-23T14:21:21+00:00",
      "tx": "4A2Wo3gwGJ4NbqJNNcZQWdegSFavr62DXgmseY23VmjoxNmbsCnB11jwGCZihRj5sLTBevy7pF7hX4hYr1PjWoAd",
      "amount": 0.01,
+     "rate": 0.99956116,
      "path": "exact",
-     "facilitator": "Dexter"
+     "facilitator": "Dexter",
+     "buyer": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49"
     },
     {
      "ts": "2026-10-23T14:22:34+00:00",
      "tx": "3FScmoM83sp36Fz3pMA8xBpwJ9L2d9sJhjVUN3pwzuZwLJ44Zipr2GAJenFW68N6HEcT3ccHtSPshqxppVsKA5mr",
      "amount": 0.05,
+     "rate": 0.99956116,
      "path": "exact",
-     "facilitator": "Dexter"
+     "facilitator": "Dexter",
+     "buyer": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49"
     },
     {
      "ts": "2026-10-23T19:05:22+00:00",
      "tx": "3xiymTHyNXkwAoJBrMxNBTxtc6nNBRWRTBv2ewJWrwTmMR9Zwzu63dXRm4Eyqp4jq5hmKgbvUU6bx3XKC9mkZ2Aj",
      "amount": 25.0,
+     "rate": 0.99956116,
      "path": "exact",
-     "facilitator": "Dexter"
+     "facilitator": "Dexter",
+     "buyer": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49"
     },
     {
      "ts": "2026-10-23T21:59:35+00:00",
      "tx": "3L4pnWZ5PRzQcw6seutq9iiYFVEp7V4EgTFqGM3fdGZapE2sUjQnjJ9S5TXNeDxn5ahvpUfEtYqmwyhickJpvcZ",
      "amount": 25.0,
+     "rate": 0.99956116,
      "path": "exact",
-     "facilitator": "Dexter"
+     "facilitator": "Dexter",
+     "buyer": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49"
     }
    ],
    "tax_ready": false
@@ -122,19 +164,23 @@
    "period": "2026-10",
    "debit_account": "1085 - Digital Assets (USDC)",
    "credit_account": "4100 - x402 Revenue",
-   "amount_usd": 50.07,
-   "provider": "buyer 8U85u8YJ\u2026tS49",
+   "amount_usd": 50.05,
+   "provider": "Anonymous x402 customers",
    "category": "x402 revenue",
    "settlements": 5,
-   "memo": "x402 revenue 2026-10 - buyer 8U85u8YJ\u2026tS49 (5 settlements)"
+   "invoice": "CTR-202610-UTY3ZN-ANON",
+   "memo": "x402 revenue 2026-10 - Anonymous x402 customers - USDC 50.070000 at daily avg rates (5 settlements)"
   }
  ],
  "tie_out": {
   "payments_exact": 50.07,
-  "statement": 50.07,
-  "invoices": 50.07,
-  "journal": 50.07,
-  "rounding_difference": 0.0,
+  "usd_exact": 50.04802728,
+  "token": "USDC",
+  "statement": 50.05,
+  "invoices": 50.05,
+  "journal": 50.05,
+  "rounding_difference": 0.00197272,
+  "translation_difference": -0.02197272,
   "sub_cent_counterparties": 0,
   "checks": [
    {
@@ -150,7 +196,11 @@
     "pass": true
    },
    {
-    "check": "Statement total equals the exact payments total, rounded once",
+    "check": "Statement total equals the exact USD total, rounded once",
+    "pass": true
+   },
+   {
+    "check": "Invoices total the USDC actually paid on-chain",
     "pass": true
    },
    {
@@ -168,8 +218,8 @@
   ],
   "all_pass": true,
   "exports": {
-   "quickbooks_debits": 50.07,
-   "xero_debits": 50.07
+   "quickbooks_debits": 50.05,
+   "xero_debits": 50.05
   }
  },
  "payments": [
@@ -178,6 +228,8 @@
    "tx": "9FvJZM9fPLoN5TQGALDS38K1vyiX9gStdAMM8aqRsUE33DbpUbojEN33TX2t47NG3ZPfp1jSF3kBspNh51cNUkE",
    "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
    "amount": 0.01,
+   "rate": 0.99956116,
+   "usd": 0.00999561,
    "path": "exact",
    "facilitator": "Dexter",
    "category": "Uncategorized",
@@ -188,6 +240,8 @@
    "tx": "4A2Wo3gwGJ4NbqJNNcZQWdegSFavr62DXgmseY23VmjoxNmbsCnB11jwGCZihRj5sLTBevy7pF7hX4hYr1PjWoAd",
    "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
    "amount": 0.01,
+   "rate": 0.99956116,
+   "usd": 0.00999561,
    "path": "exact",
    "facilitator": "Dexter",
    "category": "Uncategorized",
@@ -198,6 +252,8 @@
    "tx": "3FScmoM83sp36Fz3pMA8xBpwJ9L2d9sJhjVUN3pwzuZwLJ44Zipr2GAJenFW68N6HEcT3ccHtSPshqxppVsKA5mr",
    "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
    "amount": 0.05,
+   "rate": 0.99956116,
+   "usd": 0.04997806,
    "path": "exact",
    "facilitator": "Dexter",
    "category": "Uncategorized",
@@ -208,6 +264,8 @@
    "tx": "3xiymTHyNXkwAoJBrMxNBTxtc6nNBRWRTBv2ewJWrwTmMR9Zwzu63dXRm4Eyqp4jq5hmKgbvUU6bx3XKC9mkZ2Aj",
    "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
    "amount": 25.0,
+   "rate": 0.99956116,
+   "usd": 24.989029,
    "path": "exact",
    "facilitator": "Dexter",
    "category": "Uncategorized",
@@ -218,6 +276,8 @@
    "tx": "3L4pnWZ5PRzQcw6seutq9iiYFVEp7V4EgTFqGM3fdGZapE2sUjQnjJ9S5TXNeDxn5ahvpUfEtYqmwyhickJpvcZ",
    "counterparty": "8U85u8YJdHWkykyLcRUyQcSKi88JZaPtjei3CkaYtS49",
    "amount": 25.0,
+   "rate": 0.99956116,
+   "usd": 24.989029,
    "path": "exact",
    "facilitator": "Dexter",
    "category": "Uncategorized",
