@@ -62,54 +62,87 @@ def main():
     res = L.build(fixture(), registry=REG,
                   accounting={"expense_accounts": {"Market data": "6410 - Data & Research Services"}})
 
-    # ---- seller pack ----
-    pk = S.build_pack(SELLER, "2026-09", res)
+    from counterralib.rates import RateBook
+    # USDC traded at 0.998 on 2026-09-08 (the $45 payment day); 09-05 has no rate -> par fallback
+    rb = RateBook({"tokens": {"USDC": {"2026-09-03": {"rate": 1.0, "points": 24},
+                                       "2026-09-08": {"rate": 0.998, "points": 24}}}})
+
+    # ---- seller pack, default: identified customers + one summary invoice ----
+    cust = {B2: {"name": "Acme Agents Ltd", "tax_id": "DE999"}}
+    pk = S.build_pack(SELLER, "2026-09", res, rates=rb, customers=cust)
     assert pk["role"] == "seller" and pk["name"] == "Vendor Co"
-    exact = 0.003333 * 9 + 0.25 * 4 + 45.0
-    assert abs(pk["tie_out"]["payments_exact"] - round(exact, 6)) < 1e-9
-    assert pk["summary"]["total"] == S.cents(exact) == 46.03, pk["summary"]
-    assert pk["summary"]["counterparties"] == 3 and len(pk["invoices"]) == 3
-    assert all(c["name"] == "" for c in pk["counterparties"]), "buyers are never named"
-    inv = {i["buyer"]["wallet"]: i for i in pk["invoices"]}
-    i1 = inv[B1]
-    assert i1["kind"] == "issued" and i1["number"] == "CTR-202609-000001-000AA1"
-    assert [l["quantity"] for l in i1["lines"]] == [1, 4, 3], "lines grouped by unit price"
-    assert not i1["tax_ready"]
+    usdc = 0.003333 * 9 + 0.25 * 4 + 45.0
+    usd = 0.003333 * 9 + 0.25 * 4 + 45.0 * 0.998
+    assert abs(pk["tie_out"]["payments_exact"] - round(usdc, 6)) < 1e-9
+    assert abs(pk["tie_out"]["usd_exact"] - usd) < 1e-6
+    assert pk["summary"]["total"] == S.cents(usd) == 45.94, pk["summary"]
+    assert pk["summary"]["counterparties"] == 3 and len(pk["invoices"]) == 2, \
+        "one invoice for the named customer + one summary for anonymous buyers"
+    by = {i["number"]: i for i in pk["invoices"]}
+    acme = by["CTR-202609-000001-000AA2"]
+    assert acme["buyer"]["name"] == "Acme Agents Ltd" and acme["buyer"]["tax_id"] == "DE999"
+    anon = by["CTR-202609-000001-ANON"]
+    assert anon["summary"] and anon["buyer"]["wallets"] == 2 and len(anon["schedule"]) == 2
+    assert [l["quantity"] for l in anon["lines"]] == [1, 4, 6], "lines grouped by unit price"
+    assert {c["name"] for c in pk["counterparties"]} == {"Acme Agents Ltd", ""}, \
+        "only names the seller supplied; buyers are never named by Counterra"
+    assert len(pk["journal"]) == 2 and all(j["credit_account"] == S.REVENUE_ACCOUNT for j in pk["journal"])
     types = [x["type"] for x in pk["exceptions"]]
     assert "large payment" in types and "customer concentration" in types, types
+    assert "exchange rate unavailable" in types, "par fallback days must be reported"
 
-    # ---- buyer pack ----
-    bk = S.build_pack(B1, "2026-09", res)
+    # per-buyer mode reproduces one invoice per wallet
+    pb = S.build_pack(SELLER, "2026-09", res, rates=rb, invoice_mode="per-buyer")
+    assert len(pb["invoices"]) == 3 and pb["invoices"][0]["number"] == "CTR-202609-000001-000AA1"
+    assert pb["summary"]["total"] == pk["summary"]["total"]
+
+    # ---- buyer pack: unidentified sellers go to suspense ----
+    bk = S.build_pack(B1, "2026-09", res, rates=rb)
     assert bk["role"] == "buyer"
     cps = {c["wallet"]: c for c in bk["counterparties"]}
     assert cps[SELLER]["name"] == "Vendor Co" and cps[SELLER]["account"].startswith("6410")
+    assert cps[OTHER]["group"] == "suspense" and cps[OTHER]["account"] == S.SUSPENSE_ACCOUNT
+    assert cps[CLONE]["account"].startswith("7910"), "poisoning is held, not suspense"
     assert ESCROW not in cps, "escrow deposit is not a seller"
-    assert bk["summary"]["escrow_deposits"] == 5.0
+    assert bk["summary"]["escrow_deposits"] == 5.0 and bk["summary"]["suspense"] == 1
     bt = [x["type"] for x in bk["exceptions"]]
     assert bt[0] == "suspected address poisoning", "hard-stops sort first"
-    assert "unidentified seller" in bt and "batch-channel deposit (escrow)" in bt
+    assert "unidentified seller (in suspense)" in bt and "batch-channel deposit (escrow)" in bt
     assert any(j["debit_account"] == L.ESCROW_ACCOUNT for j in bk["journal"])
+    assert any(j["debit_account"] == S.SUSPENSE_ACCOUNT for j in bk["journal"])
     assert bk["invoices"][0]["kind"] == "reconstructed"
 
     # ---- written pack: files exist, re-read checks pass, zip complete ----
     d = tempfile.mkdtemp()
     issuer = {"name": "Vendor Co Ltd", "address": "1 Main St", "tax_id": "GB123"}
-    pk2 = S.build_pack(SELLER, "2026-09", res, issuer=issuer)
-    assert all(i["tax_ready"] for i in pk2["invoices"])
+    pk2 = S.build_pack(SELLER, "2026-09", res, issuer=issuer, rates=rb, customers=cust)
+    assert by and pk2["invoices"][0]["tax_ready"] != pk2["invoices"][-1]["tax_ready"], \
+        "named customer invoice is tax-ready; anonymous summary is not"
     S.write_pack(pk2, d)
-    for f in ("index.html", "pack.json", "payments.csv", "exceptions.csv",
-              "journal_quickbooks.csv", "journal_xero.csv", "pack.zip"):
+    for f in ("index.html", "pack.json", "payments.csv", "exceptions.csv", "customer_ledger.csv",
+              "rates.csv", "journal_quickbooks.csv", "journal_xero.csv", "pack.zip"):
         assert os.path.exists(os.path.join(d, f)), f
-    assert len(os.listdir(os.path.join(d, "invoices"))) == 3
+    assert len(os.listdir(os.path.join(d, "invoices"))) == 2
     t = json.load(open(os.path.join(d, "pack.json")))["tie_out"]
-    assert t["all_pass"] and len(t["checks"]) == 7, t
+    assert t["all_pass"] and len(t["checks"]) == 8, t
     with open(os.path.join(d, "payments.csv")) as f:
         rows = list(csv.DictReader(f))
     assert len(rows) == 14 and all(r["invoice"] for r in rows), "every payment maps to an invoice"
+    big = [r for r in rows if r["amount_usdc"] == "45.000000"][0]
+    assert big["rate_to_usd"] == "0.99800000" and big["amount_usd"] == "44.910000"
+    with open(os.path.join(d, "customer_ledger.csv")) as f:
+        cl = list(csv.DictReader(f))
+    assert len(cl) == 3 and {r["customer"] for r in cl} == {"Acme Agents Ltd", S.ANON_CUSTOMER}
     names = zipfile.ZipFile(os.path.join(d, "pack.zip")).namelist()
     assert "index.html" in names and any(n.startswith("invoices/") for n in names)
-    page = open(os.path.join(d, "invoices", pk2["invoices"][0]["number"] + ".html")).read()
-    assert "Tax ID: GB123" in page and "Payment-backed record" not in page
+    page = open(os.path.join(d, "invoices", "CTR-202609-000001-000AA2.html")).read()
+    assert "Tax ID: GB123" in page and "Tax ID: DE999" in page and "Payment-backed record" not in page
+
+    bd = tempfile.mkdtemp()
+    S.write_pack(bk, bd)
+    with open(os.path.join(bd, "suspense_ledger.csv")) as f:
+        sl = list(csv.DictReader(f))
+    assert len(sl) == 1 and sl[0]["seller_wallet"] == OTHER and sl[0]["status"].startswith("open")
 
     # a corrupted export is caught by the read-back check
     S.write_quickbooks_csv(pk2["journal"][:-1], os.path.join(d, "journal_quickbooks.csv"))
@@ -128,7 +161,9 @@ def main():
 
     print("ALL STATEMENT TESTS PASSED")
     print("  cents allocated so parts sum to the rounded total; half-up rounding")
-    print("  seller + buyer packs: invoices, exceptions, escrow, poisoning first")
+    print("  daily-average FX translation (depeg day), par fallback flagged")
+    print("  seller: named customers + one anonymous summary invoice + sub-ledger")
+    print("  buyer: unidentified sellers to 1990 suspense; poisoning held in 7910")
     print("  written pack re-reads its own exports; a short export fails the tie-out")
 
 

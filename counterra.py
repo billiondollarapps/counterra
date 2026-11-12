@@ -172,6 +172,13 @@ def main():
     stp.add_argument("--issuer", default=None,
                      help="JSON file with the seller's legal details {name,address,tax_id,email} - makes invoices tax-ready")
     stp.add_argument("--out", default=None, help="output folder (default out/statements/<wallet>/<period>)")
+    stp.add_argument("--customers", default=None,
+                     help="seller packs: JSON {wallet: {name,address,tax_id,email}} of buyers you know - they get their own invoices; all others are 'Anonymous x402 customers'")
+    stp.add_argument("--invoice-mode", choices=["summary", "per-buyer"], default="summary",
+                     help="seller packs: one summary invoice for anonymous buyers (default) or one per wallet")
+    stp.add_argument("--no-rate-update", action="store_true", help="use cached daily rates only (no network)")
+    rt = sub.add_parser("rates", help="cache daily average USDC->USD rates for every day in the ledger (CoinGecko)")
+    rt.add_argument("--update", action="store_true", help="fetch missing days into out/rates.json")
     dm = sub.add_parser("statements-demo", help="close packs for the top identified sellers -> docs/demo/ (public sample)")
     dm.add_argument("--top", type=int, default=10)
     dm.add_argument("--period", default=None, help="YYYY-MM (default: last full month)")
@@ -677,18 +684,49 @@ def main():
         from counterralib import statements as _st
         try:
             r = _st.run(args.wallet, period=args.period, role=args.role,
-                        issuer_path=args.issuer, out_dir=args.out)
+                        issuer_path=args.issuer, out_dir=args.out,
+                        customers_path=args.customers, invoice_mode=args.invoice_mode,
+                        update_rates=not args.no_rate_update)
         except ValueError as e:
             print("statement: " + str(e))
             sys.exit(1)
         pk, t = r["pack"], r["pack"]["tie_out"]
         print("{} statement {} for {} ({})".format(pk["role"], pk["period"], pk["name"] or pk["wallet"], pk["chain"]))
-        print("  {:,} payments, {:,} counterparties, total ${:,.2f}, {} invoices, {} exceptions".format(
-            pk["summary"]["payments"], pk["summary"]["counterparties"], pk["summary"]["total"],
-            len(pk["invoices"]), len(pk["exceptions"])))
+        print("  {:,} payments, {:,} counterparties, {:,.6f} {} = ${:,.2f} at daily average rates, "
+              "{} invoices, {} exceptions".format(
+            pk["summary"]["payments"], pk["summary"]["counterparties"], pk["summary"]["total_usdc"],
+            pk["token"], pk["summary"]["total"], len(pk["invoices"]), len(pk["exceptions"])))
+        if pk["summary"].get("suspense"):
+            print("  {} unidentified seller(s) in suspense: ${:,.2f}".format(
+                pk["summary"]["suspense"], pk["summary"]["suspense_usd"]))
         for c in t["checks"]:
             print("  [{}] {}".format("PASS" if c["pass"] else "FAIL", c["check"]))
         print("open: " + r["index"])
+        return
+
+    if args.mode == "rates":
+        from counterralib import rates as _r
+        from counterralib.store import EventStore
+        st = EventStore()
+        try:
+            days = {e.ts.isoformat()[:10] for e in st.all_events()}
+        finally:
+            st.close()
+        if args.update:
+            try:
+                got = _r.update(days)
+                print("rates: {} day(s) needed, {} fetched{}".format(
+                    got["needed"], got["fetched"],
+                    "; still missing " + str(len(got["missing"])) if got["missing"] else ""))
+            except Exception as ex:
+                print("rates: fetch failed ({}) - cached rates kept".format(str(ex)[:160]))
+        t = _r.load().get("tokens", {}).get("USDC", {})
+        if t:
+            vals = [v["rate"] for v in t.values()]
+            print("rates: {} days cached for USDC, {} .. {}, range {:.6f}-{:.6f}".format(
+                len(t), min(t), max(t), min(vals), max(vals)))
+        else:
+            print("rates: none cached yet (run: counterra.py rates --update)")
         return
 
     if args.mode == "statements-demo":

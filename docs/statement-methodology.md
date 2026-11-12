@@ -25,75 +25,101 @@ treatment. Every assumption that needs professional sign-off is marked
 
 ## 2. Measurement
 
-- **Currency.** Amounts are USDC, recorded at **1 USDC = 1 USD**. No exchange
-  rate is applied. **[REVIEW]** Is par valuation acceptable for USDC in the
-  reporting entity's jurisdiction, or must a daily fair-value rate be applied?
-- **Precision.** USDC has 6 decimals. Every payment is kept exact to 6 decimal
-  places. Rounding to cents happens **once**, on the period total, and the cents
-  are then allocated across counterparties with the largest-remainder method.
-  Per-counterparty lines therefore always sum exactly to the rounded total, and
-  the difference from the exact total (under ½ cent) is stated on the tie-out.
-  Rounding is half-up. **[REVIEW]** Is a disclosed sub-cent rounding difference
-  acceptable, or should it be posted to a rounding account?
+- **Transaction vs reporting currency (decided).** Every payment is recorded
+  in the token that actually moved (USDC) and translated to **USD at that UTC
+  day's average rate**, exactly as a rupee or euro transaction is translated
+  through forex. The rate is the mean of that day's hourly CoinGecko prices
+  (`counterra.py rates --update`, cached in `out/rates.json`). USDC normally
+  trades at 0.999–1.001 but has de-pegged (about 0.88 in March 2023), so par is
+  never silently assumed. If a day has no rate, the pack translates it at
+  1.00 **and lists it as an exception**. Every pack includes the rates it used
+  (`rates.csv`) and states the translation difference against par.
+  **[REVIEW]** (a) Is the daily average acceptable, or is the spot rate at
+  settlement time required? (b) Counterra translates at the transaction date
+  only; any exchange gain or loss on USDC still held at period end (re-measured
+  at the closing rate) is outside the pack. Who books that remeasurement?
+- **Precision.** USDC has 6 decimals and every payment is kept exact. The USD
+  total is rounded to cents **once**, and the cents are allocated across
+  counterparties with the largest-remainder method, so the lines always sum
+  exactly to the rounded total. Rounding is half-up. **[REVIEW]** Is a disclosed
+  sub-cent rounding difference acceptable, or should it be posted to a rounding
+  account?
 - **Timing.** A payment is recognised on its on-chain settlement timestamp
-  (UTC). x402 settles at or immediately after the request is served, so service
-  date and payment date coincide. Months follow UTC. **[REVIEW]** Should month
-  boundaries follow the entity's local time zone?
+  (UTC). x402 settles at or immediately after the request is served. Months
+  follow UTC. **[REVIEW]** Should month boundaries follow the entity's local
+  time zone?
 - **Fees.** In x402 the facilitator pays network gas, so the buyer pays exactly
   the listed price and the seller receives it in full. There is no fee line.
 
 ## 3. Seller packs (revenue)
 
-- **Entry (one per buyer per month):** Dr `1085 Digital Assets (USDC)` /
-  Cr `4100 x402 Revenue`.
-- **Revenue recognition.** Each paid request is a completed sale: the service
-  is delivered in the same HTTP exchange that triggers payment, so there is no
-  deferred revenue. **[REVIEW]** Confirm point-in-time recognition, especially
-  for sellers whose single request starts a longer job.
-- **Invoices.** One invoice per buyer wallet per month, numbered
-  `CTR-YYYYMM-<seller code>-<buyer code>`, dated the last day of the month,
-  marked PAID, with line items grouped by unit price and every payment's
-  transaction hash as settlement evidence. Without the seller's legal name,
-  address and tax ID (`--issuer issuer.json`) the document is a
-  *payment-backed record*, not a tax invoice. **[REVIEW]**
-  1. Is a monthly summary invoice per counterparty acceptable, or is one
-     invoice per request required?
-  2. The buyer is identified only by a wallet address. Can an invoice be issued
-     to an unidentified customer, and does this change VAT/GST treatment
-     (B2B vs B2C, place of supply)?
-  3. For sellers with many tiny buyers (one demo seller has 230 buyers paying
-     $18.84 in total), would one summary invoice for all anonymous buyers be
-     the more sensible document?
-- **Buyers are never named.** Counterra does not attach identities to buyer
-  wallets.
+- **Entry:** Dr `1085 Digital Assets (USDC)` / Cr `4100 x402 Revenue`, in USD
+  at daily average rates.
+- **Anonymous buyers (decided).** Revenue from a buyer the seller cannot
+  identify is still revenue: the service was delivered and paid. It is **not**
+  parked in suspense. That would understate revenue, and suspense balances are
+  meant to clear. It is booked against one customer, **"Anonymous x402
+  customers"**, the same way a shop books cash or walk-in sales. Every wallet
+  is kept in a customer sub-ledger (`customer_ledger.csv`).
+- **Identified buyers.** A seller can map wallets it knows (API-key accounts,
+  contracts) to legal customers (`--customers customers.json`). Those buyers get
+  their own invoice and journal line.
+- **Invoices.** By default, one invoice per identified customer plus **one
+  summary invoice** to "Anonymous x402 customers" with a schedule of every
+  wallet. (`--invoice-mode per-buyer` issues one per wallet instead.) Invoices
+  are denominated in USDC, the currency charged, with the USD equivalent shown.
+  Numbering is `CTR-YYYYMM-<seller>-<buyer|ANON>`, dated month-end, marked PAID,
+  with every payment's transaction hash as settlement evidence. Without the
+  seller's legal details (`--issuer issuer.json`) an invoice is a
+  *payment-backed record*. A summary invoice to anonymous wallets is never
+  presented as a tax invoice to a named customer. **[REVIEW]** Is a monthly
+  summary invoice acceptable evidence of revenue for anonymous sales in the
+  entity's jurisdiction? How is place of supply determined for VAT/GST when the
+  customer cannot be identified?
+- **Buyers are never named by Counterra.** Only names the seller supplies
+  appear.
 
 ## 4. Buyer packs (spend)
 
-- **Entry (one per seller per month):** Dr expense account by category (e.g.
-  `6410 Data & Research`, `6420 AI & Compute`; unidentified sellers go to
-  `6480–6483` by payment pattern, or `6490 Uncategorized`) / Cr `1085 Digital
-  Assets (USDC)`.
+- **Entry (identified seller):** Dr expense account by category (e.g.
+  `6410 Data & Research`, `6420 AI & Compute`) / Cr `1085 Digital Assets
+  (USDC)`.
+- **Unidentified sellers go to suspense (decided).** A payment to a seller
+  Counterra cannot identify is posted to `1990 x402 Suspense (unidentified
+  counterparty)` (Dr 1990 / Cr 1085) and listed in `suspense_ledger.csv` with
+  its likely spend type, inferred from the payment pattern. It is cleared to
+  the right expense account once the seller is identified. Open suspense items
+  are listed as exceptions: they should be cleared before the month is closed.
+  **[REVIEW]** At year-end, should uncleared suspense be expensed (to
+  uncategorised spend) rather than carried?
 - **Invoices.** *Reconstructed purchase invoices*, one per seller per month,
-  from what was actually paid. They are evidence of payment, not a seller-issued
-  invoice. **[REVIEW]** Is this enough to support the expense, and does it
-  support input-VAT recovery? (Expectation: no. A seller-issued tax invoice is
-  needed for VAT.)
-- **Disposal of USDC.** Each payment is a disposal of USDC. At par valuation
-  the gain or loss is zero, and the count of disposals is reported. **[REVIEW]**
-  Confirm that no gain or loss arises (cost basis of USDC at 1.00), and whether
-  the disposal count must be reported.
+  built from what was actually paid. They are evidence of payment, not a
+  seller-issued invoice.
+- **VAT (open).** A reconstructed invoice is expected **not** to support
+  input-VAT recovery: EU and UK rules require a valid invoice issued by the
+  supplier with its VAT number. The VAT route is seller-issued invoices
+  (sellers using `--issuer` and `--customers`). **[REVIEW]** (a) Confirm. (b)
+  Could reconstructed invoices work as *self-billed* invoices, issued by the
+  customer under a self-billing agreement with the supplier, in the relevant
+  jurisdictions? (c) For cross-border B2B services under reverse charge, what
+  evidence does the buyer need?
+- **Disposal of USDC.** Each payment is a disposal of USDC. **[REVIEW]** With
+  daily-rate translation, a disposal gain or loss arises when the rate on the
+  disposal day differs from the rate at acquisition. Counterra does not see
+  acquisition cost (USDC bought elsewhere). Is the disposal count enough, or is
+  lot tracking required?
 - **Batch-channel deposits.** USDC moved into an x402 batch-settlement channel
   is posted to `1086 x402 Channel Escrow` (Dr 1086 / Cr 1085). It becomes spend
   only when the seller claims it. **[REVIEW]** Confirm prepaid-asset treatment.
 - **Suspected address poisoning.** Payments to a wallet that imitates an
-  established counterparty are held in `7910 Suspected Misdirected Payments`
-  and not booked as expense until confirmed. **[REVIEW]** Treatment once
-  confirmed as theft (loss account, timing).
+  established counterparty are held in `7910 Suspected Misdirected Payments`,
+  not expense and not suspense, until confirmed. **[REVIEW]** Treatment once
+  confirmed as theft.
 
 ## 5. Exceptions
 
 Listed for review, and never silently dropped: suspected poisoning (high);
-unidentified sellers (medium); self-payments, dust and round-trips (medium);
+unidentified sellers in suspense (medium); missing exchange rates (medium); self-payments, dust and round-trips (medium);
 closed loops, where one buyer and one seller deal almost only with each other
 (low: possible self-testing or one dominant customer); single payments of $40
 or more (low); customer concentration of 80% or more from one buyer (info);
@@ -104,22 +130,26 @@ escrow deposits (info).
 1. Statement total = sum of invoices.
 2. Statement total = journal total.
 3. Every payment appears on exactly one invoice.
-4. Statement total = the exact payments total rounded once to cents.
+4. Statement total = the exact USD total (at daily average rates) rounded once to cents.
 5. The QuickBooks file, read back after writing, balances.
 6. The Xero file, read back after writing, balances.
 7. Both files total the statement.
+8. Invoices total the USDC actually paid on-chain (6 decimals).
 
 A pack whose tie-out fails is marked FAIL on its first page.
 
 ## Questions for the reviewing accountant (summary)
 
-1. Par valuation of USDC, or a fair-value rate?
+1. Daily average rate, or spot at settlement? Who books period-end USDC
+   remeasurement?
 2. Sub-cent rounding: disclose, or post to a rounding account?
 3. UTC months, or local time?
 4. Point-in-time revenue recognition for x402 requests?
-5. Monthly summary invoices per counterparty: acceptable? To an anonymous
-   wallet?
-6. Reconstructed purchase invoices: enough for expense support? For VAT?
-7. Zero gain or loss on USDC disposals at par; is the disposal count reportable?
-8. Escrow deposits as a prepaid asset?
-9. Confirmed address-poisoning losses: which account, and when?
+5. A monthly summary invoice to "Anonymous x402 customers": acceptable
+   evidence? Place of supply for VAT/GST?
+6. Suspense for unidentified sellers: year-end treatment if never identified?
+7. VAT: do reconstructed invoices fail input-VAT recovery? Is self-billing an
+   option? What evidence does reverse charge need?
+8. USDC disposals: is the disposal count enough without lot tracking?
+9. Escrow deposits as a prepaid asset?
+10. Confirmed address-poisoning losses: which account, and when?

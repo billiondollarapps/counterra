@@ -113,6 +113,16 @@ jobs:
           # human review - nothing unverified is ever published.
           python3 counterra.py autogrow --write --limit 15 --crawl-limit 20
 
+      - name: Cache daily USDC->USD rates (non-fatal)
+        timeout-minutes: 4
+        continue-on-error: true
+        env:
+          # Optional free CoinGecko demo key as repository secret COINGECKO_API_KEY.
+          COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+        run: |
+          # Packs translate every payment at its day's average rate, like forex.
+          python3 counterra.py rates --update
+
       - name: Label every wallet and categorise every payment (non-fatal)
         timeout-minutes: 4
         continue-on-error: true
@@ -143,7 +153,7 @@ jobs:
           # Registry growth from autogrow (safe if unchanged this run):
           git add docs/providers.json docs/pending-providers.json out/crawl_state.json 2>/dev/null || true
           # Census, label book, coverage, and the sweep schedule:
-          git add docs/facilitators.json docs/labels.json docs/coverage.json out/sweep_schedule.json 2>/dev/null || true
+          git add docs/facilitators.json docs/labels.json docs/coverage.json out/sweep_schedule.json out/rates.json 2>/dev/null || true
           git add -A docs/data docs/demo 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No new data this run — nothing to commit."

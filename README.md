@@ -41,9 +41,14 @@ For one wallet and one month: a statement by counterparty, one numbered
 invoice per counterparty (each payment listed with its transaction), an
 exceptions review, QuickBooks + Xero journals, and a tie-out that re-reads
 the exported files and proves every document agrees to the cent. Sellers get
-revenue packs; buyers get spend packs. Add your legal details with
-`--issuer` (`{"name","address","tax_id","email"}`) and the invoices become
-tax-ready. Sample packs: **[counterra.xyz/demo](https://counterra.xyz/demo/)**.
+revenue packs; buyers get spend packs. Every payment is kept in USDC and translated to
+USD at that day's average rate, like any foreign-currency transaction
+(`counterra.py rates --update`). Sellers: buyers you know go in
+`--customers customers.json` and get their own invoices; everyone else is
+booked as "Anonymous x402 customers" with one summary invoice and a wallet
+sub-ledger. Buyers: unidentified sellers are held in a 1990 suspense
+account until identified. Add your legal details with `--issuer`
+(`{"name","address","tax_id","email"}`) and the invoices become tax-ready. Sample packs: **[counterra.xyz/demo](https://counterra.xyz/demo/)**.
 Treatment and open questions: [docs/statement-methodology.md](docs/statement-methodology.md).
 
 ## The x402 network explorer

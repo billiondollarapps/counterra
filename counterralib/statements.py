@@ -44,8 +44,11 @@ from typing import List, Optional
 
 from counterralib import labels as L
 from counterralib.exports import write_quickbooks_csv, write_xero_csv
+from counterralib.rates import RateBook  # noqa: F401  (type used in signatures)
 
 REVENUE_ACCOUNT = "4100 - x402 Revenue"
+SUSPENSE_ACCOUNT = "1990 - x402 Suspense (unidentified counterparty)"
+ANON_CUSTOMER = "Anonymous x402 customers"
 ASSET_ACCOUNT = "1085 - Digital Assets (USDC)"
 LARGE_PAYMENT_USD = 40.0
 
@@ -114,10 +117,29 @@ def detect_role(wallet: str, payments: List[dict]) -> Optional[str]:
 
 
 def build_pack(wallet: str, period: str, result: dict, role: Optional[str] = None,
-               issuer: Optional[dict] = None, accounting: Optional[dict] = None) -> dict:
-    """result = labels.build(...) output (payments + wallets). Pure function."""
+               issuer: Optional[dict] = None, accounting: Optional[dict] = None,
+               rates: Optional["RateBook"] = None, customers: Optional[dict] = None,
+               invoice_mode: str = "summary") -> dict:
+    """result = labels.build(...) output (payments + wallets). Pure function.
+
+    Currency: every payment is kept in its token (USDC) and translated to USD
+    at that UTC day's average rate (rates.RateBook). Missing rates fall back
+    to 1.00 and are listed as an exception.
+
+    Seller packs: buyers named in `customers` ({wallet: {name, address,
+    tax_id, email}}) get their own invoice and journal line. All other buyers
+    are ANONYMOUS x402 CUSTOMERS - revenue is booked normally against that one
+    customer, with a sub-ledger of wallets and (invoice_mode="summary") one
+    summary invoice. invoice_mode="per-buyer" issues one per wallet instead.
+
+    Buyer packs: payments to unidentified sellers are posted to SUSPENSE
+    (1990) until the seller is identified, with a suspense ledger.
+    """
+    from counterralib.rates import RateBook, token_of
+    rb = rates if rates is not None else RateBook({})
     w = _norm(wallet)
     W = result["wallets"]
+    customers = {_norm(k): v for k, v in (customers or {}).items()}
     allp = [p for p in result["payments"] if p["ts"].startswith(period)]
     role = role or detect_role(w, allp)
     if role is None:
@@ -125,6 +147,7 @@ def build_pack(wallet: str, period: str, result: dict, role: Optional[str] = Non
     me = W.get(w, {})
     chain = me.get("chain") or next((p["chain"] for p in allp
                                      if w in (p["payer"], p["payee"])), "base")
+    token = token_of(chain)
 
     if role == "seller":
         mine = [p for p in allp if p["payee"] == w]
@@ -138,70 +161,117 @@ def build_pack(wallet: str, period: str, result: dict, role: Optional[str] = Non
         other = lambda p: p["payee"]
     main.sort(key=lambda p: p["ts"])
 
+    def usd_of(p):
+        return p["amount_usdc"] * rb.rate(token, p["ts"][:10])
+
     exp = dict((accounting or {}).get("expense_accounts") or {})
 
-    # ---- counterparties ----
+    # ---- counterparties (the sub-ledger) ----
     cps = defaultdict(list)
     for p in main:
         cps[other(p)].append(p)
     counterparties = []
     for cw, ps in cps.items():
         meta = W.get(cw, {})
+        shape = ""
         if role == "seller":
-            name = ""                          # buyers are never named
+            cust = customers.get(cw)
+            name = (cust or {}).get("name", "")          # only names the SELLER supplied
+            group = "identified" if cust else "anonymous"
+            tier = "customer" if cust else "anonymous"
             category, account = "x402 revenue", REVENUE_ACCOUNT
         else:
             name = meta.get("name") or ""
+            tier = meta.get("tier", "unknown")
             category = ps[0]["category"] or L.UNCATEGORIZED
-            account = ps[0]["account"] or exp.get(category) or "6490 - Uncategorized Agent Spend"
-        exact = sum(p["amount_usdc"] for p in ps)
+            if tier in ("unknown", "behavioral"):
+                group, account = "suspense", SUSPENSE_ACCOUNT
+                shape = category if tier == "behavioral" else ""
+                if tier == "behavioral":
+                    name = ""
+            else:
+                group = "identified"
+                account = ps[0]["account"] or exp.get(category) or "6490 - Uncategorized Agent Spend"
         counterparties.append({
-            "wallet": cw, "name": name, "tier": meta.get("tier", "unknown") if role == "buyer" else "buyer",
-            "category": category, "account": account,
-            "payments": len(ps), "amount_exact": round(exact, 6), "amount": cents(exact),
+            "wallet": cw, "name": name, "tier": tier, "group": group,
+            "category": category, "account": account, "shape_hint": shape,
+            "payments": len(ps),
+            "usdc_exact": round(sum(p["amount_usdc"] for p in ps), 6),
+            "usd_exact": round(sum(usd_of(p) for p in ps), 8),
             "first": ps[0]["ts"], "last": ps[-1]["ts"],
             "flags": sorted({f for p in ps for f in p["flags"]}),
         })
-    counterparties.sort(key=lambda c: -c["amount_exact"])
-    for c, a in zip(counterparties, allocate_cents([c["amount_exact"] for c in counterparties])):
+    counterparties.sort(key=lambda c: -c["usd_exact"])
+    for c, a in zip(counterparties, allocate_cents([c["usd_exact"] for c in counterparties])):
         c["amount"] = a
+    # back-compat name used by renderers/tests
+    for c in counterparties:
+        c["amount_exact"] = c["usdc_exact"]
 
-    # ---- invoices: one per counterparty ----
+    # ---- invoices ----
     start, end = period_bounds(period)
     yyyymm = period.replace("-", "")
     me_name = (issuer or {}).get("name") or me.get("name") or ""
+    groups = []                                    # (key, label, members, buyer details)
+    if role == "seller":
+        anon = [c for c in counterparties if c["group"] == "anonymous"]
+        for c in counterparties:
+            if c["group"] == "identified" or invoice_mode == "per-buyer":
+                groups.append((c["wallet"], c["name"], [c], customers.get(c["wallet"], {})))
+        if anon and invoice_mode != "per-buyer":
+            groups.append(("ANON", ANON_CUSTOMER, anon, {}))
+    else:
+        for c in counterparties:
+            groups.append((c["wallet"], c["name"], [c], {}))
+
     invoices = []
-    for c in counterparties:
-        ps = cps[c["wallet"]]
-        lines = defaultdict(lambda: {"qty": 0, "amount": 0.0})
+    for key, label, members, buyer_details in groups:
+        ps = sorted([p for m in members for p in cps[m["wallet"]]], key=lambda p: p["ts"])
+        lines = defaultdict(lambda: {"qty": 0, "usdc": 0.0})
         for p in ps:
             unit = round(p["amount_usdc"], 6)
             lines[unit]["qty"] += 1
-            lines[unit]["amount"] += p["amount_usdc"]
+            lines[unit]["usdc"] += p["amount_usdc"]
         if role == "seller":
-            seller_w, buyer_w, seller_name = w, c["wallet"], me_name
+            seller_w, buyer_key, seller_name = w, key, me_name
         else:
-            seller_w, buyer_w, seller_name = c["wallet"], w, c["name"]
-        inv_lines = [{"description": "x402 paid requests @ {}".format(fmt_price(u)),
-                      "quantity": v["qty"], "unit_price": u,
-                      "amount_exact": round(v["amount"], 6)}
-                     for u, v in sorted(lines.items(), key=lambda kv: -kv[1]["amount"])]
+            seller_w, buyer_key, seller_name = key, w, label
+        number = "CTR-{}-{}-{}".format(yyyymm, code(seller_w),
+                                       "ANON" if buyer_key == "ANON" else code(buyer_key))
+        for m in members:
+            m["invoice"] = number
         invoices.append({
-            "number": "CTR-{}-{}-{}".format(yyyymm, code(seller_w), code(buyer_w)),
+            "number": number,
             "kind": "issued" if role == "seller" else "reconstructed",
+            "summary": buyer_key == "ANON",
             "issue_date": end.isoformat(),
             "service_period": [start.isoformat(), end.isoformat()],
             "seller": {"wallet": seller_w, "name": seller_name,
                        **({k: v for k, v in (issuer or {}).items() if k != "name"}
                           if role == "seller" else {})},
-            "buyer": {"wallet": buyer_w},
-            "currency": "USDC", "chain": chain,
-            "lines": inv_lines,
-            "total": c["amount"], "total_exact": c["amount_exact"],
+            "buyer": ({"wallet": "", "name": ANON_CUSTOMER, "wallets": len(members)}
+                      if buyer_key == "ANON" else
+                      dict({"wallet": buyer_key if role == "seller" else w},
+                           **({"name": buyer_details.get("name", ""),
+                               **{k: v for k, v in buyer_details.items() if k != "name"}}
+                              if buyer_details else {}))),
+            "currency": token, "chain": chain,
+            "lines": [{"description": "x402 paid requests @ {} {}".format(fmt_price(u)[1:], token),
+                       "quantity": v["qty"], "unit_price": u, "amount_exact": round(v["usdc"], 6)}
+                      for u, v in sorted(lines.items(), key=lambda kv: -kv[1]["usdc"])],
+            "total_usdc": round(sum(p["amount_usdc"] for p in ps), 6),
+            "total": round(sum(m["amount"] for m in members), 2),       # USD, allocated cents
+            "total_exact": round(sum(p["amount_usdc"] for p in ps), 6),
+            "schedule": ([{"wallet": m["wallet"], "payments": m["payments"],
+                           "usdc": m["usdc_exact"], "usd": m["amount"]} for m in members]
+                         if buyer_key == "ANON" else []),
             "payments": [{"ts": p["ts"], "tx": p["tx_hash"], "amount": round(p["amount_usdc"], 6),
-                          "path": p["leg_type"], "facilitator": p.get("facilitator") or ""}
+                          "rate": rb.rate(token, p["ts"][:10]), "path": p["leg_type"],
+                          "facilitator": p.get("facilitator") or "",
+                          "buyer": p["payer"] if role == "seller" else ""}
                          for p in ps],
-            "tax_ready": bool(role == "seller" and issuer and issuer.get("tax_id")),
+            "tax_ready": bool(role == "seller" and issuer and issuer.get("tax_id")
+                              and buyer_key != "ANON"),
         })
 
     # ---- exceptions ----
@@ -210,12 +280,13 @@ def build_pack(wallet: str, period: str, result: dict, role: Optional[str] = Non
         if c["tier"] == "hard-stop":
             ex.append({"severity": "high", "type": "suspected address poisoning",
                        "counterparty": c["wallet"], "amount": c["amount"], "payments": c["payments"],
-                       "detail": "payee imitates an established counterparty; held from expense"})
-        elif role == "buyer" and c["tier"] in ("unknown", "behavioral"):
-            ex.append({"severity": "medium", "type": "unidentified seller",
+                       "detail": "payee imitates an established counterparty; held in 7910, not expense"})
+        elif c["group"] == "suspense":
+            ex.append({"severity": "medium", "type": "unidentified seller (in suspense)",
                        "counterparty": c["wallet"], "amount": c["amount"], "payments": c["payments"],
-                       "detail": ("spend type inferred from payment pattern: " + c["category"])
-                       if c["tier"] == "behavioral" else "no evidence of who this seller is"})
+                       "detail": ("held in 1990 suspense until identified; payment pattern suggests: "
+                                  + c["shape_hint"].split(" - ", 1)[-1]) if c["shape_hint"]
+                       else "held in 1990 suspense until identified; clear before closing the month"})
         for f in c["flags"]:
             if f in ("self-payment", "dust", "round-trip", "closed-loop"):
                 ex.append({"severity": "low" if f == "closed-loop" else "medium",
@@ -225,87 +296,110 @@ def build_pack(wallet: str, period: str, result: dict, role: Optional[str] = Non
                                       "round-trip": "money flows both ways between these wallets",
                                       "dust": "payments of 1 micro-USDC or less",
                                       "self-payment": "payer and payee are the same wallet"}[f]})
-    tot = sum(c["amount_exact"] for c in counterparties)
+    tot = sum(c["usd_exact"] for c in counterparties)
     if role == "seller" and len(counterparties) > 1 and tot > 0:
         top = counterparties[0]
-        share = 100.0 * top["amount_exact"] / tot
+        share = 100.0 * top["usd_exact"] / tot
         if share >= 80:
             ex.append({"severity": "info", "type": "customer concentration",
                        "counterparty": top["wallet"], "amount": top["amount"],
                        "payments": top["payments"],
                        "detail": "{:.0f}% of this month's revenue came from one buyer wallet".format(share)})
     for p in main:
-        if p["amount_usdc"] >= LARGE_PAYMENT_USD:
+        if usd_of(p) >= LARGE_PAYMENT_USD:
             ex.append({"severity": "low", "type": "large payment", "counterparty": other(p),
-                       "amount": cents(p["amount_usdc"]), "payments": 1,
+                       "amount": cents(usd_of(p)), "payments": 1,
                        "detail": "single payment >= ${:.0f}: tx {}".format(LARGE_PAYMENT_USD, p["tx_hash"])})
     for p in side:
         ex.append({"severity": "info", "type": "batch-channel deposit (escrow)",
-                   "counterparty": p["payee"], "amount": cents(p["amount_usdc"]), "payments": 1,
+                   "counterparty": p["payee"], "amount": cents(usd_of(p)), "payments": 1,
                    "detail": "prepaid into an x402 channel: booked to 1086 escrow, not expense"})
+    days = sorted({p["ts"][:10] for p in main + side})
+    rate_rows = [dict({"date": d}, **rb.info(token, d)) for d in days]
+    par_days = [r["date"] for r in rate_rows if r["points"] == 0]
+    if par_days:
+        ex.append({"severity": "medium", "type": "exchange rate unavailable",
+                   "counterparty": token, "amount": 0.0, "payments": len(par_days),
+                   "detail": "{} day(s) translated at 1.00 because no daily rate was available: {}".format(
+                       len(par_days), ", ".join(par_days[:6]) + (" …" if len(par_days) > 6 else ""))})
     order = {"high": 0, "medium": 1, "low": 2, "info": 3}
     ex.sort(key=lambda e: (order[e["severity"]], -e["amount"]))
 
-    # ---- journal entries (one per counterparty, matches the statement) ----
+    # ---- journal (matches the statement: one line per invoice group) ----
     entries = []
-    for c in counterparties:
+    for inv in invoices:
+        if inv["total"] < 0.01:
+            continue
+        members = [c for c in counterparties if c.get("invoice") == inv["number"]]
         if role == "seller":
             dr, cr = ASSET_ACCOUNT, REVENUE_ACCOUNT
-            label = "buyer " + short(c["wallet"])
+            label = inv["buyer"].get("name") or ("buyer " + short(inv["buyer"]["wallet"]))
+            cat = "x402 revenue"
         else:
-            dr, cr = c["account"], ASSET_ACCOUNT
-            label = c["name"] or short(c["wallet"])
-        if c["amount"] < 0.01:
-            continue
+            m = members[0]
+            dr, cr = m["account"], ASSET_ACCOUNT
+            label = m["name"] or ("unidentified " + short(m["wallet"]))
+            cat = m["category"]
+        n = sum(c["payments"] for c in members)
         entries.append({"period": period, "debit_account": dr, "credit_account": cr,
-                        "amount_usd": c["amount"], "provider": label, "category": c["category"],
-                        "settlements": c["payments"],
-                        "memo": "x402 {} {} - {} ({} settlements)".format(
-                            "revenue" if role == "seller" else "spend", period, label, c["payments"])})
+                        "amount_usd": inv["total"], "provider": label, "category": cat,
+                        "settlements": n, "invoice": inv["number"],
+                        "memo": "x402 {} {} - {} - {} {:.6f} at daily avg rates ({} settlements)".format(
+                            "revenue" if role == "seller" else "spend", period, label, token,
+                            inv["total_usdc"], n)})
     for p in side:
         entries.append({"period": period, "debit_account": L.ESCROW_ACCOUNT, "credit_account": ASSET_ACCOUNT,
-                        "amount_usd": cents(p["amount_usdc"]), "provider": "x402 batch channel",
-                        "category": "Escrow deposit", "settlements": 1,
+                        "amount_usd": cents(usd_of(p)), "provider": "x402 batch channel",
+                        "category": "Escrow deposit", "settlements": 1, "invoice": "",
                         "memo": "x402 channel deposit " + p["tx_hash"]})
 
     # ---- tie-out ----
-    exact_total = round(sum(p["amount_usdc"] for p in main), 6)
+    usdc_total = round(sum(p["amount_usdc"] for p in main), 6)
+    usd_exact = round(sum(usd_of(p) for p in main), 8)
     stmt_total = round(sum(c["amount"] for c in counterparties), 2)
     inv_total = round(sum(i["total"] for i in invoices), 2)
-    jr_total = round(sum(e["amount_usd"] for e in entries
-                         if e["category"] != "Escrow deposit"), 2)
-    sub_cent = round(sum(c["amount"] for c in counterparties if c["amount"] < 0.01), 2)
+    jr_total = round(sum(e["amount_usd"] for e in entries if e["category"] != "Escrow deposit"), 2)
+    sub_cent = round(sum(i["total"] for i in invoices if i["total"] < 0.01), 2)
     checks = [
         ("Statement total equals sum of invoices", stmt_total == inv_total),
         ("Statement total equals journal total", round(stmt_total - sub_cent, 2) == jr_total),
         ("Every payment appears on exactly one invoice",
          sum(len(i["payments"]) for i in invoices) == len(main)),
-        ("Statement total equals the exact payments total, rounded once",
-         stmt_total == cents(exact_total)),
+        ("Statement total equals the exact USD total, rounded once", stmt_total == cents(usd_exact)),
+        ("Invoices total the {} actually paid on-chain".format(token),
+         abs(sum(i["total_usdc"] for i in invoices) - usdc_total) < 1e-6),
     ]
-    tie = {"payments_exact": exact_total, "statement": stmt_total, "invoices": inv_total,
-           "journal": jr_total, "rounding_difference": round(stmt_total - exact_total, 6),
+    tie = {"payments_exact": usdc_total, "usd_exact": usd_exact, "token": token,
+           "statement": stmt_total, "invoices": inv_total, "journal": jr_total,
+           "rounding_difference": round(stmt_total - usd_exact, 8),
+           "translation_difference": round(usd_exact - usdc_total, 8),
            "sub_cent_counterparties": sub_cent,
            "checks": [{"check": n, "pass": bool(ok)} for n, ok in checks],
            "all_pass": all(ok for _, ok in checks)}
 
     return {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
-        "wallet": w, "chain": chain, "role": role, "period": period,
+        "wallet": w, "chain": chain, "role": role, "period": period, "token": token,
+        "reporting_currency": "USD", "invoice_mode": invoice_mode,
         "period_start": start.isoformat(), "period_end": end.isoformat(),
         "name": me_name, "tier": me.get("tier", ""), "evidence": me.get("evidence", ""),
         "issuer": issuer or {},
         "summary": {"payments": len(main), "counterparties": len(counterparties),
-                    "total": stmt_total, "total_exact": exact_total,
-                    "escrow_deposits": cents(sum(p["amount_usdc"] for p in side)),
+                    "total": stmt_total, "total_exact": usd_exact, "total_usdc": usdc_total,
+                    "anonymous": sum(1 for c in counterparties if c["group"] == "anonymous"),
+                    "suspense": sum(1 for c in counterparties if c["group"] == "suspense"),
+                    "suspense_usd": round(sum(c["amount"] for c in counterparties if c["group"] == "suspense"), 2),
+                    "escrow_deposits": cents(sum(usd_of(p) for p in side)),
                     "first": main[0]["ts"] if main else None,
                     "last": main[-1]["ts"] if main else None,
                     "days_active": len({p["ts"][:10] for p in main}),
                     "exceptions": len(ex)},
+        "rates": rate_rows,
         "counterparties": counterparties, "invoices": invoices, "exceptions": ex,
         "journal": entries, "tie_out": tie,
         "payments": [{"ts": p["ts"], "tx": p["tx_hash"], "counterparty": other(p),
-                      "amount": round(p["amount_usdc"], 6), "path": p["leg_type"],
+                      "amount": round(p["amount_usdc"], 6), "rate": rb.rate(token, p["ts"][:10]),
+                      "usd": round(usd_of(p), 8), "path": p["leg_type"],
                       "facilitator": p.get("facilitator") or "", "category": p["category"],
                       "flags": p["flags"]} for p in main],
         "disclaimer": DISCLAIMER,
@@ -397,8 +491,12 @@ def _doc(title, body):
             + body + "</div></body></html>")
 
 
+def usdc(x, token="USDC"):
+    return "{:,.6f} {}".format(float(x), token)
+
+
 def render_statement(pack: dict) -> str:
-    s, ch = pack["summary"], pack["chain"]
+    s, ch, tk = pack["summary"], pack["chain"], pack.get("token", "USDC")
     seller = pack["role"] == "seller"
     who = pack["name"] or "Unidentified wallet"
     h = []
@@ -407,39 +505,73 @@ def render_statement(pack: dict) -> str:
              ("Revenue statement" if seller else "Spend statement") + " · " + e(ch.title()) +
              " · <a class='mono' href='" + e(addr_url(ch, pack["wallet"])) + "'>" + e(pack["wallet"]) + "</a></div></div>"
              "<div class='meta'>Period <b>" + e(pack["period_start"]) + " – " + e(pack["period_end"]) + "</b><br>"
+             "Reporting currency <b>USD</b> · transaction currency <b>" + e(tk) + "</b><br>"
              "Generated " + e(pack["generated_at"][:16].replace("T", " ")) + " UTC<br>"
              "Tie-out <b class='" + ("pass'>PASS" if pack["tie_out"]["all_pass"] else "fail'>FAIL") + "</b></div></div>")
-    h.append("<div class='cards'>"
-             + "".join("<div class='card'><div class='l'>{}</div><div class='v'>{}</div></div>".format(l, v) for l, v in [
-                 ("Revenue" if seller else "Spend", money(s["total"])),
-                 ("Payments", "{:,}".format(s["payments"])),
-                 ("Buyers" if seller else "Sellers", "{:,}".format(s["counterparties"])),
-                 ("Invoices", "{:,}".format(len(pack["invoices"]))),
-                 ("Exceptions", "{:,}".format(s["exceptions"]))]) + "</div>")
+    cards = [("Revenue" if seller else "Spend", money(s["total"])),
+             ("In " + tk, "{:,.2f}".format(s["total_usdc"])),
+             ("Payments", "{:,}".format(s["payments"])),
+             ("Buyers" if seller else "Sellers", "{:,}".format(s["counterparties"])),
+             ("Invoices", "{:,}".format(len(pack["invoices"]))),
+             ("Exceptions", "{:,}".format(s["exceptions"]))]
+    if not seller and s.get("suspense"):
+        cards.insert(4, ("In suspense", money(s["suspense_usd"])))
+    h.append("<div class='cards'>" + "".join(
+        "<div class='card'><div class='l'>{}</div><div class='v'>{}</div></div>".format(e(l), v) for l, v in cards) + "</div>")
     h.append("<div class='dl noprint' style='margin-top:16px'>"
              "<a href='journal_quickbooks.csv' download>QuickBooks journal</a>"
              "<a href='journal_xero.csv' download>Xero journal</a>"
              "<a href='payments.csv' download>All payments (CSV)</a>"
+             + ("<a href='customer_ledger.csv' download>Customer sub-ledger (CSV)</a>" if seller
+                else "<a href='suspense_ledger.csv' download>Suspense ledger (CSV)</a>") +
              "<a href='exceptions.csv' download>Exceptions (CSV)</a>"
+             "<a href='rates.csv' download>Exchange rates (CSV)</a>"
              "<a href='pack.json' download>Pack (JSON)</a>"
              + ("<a href='pack.zip' download>Everything (ZIP)</a>" if pack.get("_zip") else "") + "</div>")
 
-    h.append("<h2>1 · Statement by " + ("buyer" if seller else "seller") + "</h2><table><thead><tr><th>" +
-             ("Buyer wallet" if seller else "Seller") + "</th><th>" + ("Account" if not seller else "Invoice") +
-             "</th><th class='num'>Payments</th><th class='num'>First</th><th class='num'>Last</th><th class='num'>Amount</th></tr></thead><tbody>")
-    inv_by = {i["buyer"]["wallet"] if seller else i["seller"]["wallet"]: i for i in pack["invoices"]}
-    for c in pack["counterparties"]:
-        inv = inv_by[c["wallet"]]
-        label = ("<span class='mono'>" + e(short(c["wallet"])) + "</span>") if seller else (
-            (e(c["name"]) if c["name"] else "<span class='muted'>unidentified</span>") +
-            "<div class='mono muted'>" + e(short(c["wallet"])) + "</div>")
-        h.append("<tr><td>" + label + "</td><td>" +
-                 ("<a class='mono' href='invoices/" + e(inv["number"]) + ".html'>" + e(inv["number"]) + "</a>" if seller
-                  else e(c["account"]) + "<div class='muted'><a class='mono' href='invoices/" + e(inv["number"]) + ".html'>" + e(inv["number"]) + "</a></div>") +
-                 "</td><td class='num'>{:,}</td><td class='num'>{}</td><td class='num'>{}</td><td class='num'>{}</td></tr>".format(
-                     c["payments"], e(c["first"][:10]), e(c["last"][:10]), money(c["amount"])))
-    h.append("</tbody><tfoot><tr><td colspan='5'>Total</td><td class='num'>" + money(s["total"]) +
-             "</td></tr></tfoot></table>")
+    if seller:
+        anon = [c for c in pack["counterparties"] if c["group"] == "anonymous"]
+        h.append("<h2>1 · Revenue by customer</h2><p class='muted' style='margin-bottom:8px'>Buyers the seller has "
+                 "identified are listed by name. All other buyer wallets are booked to one customer, <b>" +
+                 e(ANON_CUSTOMER) + "</b>" + (" (" + "{:,}".format(len(anon)) + " wallets)" if anon else "") +
+                 ", with every wallet kept in the customer sub-ledger below.</p>")
+        h.append("<table><thead><tr><th>Customer</th><th>Invoice</th><th class='num'>Payments</th>"
+                 "<th class='num'>" + e(tk) + "</th><th class='num'>USD</th></tr></thead><tbody>")
+        for inv in pack["invoices"]:
+            n = len(inv["payments"])
+            h.append("<tr><td>" + e(inv["buyer"].get("name") or short(inv["buyer"]["wallet"])) +
+                     ("<div class='muted'>{:,} wallets</div>".format(inv["buyer"]["wallets"]) if inv.get("summary") else
+                      "<div class='mono muted'>" + e(short(inv["buyer"]["wallet"])) + "</div>") +
+                     "</td><td><a class='mono' href='invoices/" + e(inv["number"]) + ".html'>" + e(inv["number"]) +
+                     "</a></td><td class='num'>{:,}</td><td class='num'>{:,.6f}</td><td class='num'>{}</td></tr>".format(
+                         n, inv["total_usdc"], money(inv["total"])))
+        h.append("</tbody><tfoot><tr><td colspan='3'>Total</td><td class='num'>{:,.6f}</td><td class='num'>{}</td></tr></tfoot></table>".format(
+            s["total_usdc"], money(s["total"])))
+        h.append("<h2>Customer sub-ledger (every buyer wallet)</h2>")
+    else:
+        h.append("<h2>1 · Spend by seller</h2>")
+    h.append("<table><thead><tr><th>" + ("Buyer wallet" if seller else "Seller") + "</th><th>" +
+             ("Customer" if seller else "Account") + "</th><th class='num'>Payments</th><th class='num'>First</th>"
+             "<th class='num'>Last</th><th class='num'>" + e(tk) + "</th><th class='num'>USD</th></tr></thead><tbody>")
+    rows = pack["counterparties"]
+    for c in rows[:150]:
+        if seller:
+            label = "<span class='mono'>" + e(short(c["wallet"])) + "</span>"
+            col2 = e(c["name"] or ANON_CUSTOMER)
+        else:
+            label = ((e(c["name"]) if c["name"] else "<span class='muted'>unidentified</span>") +
+                     "<div class='mono muted'>" + e(short(c["wallet"])) + "</div>")
+            col2 = e(c["account"]) + (("<div class='muted'>likely " + e(c["shape_hint"].split(" - ", 1)[-1]) + "</div>")
+                                      if c.get("shape_hint") else "")
+        col2 += "<div class='muted'><a class='mono' href='invoices/" + e(c["invoice"]) + ".html'>" + e(c["invoice"]) + "</a></div>"
+        h.append("<tr><td>" + label + "</td><td>" + col2 +
+                 "</td><td class='num'>{:,}</td><td class='num'>{}</td><td class='num'>{}</td><td class='num'>{:,.6f}</td><td class='num'>{}</td></tr>".format(
+                     c["payments"], e(c["first"][:10]), e(c["last"][:10]), c["usdc_exact"], money(c["amount"])))
+    h.append("</tbody><tfoot><tr><td colspan='5'>Total</td><td class='num'>{:,.6f}</td><td class='num'>{}</td></tr></tfoot></table>".format(
+        s["total_usdc"], money(s["total"])))
+    if len(rows) > 150:
+        h.append("<p class='muted'>+{:,} more wallets in {}.</p>".format(
+            len(rows) - 150, "customer_ledger.csv" if seller else "suspense_ledger.csv / payments.csv"))
     if s.get("escrow_deposits"):
         h.append("<p class='muted' style='margin-top:6px'>Plus " + money(s["escrow_deposits"]) +
                  " deposited into x402 batch channels (prepaid escrow, account 1086 — not spend until claimed).</p>")
@@ -457,7 +589,7 @@ def render_statement(pack: dict) -> str:
     else:
         h.append("<p class='muted'>None — nothing in this period needs review.</p>")
 
-    h.append("<h2>3 · Journal entries</h2><table><thead><tr><th>Debit</th><th>Credit</th><th>Memo</th><th class='num'>Amount</th></tr></thead><tbody>")
+    h.append("<h2>3 · Journal entries (USD)</h2><table><thead><tr><th>Debit</th><th>Credit</th><th>Memo</th><th class='num'>Amount</th></tr></thead><tbody>")
     for j in pack["journal"][:40]:
         h.append("<tr><td>" + e(j["debit_account"]) + "</td><td>" + e(j["credit_account"]) + "</td><td class='muted'>" +
                  e(j["memo"]) + "</td><td class='num'>" + money(j["amount_usd"]) + "</td></tr>")
@@ -465,14 +597,30 @@ def render_statement(pack: dict) -> str:
     if len(pack["journal"]) > 40:
         h.append("<p class='muted'>+{} more entries in the QuickBooks/Xero files.</p>".format(len(pack["journal"]) - 40))
 
+    rr = pack.get("rates") or []
+    h.append("<h2>4 · Exchange rates used (" + e(tk) + " → USD, daily average)</h2>")
+    if rr:
+        lo = min(r["rate"] for r in rr); hi = max(r["rate"] for r in rr)
+        par = [r for r in rr if not r["points"]]
+        h.append("<p class='muted' style='margin-bottom:8px'>Each payment is translated at the average rate of its UTC "
+                 "day, like any foreign-currency transaction. This period: {} days, rates {:.6f}–{:.6f}{}.</p>".format(
+                     len(rr), lo, hi, ("; <b>{} day(s) at 1.00 fallback</b> (no rate available)".format(len(par)) if par else "")))
+        h.append("<table><thead><tr><th>Date</th><th class='num'>Rate</th><th class='num'>Price points</th><th>Source</th></tr></thead><tbody>")
+        for r in rr[:40]:
+            h.append("<tr><td>{}</td><td class='num'>{:.6f}</td><td class='num'>{}</td><td class='muted'>{}</td></tr>".format(
+                e(r["date"]), r["rate"], r["points"] or "–", e(r["source"])))
+        h.append("</tbody></table>")
+
     t = pack["tie_out"]
-    h.append("<h2>4 · Tie-out</h2><table><tbody>"
-             "<tr><td>Sum of payments (exact, 6 dp)</td><td class='num'>" + signed6(t["payments_exact"]) + "</td></tr>"
-             "<tr><td>Statement total (cents allocated across counterparties)</td><td class='num'>" + money(t["statement"]) + "</td></tr>"
-             "<tr><td>Invoices total</td><td class='num'>" + money(t["invoices"]) + "</td></tr>"
-             "<tr><td>Journal total</td><td class='num'>" + money(t["journal"]) + "</td></tr>"
+    h.append("<h2>5 · Tie-out</h2><table><tbody>"
+             "<tr><td>Paid on-chain (" + e(tk) + ", exact)</td><td class='num'>" + usdc(t["payments_exact"], tk) + "</td></tr>"
+             "<tr><td>Translated at daily average rates (USD, exact)</td><td class='num'>" + signed6(t["usd_exact"]) + "</td></tr>"
+             "<tr><td>Translation difference vs. 1.00 par</td><td class='num'>" + signed6(t["translation_difference"]) + "</td></tr>"
+             "<tr><td>Statement total (USD, cents allocated)</td><td class='num'>" + money(t["statement"]) + "</td></tr>"
+             "<tr><td>Invoices total (USD)</td><td class='num'>" + money(t["invoices"]) + "</td></tr>"
+             "<tr><td>Journal total (USD)</td><td class='num'>" + money(t["journal"]) + "</td></tr>"
              "<tr><td>Rounding to cents (applied once, to the total)</td><td class='num'>" + signed6(t["rounding_difference"]) + "</td></tr>"
-             + ("<tr><td>Counterparties under one cent (on statement, no journal line)</td><td class='num'>" + money(t["sub_cent_counterparties"]) + "</td></tr>" if t["sub_cent_counterparties"] else "")
+             + ("<tr><td>Invoices under one cent (on statement, no journal line)</td><td class='num'>" + money(t["sub_cent_counterparties"]) + "</td></tr>" if t["sub_cent_counterparties"] else "")
              + "".join("<tr><td>" + e(c["check"]) + "</td><td class='num " + ("pass'>PASS" if c["pass"] else "fail'>FAIL") + "</td></tr>" for c in t["checks"])
              + "</tbody></table>")
     h.append("<div class='note'>" + e(pack["disclaimer"]) + "</div>")
@@ -480,40 +628,61 @@ def render_statement(pack: dict) -> str:
 
 
 def render_invoice(pack: dict, inv: dict) -> str:
-    ch = pack["chain"]
+    ch, tk = pack["chain"], inv.get("currency", "USDC")
     sel, buy = inv["seller"], inv["buyer"]
-    kind = "Invoice" if inv["kind"] == "issued" else "Reconstructed purchase invoice"
+    if inv.get("summary"):
+        kind = "Summary invoice"
+    else:
+        kind = "Invoice" if inv["kind"] == "issued" else "Reconstructed purchase invoice"
     h = ["<div class='top'><div><div class='brand'>Counterra · payment-backed invoice</div>"
          "<h1>" + e(kind) + "</h1><div class='sub mono'>" + e(inv["number"]) + "</div></div>"
          "<div class='meta'>Issue date <b>" + e(inv["issue_date"]) + "</b><br>Service period <b>" +
-         e(inv["service_period"][0]) + " – " + e(inv["service_period"][1]) + "</b><br>Currency <b>USDC on " +
-         e(ch.title()) + "</b><br>Status <b>PAID</b> (settled on-chain)</div></div>"]
+         e(inv["service_period"][0]) + " – " + e(inv["service_period"][1]) + "</b><br>Currency <b>" + e(tk) + " on " +
+         e(ch.title()) + "</b> (USD at daily average rates)<br>Status <b>PAID</b> (settled on-chain)</div></div>"]
     seller_lines = [e(sel.get("name") or "Unidentified seller")]
     for k in ("address", "tax_id", "email"):
         if sel.get(k):
             seller_lines.append(e(("Tax ID: " if k == "tax_id" else "") + sel[k]))
     seller_lines.append("<span class='mono'>" + e(sel["wallet"]) + "</span>")
+    if inv.get("summary"):
+        buyer_html = (e(ANON_CUSTOMER) + "<br><span class='muted'>{:,} buyer wallets, itemised in the schedule below</span>"
+                      .format(buy.get("wallets", 0)))
+    else:
+        bl = [e(buy["name"])] if buy.get("name") else ["x402 buyer wallet"]
+        for k in ("address", "tax_id", "email"):
+            if buy.get(k):
+                bl.append(e(("Tax ID: " if k == "tax_id" else "") + buy[k]))
+        bl.append("<span class='mono'>" + e(buy["wallet"]) + "</span>")
+        buyer_html = "<br>".join(bl)
     h.append("<div class='parties'><div class='party'><div class='l'>From (seller)</div>" + "<br>".join(seller_lines) +
-             "</div><div class='party'><div class='l'>To (buyer)</div>x402 buyer wallet<br><span class='mono'>" +
-             e(buy["wallet"]) + "</span></div></div>")
+             "</div><div class='party'><div class='l'>To (buyer)</div>" + buyer_html + "</div></div>")
     if not inv.get("tax_ready"):
-        h.append("<div class='warnbox'>Payment-backed record. To use as a tax invoice, the seller's legal name, "
-                 "address and tax ID must be added (Counterra: <span class='mono'>statement --issuer issuer.json</span>).</div>")
-    h.append("<h2>Line items</h2><table><thead><tr><th>Description</th><th class='num'>Qty</th><th class='num'>Unit price</th><th class='num'>Amount</th></tr></thead><tbody>")
+        why = ("A summary invoice to anonymous wallets evidences revenue; it is not a tax invoice to a named customer."
+               if inv.get("summary") else
+               "To use as a tax invoice, the seller's legal name, address and tax ID must be added "
+               "(Counterra: <span class='mono'>statement --issuer issuer.json</span>).")
+        h.append("<div class='warnbox'>Payment-backed record. " + why + "</div>")
+    h.append("<h2>Line items</h2><table><thead><tr><th>Description</th><th class='num'>Qty</th><th class='num'>Unit price</th><th class='num'>Amount (" + e(tk) + ")</th></tr></thead><tbody>")
     for ln in inv["lines"]:
-        h.append("<tr><td>" + e(ln["description"]) + "</td><td class='num'>{:,}</td><td class='num'>{}</td><td class='num'>{}</td></tr>".format(
-            ln["quantity"], fmt_price(ln["unit_price"]), "${:,.6f}".format(ln["amount_exact"])))
-    h.append("</tbody><tfoot><tr><td colspan='3'>Total (rounded to cents)</td><td class='num'>" + money(inv["total"]) +
-             "</td></tr><tr><td colspan='3' class='muted' style='font-weight:400'>Amount paid on-chain (exact)</td><td class='num muted' style='font-weight:400'>" +
-             signed6(inv["total_exact"]) + "</td></tr>" +
-             ("<tr><td colspan='3' class='muted' style='font-weight:400'>Rounding to cents</td><td class='num muted' style='font-weight:400'>" +
-              signed6(round(inv["total"] - inv["total_exact"], 6)) + "</td></tr>" if abs(inv["total"] - inv["total_exact"]) > 1e-9 else "") +
-             "<tr><td colspan='3'>Balance due</td><td class='num'>$0.00</td></tr></tfoot></table>")
-    h.append("<h2>Settlement evidence ({:,} payments)</h2><table><thead><tr><th>Time (UTC)</th><th>Transaction</th><th>Path</th><th class='num'>Amount</th></tr></thead><tbody>".format(len(inv["payments"])))
+        h.append("<tr><td>" + e(ln["description"]) + "</td><td class='num'>{:,}</td><td class='num'>{}</td><td class='num'>{:,.6f}</td></tr>".format(
+            ln["quantity"], fmt_price(ln["unit_price"])[1:] + " " + e(tk), ln["amount_exact"]))
+    h.append("</tbody><tfoot><tr><td colspan='3'>Total (" + e(tk) + ", paid on-chain)</td><td class='num'>{:,.6f}</td></tr>".format(inv["total_usdc"]) +
+             "<tr><td colspan='3' class='muted' style='font-weight:400'>USD equivalent at daily average rates</td><td class='num muted' style='font-weight:400'>" +
+             money(inv["total"]) + "</td></tr><tr><td colspan='3'>Balance due</td><td class='num'>0.000000</td></tr></tfoot></table>")
+    if inv.get("schedule"):
+        h.append("<h2>Schedule of buyer wallets ({:,})</h2><table><thead><tr><th>Buyer wallet</th><th class='num'>Payments</th>"
+                 "<th class='num'>{}</th><th class='num'>USD</th></tr></thead><tbody>".format(len(inv["schedule"]), e(tk)))
+        for r in inv["schedule"][:300]:
+            h.append("<tr><td class='mono'>{}</td><td class='num'>{:,}</td><td class='num'>{:,.6f}</td><td class='num'>{}</td></tr>".format(
+                e(r["wallet"]), r["payments"], r["usdc"], money(r["usd"])))
+        h.append("</tbody></table>")
+    h.append("<h2>Settlement evidence ({:,} payments)</h2><table><thead><tr><th>Time (UTC)</th>{}<th>Transaction</th><th class='num'>Rate</th><th class='num'>Amount</th></tr></thead><tbody>".format(
+        len(inv["payments"]), "<th>Buyer</th>" if inv.get("summary") else ""))
     for p in inv["payments"][:500]:
-        h.append("<tr><td class='num' style='text-align:left'>" + e(p["ts"][:19].replace("T", " ")) + "</td><td class='mono'><a href='" +
-                 e(tx_url(ch, p["tx"])) + "'>" + e(short(p["tx"])) + "</a></td><td>" + e(p["path"]) + "</td><td class='num'>" +
-                 fmt_price(p["amount"]) + "</td></tr>")
+        h.append("<tr><td class='num' style='text-align:left'>" + e(p["ts"][:19].replace("T", " ")) + "</td>" +
+                 ("<td class='mono'>" + e(short(p.get("buyer", ""))) + "</td>" if inv.get("summary") else "") +
+                 "<td class='mono'><a href='" + e(tx_url(ch, p["tx"])) + "'>" + e(short(p["tx"])) + "</a></td><td class='num'>" +
+                 "{:.4f}".format(p.get("rate", 1.0)) + "</td><td class='num'>" + fmt_price(p["amount"])[1:] + "</td></tr>")
     h.append("</tbody></table>")
     if len(inv["payments"]) > 500:
         h.append("<p class='muted'>+{:,} more payments listed in payments.csv</p>".format(len(inv["payments"]) - 500))
@@ -570,16 +739,40 @@ def write_pack(pack: dict, out_dir: str, make_zip: bool = True) -> str:
         json.dump(pj, f, indent=1)
     with open(os.path.join(out_dir, "payments.csv"), "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["timestamp_utc", "tx_hash", "counterparty", "amount_usdc", "path",
-                    "facilitator", "category", "flags", "invoice"])
+        w.writerow(["timestamp_utc", "tx_hash", "counterparty", "amount_" + pack.get("token", "USDC").lower(),
+                    "rate_to_usd", "amount_usd", "path", "facilitator", "category", "flags", "invoice"])
         inv_of = {}
         for inv in pack["invoices"]:
             for p in inv["payments"]:
                 inv_of[(p["tx"], p["ts"], p["amount"])] = inv["number"]
         for p in pack["payments"]:
-            w.writerow([p["ts"], p["tx"], p["counterparty"], "%.6f" % p["amount"], p["path"],
+            w.writerow([p["ts"], p["tx"], p["counterparty"], "%.6f" % p["amount"], "%.8f" % p.get("rate", 1.0),
+                        "%.6f" % p.get("usd", p["amount"]), p["path"],
                         p["facilitator"], p["category"], ",".join(p["flags"]),
                         inv_of.get((p["tx"], p["ts"], p["amount"]), "")])
+    seller = pack["role"] == "seller"
+    with open(os.path.join(out_dir, "customer_ledger.csv" if seller else "suspense_ledger.csv"), "w", newline="") as f:
+        w = csv.writer(f)
+        if seller:
+            w.writerow(["customer", "buyer_wallet", "payments", "amount_usdc", "amount_usd", "first", "last", "invoice"])
+            rows = pack["counterparties"]
+        else:
+            w.writerow(["account", "seller_wallet", "likely_spend_type", "payments", "amount_usdc", "amount_usd",
+                        "first", "last", "invoice", "status"])
+            rows = [c for c in pack["counterparties"] if c["group"] == "suspense"]
+        for c in rows:
+            if seller:
+                w.writerow([c["name"] or ANON_CUSTOMER, c["wallet"], c["payments"], "%.6f" % c["usdc_exact"],
+                            "%.2f" % c["amount"], c["first"], c["last"], c.get("invoice", "")])
+            else:
+                w.writerow([SUSPENSE_ACCOUNT, c["wallet"], (c.get("shape_hint") or "").split(" - ", 1)[-1],
+                            c["payments"], "%.6f" % c["usdc_exact"], "%.2f" % c["amount"], c["first"], c["last"],
+                            c.get("invoice", ""), "open - identify seller to clear"])
+    with open(os.path.join(out_dir, "rates.csv"), "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["date", "token", "rate_to_usd", "price_points", "source"])
+        for r in pack.get("rates") or []:
+            w.writerow([r["date"], pack.get("token", "USDC"), "%.8f" % r["rate"], r["points"], r["source"]])
     with open(os.path.join(out_dir, "exceptions.csv"), "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["severity", "type", "counterparty", "amount_usd", "payments", "detail"])
@@ -597,9 +790,27 @@ def write_pack(pack: dict, out_dir: str, make_zip: bool = True) -> str:
     return os.path.join(out_dir, "index.html")
 
 
+def prepare_rates(res: dict, periods: List[str], update: bool = True):
+    """RateBook for the periods, fetching missing days first when possible.
+    A failed fetch is not fatal: the pack falls back to 1.00 and says so."""
+    from counterralib import rates as R
+    if update:
+        days = {p["ts"][:10] for p in res["payments"] if p["ts"][:7] in periods}
+        try:
+            got = R.update(days)
+            if got["needed"]:
+                print("rates: {} day(s) needed, {} fetched{}".format(
+                    got["needed"], got["fetched"],
+                    "; missing " + ", ".join(got["missing"][:5]) if got["missing"] else ""))
+        except Exception as ex:
+            print("rates: could not fetch daily rates ({}); missing days use 1.00 and are flagged".format(str(ex)[:120]))
+    return R.RateBook()
+
+
 def run(wallet: str, period: Optional[str] = None, role: Optional[str] = None,
         issuer_path: Optional[str] = None, out_dir: Optional[str] = None,
-        db_path: Optional[str] = None) -> dict:
+        db_path: Optional[str] = None, customers_path: Optional[str] = None,
+        invoice_mode: str = "summary", update_rates: bool = True) -> dict:
     import yaml
     res = L.run_labels(write=False, db_path=db_path)
     w = _norm(wallet)
@@ -614,7 +825,10 @@ def run(wallet: str, period: Optional[str] = None, role: Optional[str] = None,
         cfg = yaml.safe_load(open(os.path.join(L.HERE, "config.yaml"))) or {}
     except Exception:
         pass
-    pack = build_pack(w, period, res, role=role, issuer=issuer, accounting=cfg.get("accounting"))
+    customers = json.load(open(customers_path)) if customers_path else None
+    rb = prepare_rates(res, [period], update=update_rates)
+    pack = build_pack(w, period, res, role=role, issuer=issuer, accounting=cfg.get("accounting"),
+                      rates=rb, customers=customers, invoice_mode=invoice_mode)
     out_dir = out_dir or os.path.join(L.HERE, "out", "statements",
                                       "".join(ch for ch in w if ch.isalnum())[:64], period)
     index = write_pack(pack, out_dir)
@@ -650,16 +864,20 @@ def build_demo(top: int = 10, period: Optional[str] = None, out_dir: Optional[st
     for p in res["payments"]:
         if p["ts"].startswith(period) and p["leg_type"] in L.PAYMENT_LEGS:
             rev[p["payee"]] += p["amount_usdc"]
+    # sellers only: a facilitator wallet that also receives payments is
+    # infrastructure, not a merchant, and must not headline the demo
     named = [w for w in rev if res["wallets"].get(w, {}).get("tier") == "verified"
-             and "seller" in res["wallets"][w].get("roles", [])]
+             and "seller" in res["wallets"][w].get("roles", [])
+             and "facilitator" not in res["wallets"][w].get("roles", [])]
     named.sort(key=lambda w: -rev[w])
     if os.path.isdir(out_dir):
         import shutil
         shutil.rmtree(out_dir)
     os.makedirs(out_dir)
     rows = []
+    rb = prepare_rates(res, [period])
     for w in named[:top]:
-        pk = build_pack(w, period, res, role="seller", accounting=cfg.get("accounting"))
+        pk = build_pack(w, period, res, role="seller", accounting=cfg.get("accounting"), rates=rb)
         sub = os.path.join("".join(ch for ch in w if ch.isalnum())[:64], period)
         write_pack(pk, os.path.join(out_dir, sub))
         rows.append({"wallet": w, "name": pk["name"], "chain": pk["chain"], "path": sub + "/index.html",
