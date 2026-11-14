@@ -1,35 +1,35 @@
 {
-  "updated_at": "2026-11-14T18:26:01.123049+00:00",
+  "updated_at": "2026-11-14T22:40:36.038910+00:00",
   "chains": [
     "base",
     "solana"
   ],
   "source": "coinbase facilitators (base via blockscout) + x402 facilitators (solana via rpc)",
   "facilitators": {
-    "base": 1,
+    "base": 12,
     "solana": 4
   },
   "note": "Base = Coinbase facilitators via Blockscout; Solana = known x402 facilitators via public RPC (best-effort, rate-limited, smaller sample). A floor, not a census. Rates are trailing, dedup by settlement id.",
   "run": {
     "scanned_tx_base": 0,
-    "scanned_tx_solana": 0,
-    "legs_seen": 0,
-    "new_settlements": 0,
-    "buffer_size": 1217
+    "scanned_tx_solana": 45,
+    "legs_seen": 45,
+    "new_settlements": 27,
+    "buffer_size": 1198
   },
   "derived": {
-    "volume_24h_usdc": 2.4195,
-    "settlements_24h": 58,
-    "unique_agents_24h": 21,
-    "unique_sellers_24h": 12,
-    "volume_7d_usdc": 33.8368,
-    "settlements_7d": 455,
-    "unique_agents_7d": 65,
-    "unique_sellers_7d": 38,
+    "volume_24h_usdc": 1.7605,
+    "settlements_24h": 69,
+    "unique_agents_24h": 25,
+    "unique_sellers_24h": 13,
+    "volume_7d_usdc": 33.8958,
+    "settlements_7d": 466,
+    "unique_agents_7d": 64,
+    "unique_sellers_7d": 39,
     "named_pct_7d": 5.9,
     "observed_span_days": 7.0,
-    "rate_per_day_usdc": 4.8338,
-    "rate_per_day_settlements": 65.0,
+    "rate_per_day_usdc": 4.8423,
+    "rate_per_day_settlements": 66.57,
     "by_chain": {
       "base": {
         "volume_24h_usdc": 0.0,
@@ -46,18 +46,18 @@
         "rate_per_day_settlements": 0.0
       },
       "solana": {
-        "volume_24h_usdc": 2.4195,
-        "settlements_24h": 58,
-        "unique_agents_24h": 21,
-        "unique_sellers_24h": 12,
-        "volume_7d_usdc": 33.8368,
-        "settlements_7d": 455,
-        "unique_agents_7d": 65,
-        "unique_sellers_7d": 38,
+        "volume_24h_usdc": 1.7605,
+        "settlements_24h": 69,
+        "unique_agents_24h": 25,
+        "unique_sellers_24h": 13,
+        "volume_7d_usdc": 33.8958,
+        "settlements_7d": 466,
+        "unique_agents_7d": 64,
+        "unique_sellers_7d": 39,
         "named_pct_7d": 5.9,
         "observed_span_days": 7.0,
-        "rate_per_day_usdc": 4.8338,
-        "rate_per_day_settlements": 65.0
+        "rate_per_day_usdc": 4.8423,
+        "rate_per_day_settlements": 66.57
       }
     }
   },
@@ -436,380 +436,12 @@
     },
     {
       "date": "2026-11-14",
-      "volume_24h_usdc": 2.4195,
-      "settlements_24h": 58,
-      "rate_per_day_usdc": 4.8338
+      "volume_24h_usdc": 1.7605,
+      "settlements_24h": 69,
+      "rate_per_day_usdc": 4.8423
     }
   ],
   "buffer": [
-    {
-      "id": "4mFEowXgXK1JmfaMvid41fwsQhCFVYp2ocnSMuW5qrRHfJKp1EJqTLGwou3EZCjfC79WWKChK4xvf17GeKkmqwZF-0",
-      "ts": "2026-10-31T18:27:07+00:00",
-      "payer": "8JkuMoTjHr3g8TtFYB68CKmocnwgRJ558iWVSJhcb4Sp",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "5BveXVqYV1g3yPhY9NQ5LD65iXjKkiacyDwqm6yesh96G66Qh5GoNozsfEozrE73Csj1yTU6big4LWRTbvRXjMRS-0",
-      "ts": "2026-10-31T18:29:05+00:00",
-      "payer": "7xneZpyyWdHCfSTHkPPuELiHgFJ8oZxAq3eHW2bKKevS",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "2sYo77EBA11nxiMLxkChbGpQ93oXmurvutcbKmUiSDwkihpRsN895EUgSFfjR3VSsSmWcvN6SBjW1GedfZ3UhJLk-0",
-      "ts": "2026-10-31T18:30:01+00:00",
-      "payer": "6wcvDUWdHtUN2PgzkJL8s3L7FuoMS9wyuxH3G1Zbtdyx",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "4KAoLiXv2zr6au4iep9Hn7mezvxhoaokaAncp7GkJb7XBKUUsyiRKW2roPRqqPLiZhVAMSBvkCU387qkYHz6qc1p-0",
-      "ts": "2026-10-31T18:31:41+00:00",
-      "payer": "3C8ZdvNHSkftK6EuSP57cEsxpk6TUWDCpjYAskk3LDmC",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "37ZrhiP26YLLR9Z8Ejt63KdXrQdembrkEV7m4yy4Hu9YsN1eQTuvkubWmyeUYYzL3ecGmit55bXYtdzHKy1N2RUN-0",
-      "ts": "2026-10-31T18:32:48+00:00",
-      "payer": "k5KE9pspDK13iUcDgGS4kuUdRx5q4LjRssTLHB6rjM6",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "vd8qoVgwWGoWh7WwuiEmVdmsWVP3oikHWSwEGAsZ49CcVqtVeisA6NYf2h3eALRNpc4HJ7nqALmxe8M9DS7tSof-0",
-      "ts": "2026-10-31T18:33:25+00:00",
-      "payer": "34WhwW7PQwharvScNbEx7kmoABbTCtxEZSxF3nGTWsLj",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "ufuZ1t7aYXS9qzrpedGYXypTeeRky4fNHponbex1EzBQBPKej1QcXzDEt7B2VAorgjNzr47KphBBKdpMonzzutS-0",
-      "ts": "2026-10-31T18:34:37+00:00",
-      "payer": "5g6VzjPfH19wWSQLbMLttAdGTFY3MbYGBagLTEeyDuqM",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "5ybySGmjok5ez2KVrNv4CLP7veayC6ERfPX5J1VdNYYhZrxoSvzQoFvYi55wL3kkuedeXcoC1dL3AQgoXAhh1A16-0",
-      "ts": "2026-10-31T18:35:43+00:00",
-      "payer": "GFDLQ3y8QqpUxJ3yQSHeypBDhfp44EzjKeSdWTr6RL2f",
-      "seller": "9MkM5Ra48KFcSv9HDQ8sb3C3r5HjouEwGQ6sp1cx1vde",
-      "amount": 0.005,
-      "chain": "solana"
-    },
-    {
-      "id": "4gUoLw5x2AHPpNynxAEdsZLH31RYbRNTdqEigKkQpFQFQDjR8QMhkJcgsxZHDtUgfDHMU4cHkoF8E5pALkmhAnY2-0",
-      "ts": "2026-10-31T18:36:43+00:00",
-      "payer": "vSNpCZMvyuo3dCCMZ2Z7JD3hDd9kZ5XpRYxvi7x89YK",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "3fm55gEJHaCNX91YF3D3LHkpdtYmhZqzFsY8R5gnnhcvckaey97bwpBbZWm1ev49mrzauoh1vHRPp8vmxbd8NEcE-0",
-      "ts": "2026-10-31T18:38:14+00:00",
-      "payer": "8JkuMoTjHr3g8TtFYB68CKmocnwgRJ558iWVSJhcb4Sp",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "5XrknAvBm7TXQetvSNtHSUgmnDTmULhTKQqwG576iVqadoWZkxTGc61vy8zd9mzvinfCL8KLTg2JhE4sHZVoAboK-0",
-      "ts": "2026-10-31T18:40:05+00:00",
-      "payer": "7xneZpyyWdHCfSTHkPPuELiHgFJ8oZxAq3eHW2bKKevS",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "edyMuSinM28uY1ZNEZHZM83cvynY1X4zS2DJP74XndQsgcmUoiuubM3HQTqQQgqY6dXNtu79CYCnRTifWhKybU7-0",
-      "ts": "2026-10-31T18:41:23+00:00",
-      "payer": "8jbSfhUf52xBNM9hBrV9wYDTeNVvGiTjH6bYKCnQ3LvL",
-      "seller": "7xvuVbuyzfoE8jLRAbdqwjNYgqLs9pVNx9FpkXPwVDVP",
-      "amount": 20.0,
-      "chain": "solana"
-    },
-    {
-      "id": "4zrKxGkQDenL5gcd7vqCDccqZ7MTr8N6Kd8zLWBugcUcadfZYwqWdZSaRebdy8WhUFND7UYYxTGMtc4cacUdhcVY-0",
-      "ts": "2026-10-31T18:42:43+00:00",
-      "payer": "3J6GdNjsqmGWE96T8Med8Uyy9EFJcmgta93jBTWDNFHU",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "2qz8AhzBvDzdswCUpWUc9DLVMhtgSQ3QALzPAfES7ADrPZj6iH32YymNVBQa1onssR7dfFTc355CBNKK2hd7qVrb-0",
-      "ts": "2026-10-31T18:42:58+00:00",
-      "payer": "8jbSfhUf52xBNM9hBrV9wYDTeNVvGiTjH6bYKCnQ3LvL",
-      "seller": "7xvuVbuyzfoE8jLRAbdqwjNYgqLs9pVNx9FpkXPwVDVP",
-      "amount": 20.0,
-      "chain": "solana"
-    },
-    {
-      "id": "TLczuHUPswDuhkzr27wMY2ZvPqZyKXyH39pH9m2ALqnDy8urps5uytooMUiJBMXhYXFA6Q37v4uYrKxfijB29ad-0",
-      "ts": "2026-10-31T18:43:59+00:00",
-      "payer": "64s4Mzu3P3AR5xADy5xVdpuszmbHdzg6ywA9FR6MY7qP",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "AiWNEM9MSHsEWnRqMMbYe1qGe2Jfd4jsv7KnjjdcT6328PcusCZaGQ3vrjZEM7DpBXRQcmnrs1atkhgRivFDuMH-0",
-      "ts": "2026-10-31T18:45:28+00:00",
-      "payer": "7xneZpyyWdHCfSTHkPPuELiHgFJ8oZxAq3eHW2bKKevS",
-      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
-      "amount": 0.02,
-      "chain": "solana"
-    },
-    {
-      "id": "3tYdLYZVECwiPeMofMM1oFWLoXhq5jTXr4JLJgVNf8k8wfRn1uT73DKneWX4ySfZuXrbrov7ERRpjyCe4HYd4Cyr-0",
-      "ts": "2026-10-31T21:45:23+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 1.08,
-      "chain": "solana"
-    },
-    {
-      "id": "5uv3ddeVXzCcPCCbockvaE5ZdVuAotnkuURYfxZhHxmZTA7PWZNgyYeRtdToyECCcgKbRjrzJ6zWh4mn5WFFVejJ-0",
-      "ts": "2026-10-31T21:47:11+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 1.0,
-      "chain": "solana"
-    },
-    {
-      "id": "31TsgvMNQJqNpLr4hF1MbayBMCDgEoyjuHiZvrAxG4cV6knK6Nz6qYNGr7rGUiGdYcEq3L9Bsh8Wxh6h2q3k4bwU-0",
-      "ts": "2026-10-31T21:49:13+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 2.03,
-      "chain": "solana"
-    },
-    {
-      "id": "38e8VMutkM8v38P7WFihKrkDrjR5BRxFCiJfK6NzrTcyeRx62ef1JC3qoosZCwjF4LdSwkdbUhrt2dv6A4EbbGvV-0",
-      "ts": "2026-10-31T21:51:16+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 1.021,
-      "chain": "solana"
-    },
-    {
-      "id": "4HVqMGr2TxZn6jSSuQCJnCd4qBeDvUQsXi9WRJX4btyq81w4w4pHaffJSGwJSZiczbuhfTEFejHT72DjAVcaYgB6-0",
-      "ts": "2026-10-31T21:53:10+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 1.011,
-      "chain": "solana"
-    },
-    {
-      "id": "2WJCPuLwo98QZd91Zf7nyRMWmDodGA5BpxjRZwdENroV54njcHy1Jv39rJiayWjjA4JGMTDtFtcMkrw71GC9w7ex-0",
-      "ts": "2026-10-31T21:54:21+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 1.0,
-      "chain": "solana"
-    },
-    {
-      "id": "5AeX8XW63Xocem2FDfaR5r3zVu2uQv6AvrjS1QPe4ktKmBavE6F6zrqLBvikeKLoPNrwoKRFfKE4rpcZCtrZXGs3-0",
-      "ts": "2026-10-31T21:56:07+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 1.0,
-      "chain": "solana"
-    },
-    {
-      "id": "9zAY8vv5KqUynpdWkTSArT7Q3jTGcoEcgkM7gkfSy1sQYqFUt7Hd1u7QGFLdfLRXm8HHaQoVJX5sper8kvx5vEu-0",
-      "ts": "2026-10-31T21:59:10+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 2.13,
-      "chain": "solana"
-    },
-    {
-      "id": "BgpeYFX7AENCYaKtvoP8oBYWNpKji6oYDi6X7y7vG5GWZqxWBcTSj2KfCvEH2iwVvo37aB5wM7uWtDw9dvbyXu7-0",
-      "ts": "2026-10-31T22:02:11+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 2.132,
-      "chain": "solana"
-    },
-    {
-      "id": "4iYCPsd6DkA53xAMSRLhQPzmzvwWrdhfkXjesCszL25p8qURFaWJYcfF7njxXa3RPKH6t264SrQSkS49aCucdjVt-0",
-      "ts": "2026-10-31T22:04:06+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 2.011,
-      "chain": "solana"
-    },
-    {
-      "id": "ykqpNz9FnCsKczFPZcdv2ZJpaTic1uXWTgXFVUfvcNvmG6rdVLVWnyUpknuSe6yw2RTxQgjzTgdoKDu75KrbNG8-0",
-      "ts": "2026-10-31T22:06:09+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 1.058,
-      "chain": "solana"
-    },
-    {
-      "id": "4mSXH26ATz3WHE9wyaa1YrSfGqugfvWFDKh1snvsrDzKbKgYRmbZmNMN1AKwz9sJqa3xbN1NRTUfYjyEUCxsQPaS-0",
-      "ts": "2026-10-31T22:09:12+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 3.055,
-      "chain": "solana"
-    },
-    {
-      "id": "5pTWw7j2Se6UKL4Vjb6BsRMpP9v6AERy1CHfAJvKxaFwZUU28kGGgN6yphFKr76yTPVtuakat2SvAqNqAWv4BFsT-0",
-      "ts": "2026-10-31T22:13:05+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 2.232,
-      "chain": "solana"
-    },
-    {
-      "id": "4aW16CF3WkiE2FfeDz6kZLjrnggy7hZaszxMbScY2W2rRN5fVMCz2oXS34JmUV8efqhjT8EW6BCd6oKGMRCJDmvB-0",
-      "ts": "2026-10-31T22:15:09+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 1.076,
-      "chain": "solana"
-    },
-    {
-      "id": "4PZVoYe3tJ8kNAFU8kzdwm5vpHjamhF6xzHcBVakxiHq2Qygn4HuX5qombXsYvoHZ7vGuaN1A1JkrCYmxdtafDTS-0",
-      "ts": "2026-10-31T22:16:30+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "b73BZAd6kdJHaghYqsR86uvg9X3eynYm6dqyKRRBpCbHGw8B8thEtLazZ6Nrpy7oSMcVXG4AwMBUhLuvB12Z4eb-0",
-      "ts": "2026-10-31T22:16:34+00:00",
-      "payer": "7gid7Bjq7bT3oZYxcoewbtM2ui2wr1eEh585veqZxkCT",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.002171,
-      "chain": "solana"
-    },
-    {
-      "id": "36nbBTov3rBK2vbxNMYiqMW3VShtvD3aeAJLU1XCHPmHCJ79XW6ZbBEeLhNUDD9ytJYm7mYAmgG5nHviud7VsgUQ-0",
-      "ts": "2026-10-31T22:16:38+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "2Y7d2aYfKcYWSPv7Ct3TGm6dECH1rtR6pxg4Kr9FxL8ZCxUD7pK8VpYvqqAXhNov4nk8qSeAUjzzyufLxq1XYaKV-0",
-      "ts": "2026-10-31T22:16:43+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "23TK743v3UzxfRnR7fFwy49SqLXYVCguAwSN6BwhNqB7H1JF5Zi33bRApDU2KumZWLoTcbUXDhEsMnVB5vJFWPWT-0",
-      "ts": "2026-10-31T22:16:51+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "4pzq7poPW9keTYzHSsmbFpAuMHgfWzAmjVGD5ghJdUanUjPYmMaZudmpwt7q92A4fnfoX1U8Ea7n8W4FJGiYRoqa-0",
-      "ts": "2026-10-31T22:16:55+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "2ft97VanaWJSjnLywa2aiJgx7k9aGoMMHWPbHzb9uMMNYfeba9VTkpCYb3eBaEtsd6QC9yyXzp645wRWE5k4H8TX-0",
-      "ts": "2026-10-31T22:16:57+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "2X8seJnxqe9a8m8Y2dmxUbDtCdksqc8XAF6VieZVdHck19xiLEd4YqFpd1BAxod7ahCaKudyJuvcXriCx6z76BhD-0",
-      "ts": "2026-10-31T22:16:57+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "5aaTV9NgL9u2bjoKt1fFzmuM1AiEt1hMKXezhipB4Ai4TZHC2aw19vUBiPMkjMf4kT2Xbrwe2fEbSrx7WGhNWmbC-0",
-      "ts": "2026-10-31T22:17:04+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "3VvJUfQ9kwt3qbeaNVStMbDpjwYuTyzVkZxvUSZHTUQdnP42hCCEsGVTReU9arZ1bH5fApcUQ9Q6iPYXfddK4LKx-0",
-      "ts": "2026-10-31T22:17:04+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "JtM98XPHfGjST2SRggikrwKNTf981HWHFykSKGbEc17ByToQvzhTk2JaTR6byVdW13AsW93peMDkXQt1Ncuf7J4-0",
-      "ts": "2026-10-31T22:17:04+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "2172FUYzFfff9Pfi8CHhvUwXMSw7d5Jmzp1jYtkUo7WDGyXpBNqyoPv49Zwy3Qmre2KYMdXN9xhTGxgRo8z16Znq-0",
-      "ts": "2026-10-31T22:17:05+00:00",
-      "payer": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
-      "seller": "X4o2UuVNMxnrgkzVy97kPF5gmS6CLRCVJGB48VastML",
-      "amount": 2.08,
-      "chain": "solana"
-    },
-    {
-      "id": "57ExQbeq1jK6rpUq14PH17MfdLmp1ff8Skf7rdo1QDKZAaR5QYq7kfffN3zpfixCwCXELKrjNNxTYM9K3rNSy54M-0",
-      "ts": "2026-10-31T22:17:13+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "4eRXJo2G7uHxVKWEXMVU963CYQHzDF1v8hq1LKm8SFiGpPwNXto2RcWxcADijb3BMVnjnHND6zB8JGNkbY3ZEbrW-0",
-      "ts": "2026-10-31T22:17:22+00:00",
-      "payer": "7gid7Bjq7bT3oZYxcoewbtM2ui2wr1eEh585veqZxkCT",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.002058,
-      "chain": "solana"
-    },
-    {
-      "id": "5BwAucAC37UKno8iHNbWiXrswLgHRWPXsZPVvrcPzXYJHGfPhq5YaMisKN1MPArFzL35hqrW3DoFfhz6s6McGbqV-0",
-      "ts": "2026-10-31T22:17:26+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "2i9Cn1PjBUffpcLf11whXcrQ5VryHPNJTbP5ae9X8cd93JGjnVPSZTwLnQiXozbq3xyedzwLc8JawXKNseMrhd9U-0",
-      "ts": "2026-10-31T22:17:39+00:00",
-      "payer": "22CdX2YyLMNb3XJ4cV2VtxbJ7ivQbf59HSpXEyfCSeBb",
-      "seller": "AQqnMFBwGZEoti85aTVRy8XYpKrho7GaMDx9ZB3CEeKA",
-      "amount": 0.001,
-      "chain": "solana"
-    },
     {
       "id": "36163xKph3od7TRjMmCKmUsKcG94spG4X2eTyAVZEY3YFwJeteaTe5UhdnoHkePS2JQXp6MoYefnCGafRjMwybPi-0",
       "ts": "2026-10-31T23:31:14+00:00",
@@ -10174,6 +9806,222 @@
       "id": "5NAk5uP4PAQJRvq99S3nwq2uoKN9LvPbjfoY7BYDwwkRt8s6NMnV1vCsQqL5JGAA2mSVrv8tG482QhpxDdvq1PX1-0",
       "ts": "2026-11-14T05:27:16+00:00",
       "payer": "7xneZpyyWdHCfSTHkPPuELiHgFJ8oZxAq3eHW2bKKevS",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "2dNb95ohjvtcxwpCqVf6wEC4tDamHb3JHFVLMqgYXVrxQbdwBzmb5AXxoJ9KrCbuofXZuhEXH98ygBLC6VgmBdbJ-0",
+      "ts": "2026-11-14T15:09:02+00:00",
+      "payer": "6o4AXHKEy2JQtrgntRdioBzbrhcH8rdxQPPaNb1mRTso",
+      "seller": "7Cd8FJ6hCKKTphtj2oDNQrevkMc4CcHCuLNWkw38so6Q",
+      "amount": 0.01,
+      "chain": "solana"
+    },
+    {
+      "id": "pMi5FAKAAHmY7hQGcQBpEfHFY8oZZxdkVWcmwwehMjWTg1phnocigiS4U8vvkGyqGRTxJp4rCJSMqiBxJ2vBi19-0",
+      "ts": "2026-11-14T16:32:34+00:00",
+      "payer": "HML8NxL73PRrpGSuB8ArMcbhBWuhPavQzPU9KcnzzkFh",
+      "seller": "8XhngTRitTcUJMiaDJ6azw8GRSiFPpwhnmV3HYQLHUpL",
+      "amount": 0.005,
+      "chain": "solana"
+    },
+    {
+      "id": "3qbMEpbbCuQtdKRFtiy8jPP638DyQWHfNkcVt2VqoSbj5Pp3t6wrpqykGw2P4pNPoUc3NigXe2aTh16ZAm9GLRFU-0",
+      "ts": "2026-11-14T16:32:44+00:00",
+      "payer": "HML8NxL73PRrpGSuB8ArMcbhBWuhPavQzPU9KcnzzkFh",
+      "seller": "8XhngTRitTcUJMiaDJ6azw8GRSiFPpwhnmV3HYQLHUpL",
+      "amount": 0.005,
+      "chain": "solana"
+    },
+    {
+      "id": "4kJtao2PKSJ2AeEBcAVL7LGWzxwLknPkBGpG3vVAF2CsJYBgBioUpzZpiurQHXmoahGyqq9FWYz9NZrjmRL773aR-0",
+      "ts": "2026-11-14T20:03:29+00:00",
+      "payer": "6YfGVUA37apeR2Le2nYmvvWMjqoLgSyGjwQZ9Jbshqx7",
+      "seller": "8XhngTRitTcUJMiaDJ6azw8GRSiFPpwhnmV3HYQLHUpL",
+      "amount": 0.005,
+      "chain": "solana"
+    },
+    {
+      "id": "5TBvATEnPgJwSiXLzMtUc4LorMktG4m4Zc5z6X7dVaVh4NLSoRRNvjnFKugSpUS6iAywKm2hp2HzRYeJehsNhgdT-0",
+      "ts": "2026-11-14T20:03:40+00:00",
+      "payer": "6YfGVUA37apeR2Le2nYmvvWMjqoLgSyGjwQZ9Jbshqx7",
+      "seller": "8XhngTRitTcUJMiaDJ6azw8GRSiFPpwhnmV3HYQLHUpL",
+      "amount": 0.005,
+      "chain": "solana"
+    },
+    {
+      "id": "5xo7eCeGD8NDRUYREv6qYoGDkTYfHmYxn49KJM2VbNjbj7zuNZ2EbN22SvKPQdi8uc55yXJ1w3fgQ6Z1SPQfryyM-0",
+      "ts": "2026-11-14T20:07:17+00:00",
+      "payer": "6YfGVUA37apeR2Le2nYmvvWMjqoLgSyGjwQZ9Jbshqx7",
+      "seller": "8XhngTRitTcUJMiaDJ6azw8GRSiFPpwhnmV3HYQLHUpL",
+      "amount": 0.005,
+      "chain": "solana"
+    },
+    {
+      "id": "3XbpA2fZr8At5SztxW3vJSptGjXSxHePNXw8YRWaao4Y99AHzfyXXteKcZAYWAUDUPYboK9XN42iDXBmSppu1LC2-0",
+      "ts": "2026-11-14T20:07:29+00:00",
+      "payer": "6YfGVUA37apeR2Le2nYmvvWMjqoLgSyGjwQZ9Jbshqx7",
+      "seller": "8XhngTRitTcUJMiaDJ6azw8GRSiFPpwhnmV3HYQLHUpL",
+      "amount": 0.005,
+      "chain": "solana"
+    },
+    {
+      "id": "3yj78AipQgNxZeqT6zyyNAuDj46maFHyF3n62qQju9PbWyFnjycEAqMQzUqQGjpSd6U9rdSgpN6wBFerM9xwsWVD-0",
+      "ts": "2026-11-14T22:18:56+00:00",
+      "payer": "2JboucBAwxFF3C3VKiS4wvqprrfg6Y4h9Z4sgUPFRUxV",
+      "seller": "GmgbqY2AKRa2oEdtSxvDn48uz1ozmbM6EjhYs1MGz8PH",
+      "amount": 0.01,
+      "chain": "solana"
+    },
+    {
+      "id": "5fvbadZeYvCXwBxytLFDXmUnZUykY2DTTpfocSoRUmM6VG6EH6hu8sZzLrcwaFkLiWfpXdF3fAEbjFMYXzUi6HwR-0",
+      "ts": "2026-11-14T22:23:57+00:00",
+      "payer": "2JboucBAwxFF3C3VKiS4wvqprrfg6Y4h9Z4sgUPFRUxV",
+      "seller": "GmgbqY2AKRa2oEdtSxvDn48uz1ozmbM6EjhYs1MGz8PH",
+      "amount": 0.01,
+      "chain": "solana"
+    },
+    {
+      "id": "xYLdF7e1mVHcfs97zxd1FfuEkdUdVV5FjrrjKyzb97VwGZXNM9TuqKApruJpFDE3FUrbfxg2Wgn3avKpFCo3a6j-0",
+      "ts": "2026-11-14T22:25:01+00:00",
+      "payer": "7xneZpyyWdHCfSTHkPPuELiHgFJ8oZxAq3eHW2bKKevS",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "5pWrgYNKbvs2fe2T1bW72Fmb9A7aMLTC4DJfWj3ngKkpsgj41JZS97m25h9BLYT1R7PcPYwxMoifdvBhfq6fYkam-0",
+      "ts": "2026-11-14T22:26:34+00:00",
+      "payer": "CtGZ1iYEHXinfM287BRUhWNth7qx7NRBXV2qdpJF97mr",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "3afjxoiFdsGiAaHzuoCCp97zLrPaUB1CrsqRiHmrHzJg6VnXdWDrrTmGioak9GvetcFoEkZSypbYKLGQrgRTjoAH-0",
+      "ts": "2026-11-14T22:27:15+00:00",
+      "payer": "6wcvDUWdHtUN2PgzkJL8s3L7FuoMS9wyuxH3G1Zbtdyx",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "51fGMrf9hNN4qMMGx958fVnyNctFPbHFDXe8HQ8KpoAp7scM1gsVvv95i3LKchWgYJSsC5R8qEKzQGbas7crcZWH-0",
+      "ts": "2026-11-14T22:28:47+00:00",
+      "payer": "3J6GdNjsqmGWE96T8Med8Uyy9EFJcmgta93jBTWDNFHU",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "3HevZvVjMKkme8gzgLP2GGRiHhNngEu6qriLmLBWoP8ZLJfJeVLXEJnFcBpP1KhvGnYczqtRzyNDESB9hcXH48zd-0",
+      "ts": "2026-11-14T22:29:07+00:00",
+      "payer": "2JboucBAwxFF3C3VKiS4wvqprrfg6Y4h9Z4sgUPFRUxV",
+      "seller": "GmgbqY2AKRa2oEdtSxvDn48uz1ozmbM6EjhYs1MGz8PH",
+      "amount": 0.01,
+      "chain": "solana"
+    },
+    {
+      "id": "9dyv8UuoAVoB6LZsmAMTmSBTAr3CPMX5nL13aDM7yUXteqhVorkHUsb5b5zGZpKx9tEYqBVrUmrPqJaJFFTbhjx-0",
+      "ts": "2026-11-14T22:30:17+00:00",
+      "payer": "k5KE9pspDK13iUcDgGS4kuUdRx5q4LjRssTLHB6rjM6",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "2VShfFgSmzkDKEEkjFiT69pUXw4rAifCKncUKSW2cBS8o2qQ5FZpEHN9ytZtxEyUXwa2xzpMAeye184F5gmDYZ8Q-0",
+      "ts": "2026-11-14T22:31:38+00:00",
+      "payer": "EQiAcdJCnqM8cJmRn1TT1wWBYvnPen13jBi5dbopFgW9",
+      "seller": "J8vnmBx4pS1X7UUBTfz1yWBKiw69Dj2yRGRHDaXBRdhR",
+      "amount": 0.004,
+      "chain": "solana"
+    },
+    {
+      "id": "vp8RThd8TzFgiRfqChZk2R7hXyD2D8pMpC226WD59WRNVdYqcC7EeNHYUU7NS7fmqeCKskMr6i2qzCwgsRegLNs-0",
+      "ts": "2026-11-14T22:31:47+00:00",
+      "payer": "8JkuMoTjHr3g8TtFYB68CKmocnwgRJ558iWVSJhcb4Sp",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "5JDsTUhBB9nY2WRJN319WumGY3JffwmSNpkMjQJzJPmMgW1myTGkhAjttuoT1GJZNqzA1cVXyPUDA4tkk4DSFnQ5-0",
+      "ts": "2026-11-14T22:31:52+00:00",
+      "payer": "EQiAcdJCnqM8cJmRn1TT1wWBYvnPen13jBi5dbopFgW9",
+      "seller": "J8vnmBx4pS1X7UUBTfz1yWBKiw69Dj2yRGRHDaXBRdhR",
+      "amount": 0.002,
+      "chain": "solana"
+    },
+    {
+      "id": "Reosn9tGoaqPKZ7iBSDspYmXBF4Y6UjsuZCa5B2Hmj2U62QEivcQvb9VMQkPWi8Wnjr2qMTbmcg7rRDynJw5m9p-0",
+      "ts": "2026-11-14T22:32:12+00:00",
+      "payer": "CtGZ1iYEHXinfM287BRUhWNth7qx7NRBXV2qdpJF97mr",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "5omLo3LGEyqW3JJ9Q2vQ2Lh8XEQ9AvFaxG9Z9p7mDnA9h1w79J8U1WofzhwMRpUJhFSJfhoLEZuL1omqY3T9eBr6-0",
+      "ts": "2026-11-14T22:34:01+00:00",
+      "payer": "EBykkkakoCG2WdJNXmPE2MHLhVaV1yg1vBi3ZgeB4Us7",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "4JGSE6DiirdgtbcE2BPAxSdvxn2ZdLaLmh9LT3W7KbjdJBHS6pWN3SFrst2KDoGAHqkEMivEPT3hQieBsSYiM1D7-0",
+      "ts": "2026-11-14T22:34:07+00:00",
+      "payer": "2JboucBAwxFF3C3VKiS4wvqprrfg6Y4h9Z4sgUPFRUxV",
+      "seller": "GmgbqY2AKRa2oEdtSxvDn48uz1ozmbM6EjhYs1MGz8PH",
+      "amount": 0.01,
+      "chain": "solana"
+    },
+    {
+      "id": "5YdYrs4ocJgVWSsCzxQpB22c8rErFfN9itvk3FUJyKRC9UXkeb2npCCwkVpPZSx53Ac7dubWGwd9pGHMBPsAtMz4-0",
+      "ts": "2026-11-14T22:34:36+00:00",
+      "payer": "7xneZpyyWdHCfSTHkPPuELiHgFJ8oZxAq3eHW2bKKevS",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "4m9SG9ZsvfDzxLu2AxTKSxh2uJqAdgfg6LWdDwNBdu58zqYJkPRfeZeBBbqFwunncHmPFEM9rQW6Bwyd6WH7peQX-0",
+      "ts": "2026-11-14T22:36:03+00:00",
+      "payer": "vSNpCZMvyuo3dCCMZ2Z7JD3hDd9kZ5XpRYxvi7x89YK",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "NGMm5fQgpfuk6dcFUHQxn3B4tQPHJ5Q1X28Ra85ypCvz2QMkjXRVDnxHkZWnjszdH7tS8zi2pCx5zsqHook97zK-0",
+      "ts": "2026-11-14T22:37:15+00:00",
+      "payer": "3J6GdNjsqmGWE96T8Med8Uyy9EFJcmgta93jBTWDNFHU",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "258ZT3buQDpVGMZ7YU8QqCU631de8nqynFVrQ5bfvtpN9ijRJaZobEdqAhBLRJPYTJuAiHp5BLk3BSiDhFD1TW9N-0",
+      "ts": "2026-11-14T22:38:49+00:00",
+      "payer": "2JboucBAwxFF3C3VKiS4wvqprrfg6Y4h9Z4sgUPFRUxV",
+      "seller": "GmgbqY2AKRa2oEdtSxvDn48uz1ozmbM6EjhYs1MGz8PH",
+      "amount": 0.01,
+      "chain": "solana"
+    },
+    {
+      "id": "2SArcNhomD5tnf5ZPkS3AgeRc4JnKynXDYH9QbyetAdWRVUHpfnLCyB3TszjPShqkM9hsxQRuZ3zrrP62ACG1btZ-0",
+      "ts": "2026-11-14T22:38:52+00:00",
+      "payer": "64s4Mzu3P3AR5xADy5xVdpuszmbHdzg6ywA9FR6MY7qP",
+      "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
+      "amount": 0.02,
+      "chain": "solana"
+    },
+    {
+      "id": "5HGHE565UytpD24CYKRGDMqw3z8ERfUvgw6Tw5KCDhB7D2WD8XjQLmAYSZFJRoofXnsD8Hg7oBEmCUHtt21b2nCk-0",
+      "ts": "2026-11-14T22:39:32+00:00",
+      "payer": "5g6VzjPfH19wWSQLbMLttAdGTFY3MbYGBagLTEeyDuqM",
       "seller": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
       "amount": 0.02,
       "chain": "solana"
