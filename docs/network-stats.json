@@ -1,35 +1,35 @@
 {
-  "updated_at": "2026-11-26T15:48:46.590449+00:00",
+  "updated_at": "2026-11-27T00:22:13.453599+00:00",
   "chains": [
     "base",
     "solana"
   ],
   "source": "coinbase facilitators (base via blockscout) + x402 facilitators (solana via rpc)",
   "facilitators": {
-    "base": 12,
+    "base": 1,
     "solana": 4
   },
   "note": "Base = Coinbase facilitators via Blockscout; Solana = known x402 facilitators via public RPC (best-effort, rate-limited, smaller sample). A floor, not a census. Rates are trailing, dedup by settlement id.",
   "run": {
     "scanned_tx_base": 0,
-    "scanned_tx_solana": 45,
-    "legs_seen": 45,
-    "new_settlements": 45,
-    "buffer_size": 681
+    "scanned_tx_solana": 0,
+    "legs_seen": 0,
+    "new_settlements": 0,
+    "buffer_size": 678
   },
   "derived": {
-    "volume_24h_usdc": 10.528,
-    "settlements_24h": 44,
-    "unique_agents_24h": 20,
+    "volume_24h_usdc": 5.528,
+    "settlements_24h": 43,
+    "unique_agents_24h": 19,
     "unique_sellers_24h": 9,
-    "volume_7d_usdc": 45.13,
-    "settlements_7d": 228,
-    "unique_agents_7d": 35,
-    "unique_sellers_7d": 33,
-    "named_pct_7d": 1.3,
+    "volume_7d_usdc": 44.822,
+    "settlements_7d": 206,
+    "unique_agents_7d": 33,
+    "unique_sellers_7d": 31,
+    "named_pct_7d": 0.9,
     "observed_span_days": 7.0,
-    "rate_per_day_usdc": 6.4471,
-    "rate_per_day_settlements": 32.57,
+    "rate_per_day_usdc": 6.4031,
+    "rate_per_day_settlements": 29.43,
     "by_chain": {
       "base": {
         "volume_24h_usdc": 0.0,
@@ -46,18 +46,18 @@
         "rate_per_day_settlements": 0.0
       },
       "solana": {
-        "volume_24h_usdc": 10.528,
-        "settlements_24h": 44,
-        "unique_agents_24h": 20,
+        "volume_24h_usdc": 5.528,
+        "settlements_24h": 43,
+        "unique_agents_24h": 19,
         "unique_sellers_24h": 9,
-        "volume_7d_usdc": 45.13,
-        "settlements_7d": 228,
-        "unique_agents_7d": 35,
-        "unique_sellers_7d": 33,
-        "named_pct_7d": 1.3,
+        "volume_7d_usdc": 44.822,
+        "settlements_7d": 206,
+        "unique_agents_7d": 33,
+        "unique_sellers_7d": 31,
+        "named_pct_7d": 0.9,
         "observed_span_days": 7.0,
-        "rate_per_day_usdc": 6.4471,
-        "rate_per_day_settlements": 32.57
+        "rate_per_day_usdc": 6.4031,
+        "rate_per_day_settlements": 29.43
       }
     }
   },
@@ -511,33 +511,15 @@
       "volume_24h_usdc": 10.528,
       "settlements_24h": 44,
       "rate_per_day_usdc": 6.4471
+    },
+    {
+      "date": "2026-11-27",
+      "volume_24h_usdc": 5.528,
+      "settlements_24h": 43,
+      "rate_per_day_usdc": 6.4031
     }
   ],
   "buffer": [
-    {
-      "id": "4KBePZx6tDkgDiq4ihupKQdn1bVAzgU2AU3UfVYbUhzQL1pTnWbAecKobGp7ugMTekDkf4s2bKMgBbM2GWrY1VWz-0",
-      "ts": "2026-11-12T16:59:43+00:00",
-      "payer": "2eczs3GScWBAkyoLkSVxjiSUxjKKnsMn1uS8nqM4MUCg",
-      "seller": "FgcKNzsBXSEHGNZNWetPsjXiBZk1WFoU6sF2zVsnzXfa",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "GEcDZgz1imtBHAhxTQtB2wpFFjF16SQf1XTNjreRzfCj2ziQcdEz4GTJg4jAXnnq4gJocAgVCjAn7eeeHXbwc6h-0",
-      "ts": "2026-11-12T22:05:25+00:00",
-      "payer": "3sng11LXu3jeAiHvqcEgpqLnErFDfKyqSz3k2VunT8oS",
-      "seller": "4ZUtqtQSrL522bcXTag1eR59cwfQhQGW16nYuzyYgRWX",
-      "amount": 0.001,
-      "chain": "solana"
-    },
-    {
-      "id": "3U9gB1e5pdSsziPyhXVG5vWVpJ8eZSBRr7cA4vyWtiwYeJVNAMWoQWoxTv5Q68NAQiKsiqik58YTRo9oeHtA8Drt-0",
-      "ts": "2026-11-12T23:50:10+00:00",
-      "payer": "Hvye5NcgG9jC4s76ZMHxdgZHXBh8An6WweL5W76LwPwm",
-      "seller": "8XhngTRitTcUJMiaDJ6azw8GRSiFPpwhnmV3HYQLHUpL",
-      "amount": 0.005,
-      "chain": "solana"
-    },
     {
       "id": "4mquxktnCTrxawHhKzEzuaD1mtEMn6KksmKiCwWvgsS7yy3WYfk2i8VgpkS6n7L89PLcGiijf8uK3tysco8r1514-0",
       "ts": "2026-11-13T02:04:00+00:00",
